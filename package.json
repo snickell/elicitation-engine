@@ -1,33 +1,22 @@
 {
-  "name": "WebMatrixExpressSite",
-  "version": "0.2.0",
-  "author": "The WebMatrix Team <webmatrix@microsoft.com>",
-  "description": "A simple boilerplate for building node applications on Windows Azure (or wherever)",
-  "contributors": [
-    {
-      "name": "Justin Beckwith",
-      "email": "justbe@microsoft.com"
-    }
-  ],
+  "name": "elicitation-gorilla",
+  "version": "0.0.1",
+  "author": "Seth Nickell <snickell@gmail.com>",
+  "description": "",
+  "contributors": [ ],
   "main": "./server.js",
-  "keywords": [
-    "azure",
-    "boilerplate",
-    "express"
-  ],
+  "keywords": [ ],
   "dependencies": {
     "express": "~3.1.0",
     "express-handlebars": "^2.0.1",
-    "jade": "*",
     "node-connection-string-builder": "0.0.1",
     "tedious": "^1.12.2"
   },
   "noAnalyze": true,
-  "license": "Apache",
+  "license": "commercial",
   "engines": {
     "node": ">=0.6.14"
   },
   "devDependencies": {
-    "tsd": "^0.5.7"
   }
 }
