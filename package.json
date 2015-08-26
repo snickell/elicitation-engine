@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "author": "Seth Nickell <snickell@gmail.com>",
   "description": "",
-  "contributors": [ ],
+  "contributors": [],
   "main": "./server.js",
-  "keywords": [ ],
+  "keywords": [],
   "dependencies": {
     "express": "~3.1.0",
+    "express-asset-manager": "^0.3.0",
     "express-handlebars": "^2.0.1",
     "node-connection-string-builder": "0.0.1",
     "tedious": "^1.12.2"
   },
   "noAnalyze": true,
-  "license": "commercial",
+  "license": "LicenseRef-LICENSE",
   "engines": {
     "node": ">=0.6.14"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

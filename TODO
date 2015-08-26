@@ -1,0 +1,13 @@
+Validate identity of current person against Forms auth (do a call to asp.net mvc)
+
+DB:
+- get elicitation AND definition in one join call
+- get elicitation assignment for elicitation and person ID
+- update assignment lastaccessed
+- get last session data
+
+1) convert combres assets into express-asset-manager bundles
+2) use bower or npm (???) to include many of our assets
+3) figure out how to integrate express-asset-manager with handlebars (?)
+
+Convert Elicitation.cshtml from Razor to Handlebars

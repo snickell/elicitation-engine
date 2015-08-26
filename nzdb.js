@@ -1,6 +1,8 @@
 
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
+var TYPES = require('tedious').TYPES;
+
 var ncsBuilder = require('node-connection-string-builder');
 
 function connectionStringToConfig(connectionString) {
@@ -46,7 +48,7 @@ var NZDB = function (connectionString) {
   }); 
 }
 
-NZDB.prototype.query = function (query, cb) {
+NZDB.prototype.query = function (query, params, cb) {
   var con = this.connection;
   
   var rowResults = [];
@@ -60,6 +62,10 @@ NZDB.prototype.query = function (query, cb) {
 
     cb(err, rowResults);
   });
+   
+  params.forEach(function (param) {
+    request.addParameter(param.name, param.type, param.value);
+  });
     
   request.on('row', function(columns) {
     var result = {};
@@ -72,6 +78,16 @@ NZDB.prototype.query = function (query, cb) {
   });
     
   con.execSql(request);
+}
+
+NZDB.prototype.getElicitationFromID = function (id, cb) {
+  this.query(
+    "SELECT * FROM Tasks WHERE Discriminator='Elicitation' and ID=@id",
+    [
+      { name: "id", type: TYPES.Int, value: id}
+    ],
+    cb
+  )
 }
 
 module.exports = NZDB;
