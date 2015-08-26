@@ -11,6 +11,32 @@ var exphbs  = require('express-handlebars');
 
 var app = express();
 
+
+var devEnv = app.get('env') === 'development';
+
+var staticDir = path.join(__dirname, 'public');
+var assetsDir = path.join(__dirname, 'builtAssets');
+var assertsUrl = devEnv ? '/' : '/assets';
+var maxAge = 86400000; // one day
+
+var assets = {
+  'test.js' : {
+    type: 'js',
+    dir: 'js',
+    files: [
+      'one.js',
+      'two.js' 
+    ]
+  }
+};
+
+var assetManagerConfig = {
+  rootRoute: assertsUrl,
+  srcDir: staticDir,
+  buildDir: assetsDir,
+  process: true
+};
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
 
@@ -21,16 +47,26 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  
+  app.use(require("express-asset-manager")(assets, assetManagerConfig));
+  
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
+
+  if (!devEnv) app.use(assetsUrl, 
+    express.static(assetsDir, { maxAge: maxAge })
+  );
+  
+  app.use(express.static(staticDir));
 });
 
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+
+
 var connectionString = process.env['SQLAZURECONNSTR_DefaultConnection'];
-var NZDB = require('./nzdb');
+var NZDB = require('./backend/nzdb');
 var db = new NZDB(connectionString);
 
 
@@ -41,10 +77,17 @@ app.get('/', function (req, res) {
   });
 });
 
+
+
+
+
 app.get('/noodlefactory', function (req, res) {
+  console.log(res.locals);
+  
   db.getElicitationFromID(97, function (err, results) {
     res.render('noodlefactory', {
       results: JSON.stringify(results),
+      asset: res.locals.asset
     });
   });
 });
