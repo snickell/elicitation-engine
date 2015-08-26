@@ -45,6 +45,7 @@ app.get('/noodlefactory', function (req, res) {
   db.query("select name, category from Discussions", function (err, results) {
     res.render('noodlefactory', {
       results: JSON.stringify(results),
+      harmony: "boo".startsWith("b")
     });
   });
 });
