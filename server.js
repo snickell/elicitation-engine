@@ -16,7 +16,7 @@ var devEnv = app.get('env') === 'development';
 
 var staticDir = path.join(__dirname, 'public');
 var assetsDir = path.join(__dirname, 'builtAssets');
-var assertsUrl = devEnv ? '/' : '/assets';
+var assetsUrl = devEnv ? '/' : '/assets';
 var maxAge = 86400000; // one day
 
 var assets = {
@@ -31,7 +31,7 @@ var assets = {
 };
 
 var assetManagerConfig = {
-  rootRoute: assertsUrl,
+  rootRoute: assetsUrl,
   srcDir: staticDir,
   buildDir: assetsDir,
   process: true
