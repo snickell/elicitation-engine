@@ -8,6 +8,6 @@ DB:
 
 1) convert combres assets into express-asset-manager bundles
 2) use bower or npm (???) to include many of our assets
-3) figure out how to integrate express-asset-manager with handlebars (?)
+3) Use connect-assets instead of express-asset-manager?
 
 Convert Elicitation.cshtml from Razor to Handlebars

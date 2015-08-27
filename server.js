@@ -5,7 +5,8 @@
 
 var express = require('express')
 , http = require('http')
-, path = require('path');
+, path = require('path')
+, request = require('request');
 
 var exphbs  = require('express-handlebars');
 
@@ -79,16 +80,33 @@ app.get('/', function (req, res) {
 
 
 
+function authenticateAcessTo(elicitationID, cb) {
+  console.log("Authenticating acess to ", elicitationID);
+  var url = "http://www.nearzero.org/authenticate-access-to-elicitation/" + elicitationID;
+  console.log(url);
+  request(url, function (error, response, body) {
+    console.log("error ", error, "response.statusCode", response.statusCode);
+    if (!error && response.statusCode == 200) {
+      cb();
+    } else {
+      cb("couldn't authenticate access to elicitation");
+    }
+  });
+}
 
-
-app.get('/noodlefactory', function (req, res) {
-  console.log(res.locals);
+app.get('/elicitation/run/:id', function (req, res) {  
+  var elicitationID = req.params.id;
+  console.log("running elicitation ", elicitationID);
   
-  db.getElicitationFromID(97, function (err, results) {
-    res.render('noodlefactory', {
-      results: JSON.stringify(results),
-      asset: res.locals.asset
-    });
+  authenticateAcessTo(elicitationID, function (err) {
+    if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
+    
+    db.getElicitationFromID(elicitationID, function (err, results) {
+      res.render('noodlefactory', {
+        results: JSON.stringify(results),
+        asset: res.locals.asset
+      });
+    }); 
   });
 });
 

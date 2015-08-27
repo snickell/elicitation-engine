@@ -11,6 +11,7 @@
     "express-asset-manager": "^0.3.0",
     "express-handlebars": "^2.0.1",
     "node-connection-string-builder": "0.0.1",
+    "request": "^2.61.0",
     "tedious": "^1.12.2"
   },
   "noAnalyze": true,
