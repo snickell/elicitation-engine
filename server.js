@@ -402,15 +402,6 @@ app.get('/elicitation/run/:id', function (req, res) {
   console.log("running elicitation #" + elicitationID + "#");
   
   var asset = res.locals.asset;
-  /*
-  includeStatic filename
-  includeCSS filename
-  includeJS filename
-  jsonStringify obj
-  */
-  
-  // add to viewModel:
-  // showNZLogo = embedded && isMobileDevice
   
   authenticateAcessTo(elicitationID, function (err) {
     if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
@@ -423,7 +414,7 @@ app.get('/elicitation/run/:id', function (req, res) {
       var embedded = false;
       
       var membership = {
-        AllowModerator: false
+        AllowModerator: true
       };
       
       var person = {

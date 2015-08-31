@@ -1,0 +1,8 @@
+﻿.category.nuclear #discussion-question #header #subtitle {
+    border-top: 1px solid #fff;
+}
+
+.category.nuclear #discussion-question #header {
+	background-image:url('header.png');
+	background-color: rgb(168,206,56);
+}
