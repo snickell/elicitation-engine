@@ -9,7 +9,6 @@ var express = require('express')
 , request = require('request');
 
 var exphbs  = require('express-handlebars');
-
 var app = express();
 
 
@@ -27,6 +26,14 @@ var assets = {
     files: [
       'one.js',
       'two.js' 
+    ]
+  },
+  'elicitationCSS' : {
+    type: 'css',
+    dir: 'css',
+    files: [
+      'one.css',
+      'two.css'
     ]
   }
 };
@@ -170,6 +177,8 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
         isMobileDevice: isMobileDevice,
         elicitationName: elicitation.ElicitationName,
 
+        showNZLogo: !(isMobileDevice || embedded),
+
         expertNames: otherPersonNames,
 
         settings: {
@@ -214,10 +223,34 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
   });
 }
 
+var staticIncludes = {
+  _GoogleAnalytics: {
+    filename: "app/views/_GoogleAnalytics.cshtml",
+    content: null
+  },
+  _ElicitationTemplates: {
+    filename: "app/views/_ElicitationTemplates.cshtml",
+    content: null
+  },
+  _ElicitationWidgets: {
+    filename: "app/views/_ElicitationWidgets.cshtml",
+    content: null
+  }
+};
+
+// YUUUUUUUUCKKK!!!! THIS SO GROSS!!!! FIXME FIXME FIXME
+var fs = require('fs');
+Object.keys(staticIncludes).forEach(function (includeName) {
+  fs.readFile(staticIncludes[includeName].filename, 'utf8', function (err, content) {
+    staticIncludes[includeName].content = content;
+  });
+});
+
 app.get('/elicitation/run/:id', function (req, res) {  
   var elicitationID = parseInt(req.params.id);
   console.log("running elicitation #" + elicitationID + "#");
-    
+  
+  var asset = res.locals.asset;
   /*
   includeStatic filename
   includeCSS filename
@@ -258,9 +291,9 @@ app.get('/elicitation/run/:id', function (req, res) {
 
       setupElicitation(person, membership, "Elicitation.View+", elicitation, elicitationDefinition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
-          includeStatic: function(filename) { return "includeStatic(filename=" + filename + ")"; },
-          includeCSS: function(filename) { return "includeCSS(filename=" + filename + ")"; },
-          includeJS: function(filename) { return "includeJS(filename=" + filename + ")"; },
+          includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
+          includeCSS: function(filename) { return new Handlebars.SafeString(asset(filename)); },
+          includeJS: function(filename) { return new Handlebars.SafeString(asset(filename)); },
           jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
         };
         
