@@ -85,6 +85,26 @@ var assets = {
       'elicitation-print.css',
     ]
   },
+  'elicitation-categories.css' : {
+    type: 'css',
+    dir: 'categories',
+    files: [  
+        'other/elicitation.css',
+        'biomass/elicitation.css',
+        'buildings/elicitation.css',
+        'ccs/elicitation.css',
+        'climate/elicitation.css',
+        'fossil/elicitation.css',
+        'geothermal/elicitation.css',
+        'hydro/elicitation.css',
+        'industry/elicitation.css',
+        'nuclear/elicitation.css',
+        'solar/elicitation.css',
+        'storage-and-transmission/elicitation.css',
+        'transportation/elicitation.css',
+        'wind/elicitation.css',
+    ]
+  },
   'site.css' : {
     type: 'css',
     dir: 'css',
@@ -395,7 +415,9 @@ app.get('/elicitation/run/:id', function (req, res) {
   authenticateAcessTo(elicitationID, function (err) {
     if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
     
-    db.getElicitationFromID(elicitationID, function (err, elicitation) {
+    db.getElicitationAndAssets(elicitationID, function (err, result) {
+      var elicitation = result.elicitation;
+      var definition = result.definition;
       
       var startEditing = false;
       var embedded = false;
@@ -414,13 +436,8 @@ app.get('/elicitation/run/:id', function (req, res) {
       var discussion = {
         category: "solar"
       };
-      
-      var elicitationDefinition = {
-        ID: 666,
-        Definition: "fixme"
-      };
 
-      setupElicitation(person, membership, "Elicitation.View+", elicitation, elicitationDefinition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
+      setupElicitation(person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
           includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
           includeCSS: function(filename) { return new Handlebars.SafeString(asset(filename)); },

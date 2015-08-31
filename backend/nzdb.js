@@ -80,22 +80,52 @@ NZDB.prototype.query = function (query, params, cb) {
   con.execSql(request);
 }
 
-NZDB.prototype.getElicitationFromID = function (id, cb) {
-  this.query(
-    "SELECT * FROM Tasks WHERE Discriminator='Elicitation' and ID=@id",
-    [
-      { name: "id", type: TYPES.Int, value: id}
-    ],
-    function (err, rows) {
+NZDB.prototype.queryOne = function (query, params, cb) {
+  this.query(query, params, function (err, rows) {
       if (err) {
         cb(err, null);
       } else if (rows.length == 1){
         cb(null, rows[0]);
       } else {
-        cb("uhoh, more than 1 elicitation was returned", null);
+        cb("uhoh, more than 1 was returned", null);
       }
     }
+  )  
+}
+
+NZDB.prototype.getElicitationDefinitionFromID = function(id, cb) {
+  this.queryOne(
+    "SELECT * FROM ElicitationDefinitions WHERE ID=@id",
+    [
+      { name: "id", type: TYPES.Int, value: id}
+    ],    
+    cb
   )
+}
+
+NZDB.prototype.getElicitationFromID = function (id, cb) {
+  this.queryOne(
+    "SELECT * FROM Tasks WHERE Discriminator='Elicitation' and ID=@id",
+    [
+      { name: "id", type: TYPES.Int, value: id}
+    ],
+    cb
+  )
+}
+
+NZDB.prototype.getElicitationAndAssets = function(elicitationID, cb) {
+  this.getElicitationFromID(elicitationID, function (err, elicitation) {
+    if (err) {
+      cb(err, null);
+    } else {
+      this.getElicitationDefinitionFromID(elicitation.ElicitationDefinition_ID, function (err, definition) {
+        cb(null, {
+          elicitation: elicitation,
+          definition: definition
+        });
+      });
+    }
+  }.bind(this));
 }
 
 module.exports = NZDB;
