@@ -1,0 +1,56 @@
+.widget.multiple-choice-table table {
+    /*font-size: 12px;*/
+}
+
+.widget.multiple-choice-table .prompt {
+    margin-bottom: 0.5em;
+}
+
+.widget.multiple-choice-table th {
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.widget.multiple-choice-table td.row-label {
+    padding: 5px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.widget.multiple-choice-table td {
+    border-bottom: 1px solid #ececec;
+    border-top: 1px solid #ececec;
+}
+
+.widget.multiple-choice-table tbody tr:nth-of-type(2n+1) {
+    background-color: #f2f2f2;
+}
+
+.widget.multiple-choice-table th {
+    vertical-align: bottom;
+}
+
+.widget.multiple-choice-table td.choice {
+    vertical-align: middle;
+}
+
+.widget.multiple-choice-table .markdown-label, .widget.multiple-choice-table .markdown {
+    display: inline;
+}
+
+.widget.multiple-choice-table p:first-of-type {
+    margin: 0px;
+    display: inline;
+}
+
+.widget.multiple-choice-table table label {
+    width: 100%;
+    text-align: center;
+    display: block;
+    min-height: 1.5em;
+    line-height: 1.5em;
+}
+
+.widget.multiple-choice-table table label:hover {
+    background-color: #19b5eb;
+}

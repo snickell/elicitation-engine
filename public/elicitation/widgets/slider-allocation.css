@@ -1,0 +1,46 @@
+.widget.zero-sum-slider {
+    margin-left: 70px;
+    margin-right: 70px; 
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+.widget.zero-sum-slider #slider {
+    clear: both;
+}
+
+.widget.zero-sum-slider #leftLabel {
+  float: left;
+  font-size: 18px;
+  text-align: left;
+  padding-right: 15px;
+}
+
+.widget.zero-sum-slider #rightLabel {
+  float: right;
+  font-size: 18px;
+  text-align: right;
+  padding-left: 15px;
+}
+
+.widget.zero-sum-slider #value {
+  font-style: italic;
+  font-size: 14px;
+}
+
+
+.widget.zero-sum-slider input[type='range'] {
+  width: 100%;
+}
+
+/* For JQuery UI */
+.ui-slider-handle {
+   outline: none;
+}
+
+#labell {
+  color: #333;
+  font-size: 14px;
+  position: relative;
+  left: 10px;
+}

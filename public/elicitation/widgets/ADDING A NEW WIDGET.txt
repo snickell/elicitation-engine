@@ -1,0 +1,20 @@
+﻿To add a new widget called my-new-widget:
+1) Create my-new-widget.js and my-new-widget.css in this folder by copying text-area.js and text-area.css
+2) Search and replace instances of 'text-area' to be 'my-new-widget' in js/css, most importantly the top three lines of my-new-widget.js:
+		// So that this...
+	    EAT.Widget.register('text-area', {
+			prettyName: "Text Area",
+			templateName: 'text-area',
+
+		// becomes this...
+	    EAT.Widget.register('my-new-widget', {
+			prettyName: "My New Widget",
+			templateName: 'my-new-widget',
+
+3) Register my-new-widget.js and my-new-widget.css with NearZero Web\App_Data\combres.xml
+	- You'll need one line for my-new-widget.js and one for my-new-widget.css, just copy the equivalents for text-area.js and text-area.css
+
+4) Define the view in NearZero Web\Views\Shared\_ElicitationWidgets.cshtml
+	- Again, find the 'text-area' view by searching, and copy it
+
+5) Add a 300px wide my-new.widget.png to the thumbnails sub-directory

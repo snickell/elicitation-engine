@@ -1,0 +1,44 @@
+
+.widget.likert {
+    padding-left: 35px;
+    padding-right: 35px;
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+}
+
+.widget.likert .degrees {
+    width: 100%;
+    margin-top: 0.5em;
+    border-radius: 5px;
+}
+
+.widget.likert .degrees tr.labels {
+    vertical-align: bottom;
+}
+
+.widget.likert .degrees td {
+    text-align: center;
+    font-size: 14px;
+    width: 20%;
+}
+
+.widget.likert .degree {
+    font-size: 14px;
+    width: 110px;
+    display: inline-block;
+    text-align: center;
+}
+
+.widget.likert input[type='radio'] {
+}
+
+.widget.likert label {
+    font-style: italic;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.widget.likert label:hover {
+    background-color: #19b5eb;
+}

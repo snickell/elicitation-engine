@@ -1,0 +1,93 @@
+﻿#confidentiality-indicator-box {
+    display: none; /* DISABLED UNTIL DEBUGGED */
+    position: fixed;
+    text-align: center;
+    z-index: 50;
+    bottom: 0px;
+    right: 0px;
+    font-family: 'Trebuchet MS', verdana, sans-serif;
+    font-size: 12px;
+}
+
+#debug-box {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    text-align: left;
+    border: 5px solid black;
+}
+
+.nz-confidentiality-indicator {
+    text-align: right;
+    cursor: default;
+}
+
+.nz-confidentiality-indicator .tab {
+    background-color: #19b5eb;
+    color: white;
+    width: 100px;
+    border-radius: 5px 0px 0px 0px;
+    text-align: left;
+    min-width: 150px;
+    padding: 5px;
+    text-align: left;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.nz-confidentiality-indicator .title {
+}
+
+.nz-confidentiality-indicator .policies {
+    border-top: 5px solid #19b5eb;
+    text-align: left;
+    background-color: white;
+    color: black;
+    display: none;
+}
+
+.nz-confidentiality-indicator .policies .policy {
+    border-bottom: 1px solid #eee;
+    padding: 2px 10px 2px 10px;
+}
+
+.nz-confidentiality-indicator .policies .policy:hover {
+    background-color: lightblue;
+}
+
+.nz-confidentiality-indicator .policies .policy .key, .nz-confidentiality-indicator .policies .policy .value-box {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.nz-confidentiality-indicator .policies .policy .value-box {
+    vertical-align: text-bottom;
+    font-weight: bold;
+    border: 1px solid #19b5eb;
+    padding: 0px 5px;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+}
+
+.nz-confidentiality-indicator .policies .policy .key {
+    width: 20em;
+    display: inline;
+    margin-right: 1em;
+}
+
+.nz-confidentiality-indicator .policies .policy.new {
+    background-color: yellow;
+}
+
+.nz-confidentiality-indicator .policies .policy.new, .nz-confidentiality-indicator .policies .policy.changed .value, .nz-confidentiality-indicator .change-indicator {
+    background-color: yellow;
+}
+
+.nz-confidentiality-indicator .policies .policy.deleted .key, .nz-confidentiality-indicator .policies .policy.deleted .value {
+    text-decoration: line-through;
+    color: red;
+}

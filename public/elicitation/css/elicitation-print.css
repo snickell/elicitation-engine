@@ -1,0 +1,74 @@
+﻿
+@media print {
+    body {
+        background-color: inherit !important;
+    }
+
+    .widget {
+        page-break-inside: avoid;
+        background-color: green;
+    }
+
+    div.page {
+        page-break-after: always;
+        box-shadow: none !important;
+    }
+
+    div.page > .contents {
+        padding-top: 4em;
+    }
+
+    #logo {
+        display: none;
+    }
+
+    div.page #title, .page #title input {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+
+    .page .footer {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        border-top: none !important;
+        border-bottom: 2px solid black;
+    }
+
+    .page-author-notes, .insert-a-new-page {
+        display: none;
+    }
+
+    .edit-sidebar, .edit-controls, .phrase-definitions-view, #edit-elicitation-controls, .edit-widget {
+        display: none;
+    }
+
+    .edit-mode div#elicitation-box {
+        margin-left: 50px;
+    }
+
+    .select-qualifications {
+        display: none;
+    }
+
+    .page-footer .editor {
+        display: none;
+    }
+
+    .page-footer .view {
+        color: black;
+    }
+
+    .edit-mode .could-be-edited.being-edited {
+        outline: none;
+    }
+
+    .elicitation-widget-view .qualifications {
+        border: none;
+        border-top: 1px solid #999;
+        border-bottom: 1px solid #999;
+    }
+}

@@ -1,0 +1,50 @@
+.widget.text-area {
+  margin-left: 35px;
+  margin-right: 35px;
+  position: relative;
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 14px;
+  font-family: Arial, Sans-Serif;
+}
+
+.widget.text-area .label {
+  font-size: 12px;
+  font-style: italic;
+  font-family: helvetica, arial;
+  color: #333;
+}
+
+.widget.text-area textarea {
+  width: 100%;
+  border: 1px solid #f0d030;
+  background-color: #e8e8e8;
+  resize: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 5px;
+  font-family: Arial, Sans-Serif;
+}
+
+.widget.text-area textarea {
+  border-color: #6FC7B7;
+}
+
+.widget.text-area textarea:focus {
+  outline: 3px solid #f0d030;
+  background-color: #d9d9d9;
+  outline-radius: 5px;
+}
+
+.wind .widget.text-area textarea:focus {
+   outline-color: #6FC7B7;
+}
+
+.widget.text-area #optionallabel {
+  position: absolute;
+  bottom: -12px;
+  right: 0px;
+  font-size: 12px;
+  font-style: italic;
+}

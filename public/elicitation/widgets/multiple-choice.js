@@ -1,0 +1,65 @@
+(function (EAT, Ember) {
+    "use strict";
+
+    var globalMultipleChoiceNum = 0;
+
+    EAT.Widget.register('multiple-choice', {
+        prettyName: "Multiple Choice",
+        value: null, // FIXME: remove this?
+        templateName: 'multiple-choice',
+        dataModel: EAT.WidgetData.extend({
+            writein: ""
+        }),
+        definitionSchema: {
+            model: EAT.WidgetDefinition.extend({
+                writein: false
+            }),
+            label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+            writein: { accessor: EAT.WidgetDefinition.Attr("writein"), type: "Boolean", prettyName: "Append a write-in choice" },
+            choices: {
+                type: "HasMany",
+                prettyName: 'Choice',
+                emphasizeWhenEmpty: true,
+                accessor: EAT.WidgetDefinition.HasMany('choice', {
+                    model: EAT.WidgetDefinition.extend({
+                        label: "One choice amongst many",
+                        htmlID: function () {
+                            return this.get('dataKey');
+                        }.property('dataKey')
+                    }),
+                    label: { accessor: EAT.WidgetDefinition.Contents() }
+                })
+            }
+        },
+        initWidget: function () {
+            this._super();
+            this.set('multipleChoiceNum', globalMultipleChoiceNum++);
+        },
+        setupDOM: function () {
+        },
+        serializeData: function (data, errors) {
+            var choice = this.$().find("input[type='radio']:checked").val();
+
+            data.set('choice', choice);
+            if (!choice) {
+                errors.pushObject("You didn't select one of the multiple choices");
+            }
+        },
+        resumeFromSerializedData: function (serializedData) {
+            if (serializedData && serializedData.choice) {
+                var choice = serializedData['choice'];
+
+                var radioButton = this.$().find("input[type='radio']").toArray().find(function (x) {
+                    return $(x).val() === choice;
+                });
+
+                if (Ember.isNone(radioButton) && this.get('definition.writein')) {
+                    radioButton = $(".writein input[type='radio']");
+                    this.set('data.writein', choice);
+                }
+
+                $(radioButton).prop('checked', true);
+            }
+        }
+    });
+})(EAT, Ember);

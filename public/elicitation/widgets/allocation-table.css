@@ -1,0 +1,275 @@
+
+.widget.allocation-table .prompt {
+    margin-bottom: 1em;
+}
+
+.widget.allocation-table .switch-to-graphical-input {
+    font-size: 10pt;
+    float: right;
+    display: none;
+}
+
+.widget.allocation-table .scale-to-total {
+    border: 2px solid #19b5eb;
+    padding: 3px 5px;
+    background-color: #666;
+    color: white;
+    border-radius: 5px;
+}
+
+.widget.allocation-table .scale-to-total:hover {
+    background-color: #19b5eb;
+    text-decoration: none;
+}
+
+
+
+.widget.allocation-table .graphic-holder {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    cursor: row-resize;
+}
+.widget.allocation-table .graphic {
+    position: absolute;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    color: white;
+    background-color: #19b5eb;
+    border: 1px solid black;
+    border-radius: 2000px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 5px;
+    height: 5px;
+    min-width: 5px;
+    min-height: 5px;
+    overflow: hidden;
+}
+
+.widget.allocation-table .graphic .oversize {
+    position: absolute;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    font-size: 12px;
+    line-height: 12px;
+    height: 12px;
+}
+
+
+.widget.allocation-table table {
+    font-size: 10pt;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.widget.allocation-table table thead tr {
+    vertical-align: bottom;
+}
+
+.widget.allocation-table .locking-input {
+    display: inline-block;
+    text-wrap:avoid;
+    white-space: nowrap;
+}
+
+.widget.allocation-table .cell-contents {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    padding: 5px;
+}
+
+.widget.allocation-table .graphical-input .cell-contents {
+    height: initial;
+}
+
+.widget.allocation-table .plain {
+    border-left: 1px solid #eee;
+}
+
+.widget.allocation-table .plain.graphical-input {
+    vertical-align: middle;
+}
+
+
+.widget.allocation-table .sum {
+    border-width: 2px;
+    border-color: #19b5eb;
+}
+
+.widget.allocation-table .sum.col {
+    border-left-style: solid;
+    text-align: left;
+}
+.widget.allocation-table .sum.col .cell-contents {
+    padding-left: 20px;
+}
+
+.widget.allocation-table .sum.row {
+    border-top-style: solid;
+}
+
+
+.widget.allocation-table .cell-contents input[type='text'] {
+    position: relative;
+    z-index: 1;
+    font-size: 10pt;
+    width: 4em;
+
+    /* Lock+Input Alignment */
+    height: 16px;
+}
+
+.widget.allocation-table .allocated-string-is-invalid input[type='text'] {
+    border: 1px solid red;
+}
+
+.widget.allocation-table .cell-contents .ui-icon {
+    display: inline-block;
+}
+
+.widget.allocation-table .cell {
+    -webkit-transition: background-color ease-in-out 0.2s;
+    -moz-transition: background-color ease-in-out 0.2s;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.widget.allocation-table thead th {
+    padding-bottom: 2px;
+}
+
+.widget.allocation-table tbody th {
+    background-color: white;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.widget.allocation-table .cell {
+    padding: 5px;
+}
+
+.widget.allocation-table .sum {
+    background-color: white;
+}
+
+.widget.allocation-table .cell:nth-child(2n+1) {
+    /*background-color: rgba(20,0,20,0.02);*/
+}
+
+.widget.allocation-table tbody tr:nth-child(2n+1) {
+    background-color: #f4f4f6;
+}
+
+.widget.allocation-table .cell.locked {
+    background-color: rgba(0,0,0,0.2);
+}
+
+
+.widget.allocation-table .sum.total {
+    background-color: #19b5eb;
+    border-style: solid;
+    color: white;
+}
+
+.widget.allocation-table .label {
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+
+/* Lock Toggler Properties */
+.widget.allocation-table .lock-toggler {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.widget.allocation-table .lock-button {
+    display: inline-block;
+    border: 1px solid #999;
+    border-left-color: #666;
+    border-radius: 0px 4px 4px 0px;
+    background-color: #f0f0f0;
+    z-index: 1;
+    -webkit-transition: background-color linear 0.2s;
+    -moz-transition: background-color linear 0.2s;
+    transition: background-color linear 0.2s;
+
+    /* Lock+Input Alignment */
+    height: 20px;
+    position: relative;
+    top: 6px;
+    left: -1px;
+}
+
+.widget.allocation-table .lock-toggler:hover .lock-button {
+    background-color: #19b5eb;
+}
+
+.widget.allocation-table .lock-button.locked {
+    background-color: #19b5eb;
+}
+
+.widget.allocation-table .graphical-input .click-catcher {
+    display: none;
+}
+
+.widget.allocation-table .lock-toggler .click-catcher {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+
+/* Chip Allocation Table shizzle:
+.widget.allocation-table .cell {
+    min-height: 130px;
+    padding: 10px;
+    font-size: 0;
+}
+
+.widget.allocation-table .cell, .widget.allocation-table .td {
+    width: 150px;
+}
+
+.widget.allocation-table .chip {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ddd;
+    border: 1px solid #bbb;
+}
+
+.widget.allocation-table .chip {
+    cursor: pointer;
+}
+
+.widget.allocation-table .chip.allocated:hover {
+    background-color: red;
+}
+
+.widget.allocation-table .chip:hover {
+    background-color: yellow;
+    border-color: blue;
+}
+
+.widget.allocation-table .chip.allocated {
+    background-color: yellow;
+    border: 1px solid black;
+}
+*/

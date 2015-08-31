@@ -1,0 +1,8 @@
+﻿.category #discussion-question #header #subtitle {
+    border-top: 1px solid #fff;
+}
+
+.category #discussion-question #header {
+	background-image:url('header.png');
+	background-color: rgb(179,179,179);
+}

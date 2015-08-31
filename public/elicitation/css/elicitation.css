@@ -1,0 +1,801 @@
+﻿#resume-info-box {
+    position: relative;
+    display: inline-block;
+}
+
+#resume-info-box .info {
+    position: absolute;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: white;
+    width: 350px;
+    right: 0px;
+}
+
+.error-submitting-to-server {
+    color: white;
+    margin: 10px;
+    margin-top: 30px;
+}
+
+.error-submitting-to-server {
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+.error-submitting-to-server .header {
+    padding-bottom: 10px;
+    margin-bottom: 1em;
+    border-bottom: 1px solid red;
+}
+
+
+.error-submitting-to-server .title {
+    background-color: red;
+}
+
+.error-submitting-to-server .copy-paste {
+    border: 1px solid white;
+    padding: 20px;
+    background-color: white;
+    color: black;
+    font-size: 10pt;
+    white-space: pre-wrap;
+}
+
+.page-footer .view {
+    color: #f4f4f4;
+    padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.drop-down-menu {
+    position: relative;
+    font-size: 12pt;
+    display: inline-block;
+}
+
+.drop-down-menu .ui-menu a {
+    font-size: 12pt;
+}
+
+
+.drop-down-menu .ui-menu.ui-focus {
+    font-weight: normal;
+}
+.drop-down-menu .ui-menu {
+    position: absolute;
+    width: 300px;
+    z-index: 5000;
+    cursor: default;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
+}
+
+.drop-down-menu .ui-menu .category {
+    background-color: #19b5eb;
+    color: white;
+    padding: 3px;
+    margin-left: -2px;
+    margin-right: -2px;
+    margin-top: 5px;
+    padding-left: 10px;
+    font-weight: bold;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #666
+}
+
+.insert-new-page {
+    text-align: center;
+}
+
+.elicitation-widget-view {
+    position: relative;
+}
+
+.elicitation-widget-view.has-qualifications-to-show .qualifications-rhs-bar {
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    right: -40px;
+    width: 8px;
+    background-color: #666;
+    z-index: 498; /* just above the select-qualifications */
+}
+
+
+.elicitation-widget-view .select-qualifications {
+    position: absolute;
+    right: -40px;
+    top: 0px;
+    text-wrap: avoid;
+    border-right: none;
+    /*background-color: #f8f8f8;*/
+    z-index: 499; /* just below the phrase definitions view, but above the definitions */
+}
+
+.elicitation-widget-view .select-qualifications .drop-down-menu .ui-menu {
+    width: 190px;
+}
+
+.elicitation-widget-view .select-qualifications .drop-down-menu .ui-menu label {
+    display: block;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.elicitation-widget-view .select-qualifications .drop-down-menu .ui-menu label:hover {
+    background-color: #19b5e5;
+}
+
+
+.elicitation-widget-view .select-qualifications .button {
+    width: 30px;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    border-left: 1px solid black;
+
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+
+    border-radius: 5px 0px 0px 5px;
+    background-color: #666;
+}
+
+.elicitation-widget-view .section.optional:first-of-type {
+    border-left: 2px solid green;
+}
+
+.elicitation-widget-view .select-qualifications .button:after {
+    content: "+";
+}
+
+.elicitation-widget-view .select-qualifications .caption {
+    position: absolute;
+    right: -110px;
+    top: 0px;
+    overflow: visible;
+    color: white;
+    display: inline-block;
+    opacity: 0.8;
+    transition: opacity 0.5s 1s;
+    -webkit-transition: opacity 1s 1s;
+    -moz-transition: opacity 1s 1s;
+    width: 99px;
+    /*cursor: pointer;*/
+}
+
+.elicitation-widget-view .select-qualifications:hover .caption {
+    opacity: 1.0;
+    transition: opacity 0.5s 0s;
+    -webkit-transition: opacity 0.5s 0s;
+    -moz-transition: opacity 0.5s 0s;
+}
+
+.elicitation-widget-view .select-qualifications:hover .button {
+    border-color: #19b5eb;
+    color: #19b5eb;
+}
+
+
+.elicitation-widget-view .qualifications {
+    margin-left: -40px;
+    margin-right: -40px;
+    background: #999;
+
+    /* rgb(62,73,89) */
+    border: 1px solid rgb(62,73,89);
+
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #888;
+
+    padding: 10px 40px;
+    color: white;
+}
+
+.elicitation-widget-view .qualifications .qualification-editor {
+    display: inline-block;
+    font-size: 15px;
+    margin-bottom: 0.5em;
+}
+
+.elicitation-widget-view .qualifications .qualification-editor label {
+    display: inline-block;
+}
+
+.elicitation-widget-view .qualifications .qualification-editor.text-comment {
+    display: block;
+}
+
+.elicitation-widget-view .qualifications .qualification-editor.text-comment label {
+    display: block;
+}
+
+.elicitation-widget-view .qualifications .qualification-editor.text-comment textarea {
+    width: 100%;
+    min-height: 3em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body.embedded {
+    height: 100%;
+    width: 100%;
+}
+
+body.not-embedded {
+    background-color: rgb(62,73,89);
+}
+
+body.embedded .elicitation-application {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    padding-top: 30px;
+}
+
+.close-embedded-view {
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    background-color: white;
+    width: 18px;
+    height: 18px;
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.close-embedded-view:hover {
+    border: 1px solid black;
+    background-color: #19b4eb;
+    color: White;
+}
+
+#browser-version-warning {
+    width: 400px;
+    font-size: 16px;
+    padding: 20px;
+    border: 1px solid red;
+    background-color: #fff0f0;
+    margin: 0px auto;
+    margin-top: 30px;
+    text-align: left;
+}
+
+#page-load-throbber {
+    padding: 10px;
+    color: white;
+    border: 1px solid #666;
+    text-align: center;
+    position: absolute;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: black;
+}
+
+.conditionally-hidden {
+    display: none;  
+}
+
+.page .prompt {
+  font-size: 110%;
+  font-family: arial;
+  line-height: 1.4;
+    
+  padding-left: 35px;
+  padding-right: 35px;
+  margin-top: 1em;
+  
+  text-align: left;
+}
+
+.page .prompt h1 {
+    line-height: 1.1;
+}
+
+.page .prompt p {
+    margin-bottom: 0;
+}
+
+.page .widget .prompt {
+    padding-left: 0px;
+    padding-right: 0px;   
+}
+
+.post-submit {
+  display: none;
+  background-color: white;
+  border-radius: 10px 10px 10px 10px;
+  padding: 60px;
+  color: black;
+}
+
+.post-submit .message {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.post-submit .continue-to-discussion {
+    border-radius: 0px 0px 5px 5px;
+    background-color: #19b5eb;
+    text-align: right;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    padding: 5px;
+}
+
+
+a {
+  color: rgb(0,130,200);
+  text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.markdown a {
+    text-decoration: underline;
+}
+
+.markdown, .markdown-label {
+    display: inline-block;
+}
+
+.markdown-label .substituted-variable .name {
+    color: red;
+    background-color: blue;
+}
+
+.markdown-label .substituted-variable .value {
+    border: 1px solid red;
+}
+
+
+.markdown img {
+    max-width: 100%;
+    cursor: pointer;
+}
+
+.markdown sub sup, .markdown sup sub { font-size: 13px\9; /* IE8 and below: IE8's font-size is too small otherwise */  }
+
+body {
+  text-align: center;
+  font-family: arial;
+  padding: 0px;
+  margin: 0px;
+}
+
+.defined-term {
+    position: relative;
+    display: inline-block;
+    z-index: 490;
+}
+
+.defined-term .phrase {
+  display: inline-block;
+  border-bottom: 1px dotted #66b;
+  cursor: default;
+  counter-increment: defined-term;
+  position: relative;
+  z-index: 1;
+}
+
+.defined-term .phrase img {
+    width: 150px;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+
+.defined-term::after {
+  content: counter(defined-term);
+  vertical-align: super;
+  color: #66b;
+  font-size: 60%;
+  margin-left: 0.2em;
+}
+
+.defined-term.not-yet-defined .phrase {
+    border-bottom-color: Red;
+}
+
+.defined-term:hover .popup {
+  display: block;
+}
+
+.defined-term .popup {
+  display: none;
+  color: black;
+  position: absolute;
+  top: 28px;
+  left: -140px;
+  padding: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border: 2px solid #007DCC;
+  background-color: white;
+  box-shadow: 4px 4px 4px rgba(0,0,0,0.35);
+  min-width: 300px;
+  max-width: 450px;
+  font-size: 14px;
+  border-radius: 4px;
+  font-weight: normal;
+  text-decoration-style: none;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  font-family: verdana, arial, helvetica;
+  z-index: 5000;
+  min-height: 4em;
+}
+
+.defined-term .popup > .markdown {
+    display: block; /* this is for IE8, which doesn't properly width-wrap otherwise, resulting in popup definitions overflowing the box */
+}
+
+.defined-term.popped-out {
+  text-shadow: none;
+  display: inline-block;
+  box-shadow: 4px 4px 4px rgba(0,0,0,0.35);  
+  background-color: #007DCC;
+  outline: 2px solid #007DCC;
+  color: white;
+  z-index: 499;
+}
+
+.defined-term.popped-out:after {
+    color: black;
+}
+
+.elicitation {
+  /*background-color: white;
+  border-radius: 10px;  */
+}
+
+span.formula {
+  display: none;
+}
+
+#vertical-spacer {
+	height: 100px;
+}
+html { height: 100%; width: 100%; }
+
+
+.edit-mode div#elicitation-box {
+    margin-left: 400px;
+}
+
+div#elicitation-box {
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  width: 750px;
+  position: relative;
+  padding: 0px;
+}
+
+div#elicitation-box #page-holder {
+  position: relative;
+}
+
+div#elicitation-box #page-notes {
+  display: none;
+  margin-left: 35px;
+  margin-right: 35px;
+  font-family: helvetica;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  color: #ddd;
+  position: relative;
+  font-size: 16px;
+}
+
+div#elicitation-box #page-notes h2 {
+  font-weight: normal;
+  margin: 0px;
+}
+
+div#elicitation-box #page-notes #note-contents {
+  margin-left: auto;
+  margin-right: auto;
+  top: 100px;
+}
+
+#logo {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+#elicitation-box #logo {
+  position: absolute;
+  top: -80px;
+  /*right: 25px;*/
+  left: 52px;
+  color: #888;
+  font-family: arial;
+}
+
+#elicitation-box #colored-top-bar {
+  display: none;
+  border-bottom: 1px solid #BA9D36;
+  position: absolute;
+  top: 0px;
+  left: 0px;  
+  right: 0px;
+  height: 10px;
+  background-color: #f5d33f;  
+  z-index: 20;
+  border-radius: 5px 5px 0px 0px;
+}
+
+#elicitation-box #overall-title {
+  display: none;
+  padding: 8px;
+  background-color: white;
+  position: absolute;
+  top: 0px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  text-transform: upper;
+  right: 0px;
+  font-size: 13px;
+  color: rgba(0,0,0,0.8);  
+  border: 1px solid #BA9D36;
+  background-color: #f5d33f;
+  border-radius: 0px 0px 0px 5px;
+  border-top: 0px;  
+  border-right: 0px;
+  z-index: 20;
+}
+
+div.about {
+  font-size: 15px;
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-bottom: 45px;
+  display: block;
+  text-align:left;
+}
+
+#logo img {
+  border: 0px;
+}
+
+#header {
+  font-size: 35px; 
+  font-weight: bold; 
+  color: #f5d33f; 
+  position: relative; 
+  bottom: -20px;
+  right: -10px;
+}
+
+#header #logo {
+  position: absolute;
+  right: 0px;
+  bottom: -5px;
+}
+
+.counter {
+  font-size: 16px;
+  position: absolute;
+  bottom: 8px;
+  left: 20px;
+  font-weight: normal;
+  color: rgba(0,0,0,0.8);
+}
+
+div.page {
+  z-index: 1;
+  counter-reset: defined-term;
+  padding: 0;
+  background-color: white;
+  border-radius: 10px 10px 10px 10px;
+  color: black;
+  position: relative;
+  border: 0;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+}
+
+div.page > .contents {
+  padding: 40px;
+  padding-top: 30px;
+}
+
+div.page #page-header {  
+  display: none;
+  position: absolute;
+  top: 0px;
+  background-color: #f5d33f;
+  left: 0px;
+  right: 0px;
+  top: -20px;
+  border-radius: 10px 10px 0px 0px;
+  padding-left: 54px;
+  border-bottom: 1px solid #BA9D36;
+  padding-top: 25px;
+  font-size: 22px;
+  padding-bottom: 20px;
+  color: white;
+}
+
+div.page #page-header-spacer {
+  display: none;
+  height: 40px;
+}
+
+div.page #notes {
+  display: none;
+  padding-left: 35px;
+  padding-right: 35px;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+div.page #notes ul {
+  margin: 0px;
+}
+
+div.page #notes li {
+  font-family: verdana, arial, helvetica;
+  color: black;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+div.page #title {
+  position: absolute;
+  text-align: center;
+  left: 150px;
+  right: 150px;
+  height: 15px;
+  padding-top: 10px;
+  
+  color: black;
+  font-size: 14px;
+  
+  z-index: 1;
+
+  font-family: helvetica, arial;
+}
+
+div.page #topline {
+  display: none;
+  border-top: 1px solid #BA9D36;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+
+div.intro.page {
+  font-size: 15px;
+  padding-top: 20px;
+  padding-left: 55px;
+  padding-right: 55px;
+  padding-bottom: 65px;
+  display: block;
+  font-family: arial;
+  font-size: 14px;
+  line-height: 130%;
+}
+
+div.intro.page h2 {
+  margin: 0px;
+  padding: 0px;
+  padding-top: 1em;  
+  line-height: 0px;
+}
+
+div.intro h2 {
+  margin: 0px;
+  padding: 0px;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+
+
+
+
+input.value {
+  font-size: 20px;
+  width: 220px;
+  margin: 5px;
+}
+
+
+
+div.page .unexpected {
+  /* Steve: tweak these to tweak the "form fields" light-blue box */
+  background-color: #f4f4ff;
+  border: 1px solid #95b4d7;
+  padding: 20px;
+  padding-bottom: 23px;
+
+  /* These are probably better left alone */
+  margin-left: auto;
+  margin-right: auto;
+  width: 340px;
+  text-align: center;
+  margin-bottom: 1em;
+  white-space: nowrap;
+}
+
+.page #navigation {
+  z-index: 16;
+  position: absolute;
+  bottom: 6px;
+  right: 20px;
+}
+
+.page #navigation input#next {
+  font-size: 18px;
+}
+
+.page #navigation #back {
+  cursor: default;
+  margin-right: 10px;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.page #navigation #back:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.page.firstPageInElicitation {
+
+}
+
+.page.firstPageInElicitation #navigation #back {
+  display: none;
+}
+
+.page .footer {
+  position: relative;
+  background-color: #f5d33f;
+
+  background-color: rgb(179,179,179);
+  height: 39px;
+  border-radius: 0px 0px 10px 10px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+}

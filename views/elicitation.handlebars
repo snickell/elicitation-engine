@@ -19,7 +19,9 @@
         window.IsMobileDevice = true;
     </script>
 {{else}}
-	{{includeCSS "elicitationCSS"}}
+	{{includeCSS "site.css"}}
+	{{includeCSS "elicitation.css"}}
+	{{includeCSS "elicitation-widgets.css"}}
 {{/if}}
     
 	<!-- FIXME RAZOR -->
@@ -41,8 +43,9 @@
         @Html.CombresLink("shimsForIE7")
     <![endif]-->
 
-	{{includeJS "siteJs"}}
-	{{includeJS "elicitationJs"}}
+	{{includeJS "site.js"}}
+	{{includeJS "elicitation.js"}}
+	{{includeJS "elicitation-widgets.js"}}
 
 	{{includeStatic "_ElicitationTemplates"}}
 	{{includeStatic "_ElicitationWidgets"}}

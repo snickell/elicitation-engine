@@ -1,0 +1,24 @@
+
+.widget.tabular-input {
+    padding-left: 35px;
+    padding-right: 35px;
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+}
+
+.widget.tabular-input .prompt {
+    margin-bottom: 0.5em;
+}
+
+.widget.tabular-input table {
+    width: 100%;
+    /*border: 1px solid #bbb;*/
+}
+
+.widget.tabular-input table input {
+    width: 95%;   
+}
+
+.widget.tabular-input table td {
+    /*border: 1px solid #bbb;*/
+}

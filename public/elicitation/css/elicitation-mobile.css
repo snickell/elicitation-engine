@@ -1,0 +1,105 @@
+.edit-sidebar, .edit-controls {
+    display: none;
+}
+
+#page-fold {
+    position: absolute;
+    top: 480px;
+    height: 1px;
+    width: 100%;
+    background-color: Red;
+    z-index: 1000;
+    opacity: 0.1;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #333;
+}
+
+div#elicitation-box {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+div#elicitation-box #page-holder {
+    border-radius: 0;
+}
+
+div.page > .contents {
+    font-size: 12px;    
+    padding: 10px;  
+}
+
+div.page #q {
+    padding: 0;
+    font-size: 14px;
+    margin: 0;
+}
+
+#comment {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.widget.zero-sum-slider {
+    margin: 0px;
+}
+
+.widget.zero-sum-slider #slider {
+    font-size: 24px;
+    padding-top: 10px;    
+}
+
+.widget.zero-sum-slider table #rightLabel, .widget.zero-sum-slider table #leftLabel {
+    font-size: 14px;
+}
+
+div.page #title {
+    display: none;
+}
+
+/* CARD RANK WIDGET */
+.widget.card-rank {
+    margin-left: 0px;
+}
+
+.widget.card-rank .container.initial {
+    min-width: 100px;
+}
+
+.widget.card-rank .card {
+    width: 100px;
+    font-size: 10px;
+    min-height: 0;   
+    position: relative; 
+}
+
+.widget.card-rank .container.initial .card {
+    width: 150px;
+    font-size: 12px;
+    min-height: 30px;   
+}
+
+.widget.card-rank .instruction-card:after {
+    font-size: 10px;
+    line-height: 8px;
+    content: "Drag here";
+}
+
+.widget.multiple-choice {
+    margin-left: 10px; 
+    margin-top: 1em;
+    margin-bottom: 30px;
+}
+
+.widget.multiple-choice li > * {
+    font-size: 100%;
+}
+
+.widget.multiple-choice li {
+    margin-top: 20px;   
+}

@@ -20,23 +20,155 @@ var assetsUrl = devEnv ? '/' : '/assets';
 var maxAge = 86400000; // one day
 
 var assets = {
-  'test.js' : {
-    type: 'js',
-    dir: 'js',
-    files: [
-      'one.js',
-      'two.js' 
-    ]
-  },
-  'elicitationCSS' : {
+  'elicitation.css' : {
     type: 'css',
     dir: 'css',
     files: [
       'one.css',
       'two.css'
     ]
+  },
+  'elicitation-widgets.js' : {
+    type: 'js',
+    dir: 'elicitation/widgets',
+    files: [
+        'agree-disagree.js',
+        'allocation-table.js',
+        'area-allocation.js',
+        'box-and-whiskers.js',
+        'card-rank.js',
+        'dropdown.js',
+        'image.js',
+        'likert.js',
+        'multiple-choice.js',
+        'multiple-choice-table.js',      
+        'paragraph.js',
+        'custom-scripting.js',
+        'slider-allocation.js',
+        'tabular-input.js',
+        'text-area.js',
+        'text-box.js',
+        'time-trend.js'
+    ]
+  },
+  'elicitation-widgets.css' : {
+    type: 'css',
+    dir: 'elicitation/widgets',
+    files: [
+        'agree-disagree.css',
+        'allocation-table.css',
+        'area-allocation.css',
+        'box-and-whiskers.css',
+        'card-rank.css',
+        'dropdown.css',
+        'image.css',
+        'likert.css',
+        'multiple-choice.css',
+        'multiple-choice-table.css',
+        'paragraph.css',
+        'custom-scripting.css',
+        'slider-allocation.css',
+        'tabular-input.css',
+        'text-area.css',        
+        'text-box.css',
+        'time-trend.css',
+    ]
+  }, 
+  'elicitation.css' : {
+    type: 'css',
+    dir: 'elicitation/css',
+    files: [
+      'elicitation.css',
+      /* elicitation editing */
+      'jquery.miniColors.css',
+      'elicitation-editor.css',
+      'elicitation-print.css',
+    ]
+  },
+  'site.css' : {
+    type: 'css',
+    dir: 'css',
+    files: [
+      'chosen/chosen.css',
+      'themes/base/all.css',
+      'nearzero-confidentiality-indicator.css'      
+    ]
+  },
+  'site.js' : {
+    type: 'js',
+    dir: 'js',
+    files: [
+      'jquery-1.11.3.js',
+      'jquery.textarea_auto_expand.js',      
+      'browser-detection-from-old-jquery.js',
+      'jquery.scrollTo.js',
+      'jquery-ui-1.11.4.js',
+      'nearzero-confidentiality-indicator.js',
+      'handlebars.js',
+      'ember.js'
+    ]
+  },
+  'elicitation.js' : {
+    type: 'js',
+    dir: 'elicitation/scripts',
+    files: [
+      'libs/jquery.miniColors.js',
+
+
+      'pagedown/Markdown.Converter.js',
+      'pagedown/Markdown.Editor.js',
+      'pagedown/Markdown.Sanitizer.js',
+            
+      // This bad hack library is required because APPLE SUX and so does JQUERY UI
+      'libs/jquery.ui.touch-punch.js',
+      'libs/jquery.color.js',
+      'libs/jquery.placeholder.js',
+
+      'elicitation-utils.js',
+      'app.js',
+
+      'rate-limited-view.js',
+      'markdown-label.js',
+      'phrase-definition.js',
+      'page.js',
+      'pages.js',
+      'widget-gallery.js',
+
+      'eat.js',
+      'eat-views.js',
+      'elicitation.js',
+      
+      'schema.js',
+      'property-editor.js',
+      
+      'widget-definition.js',
+      'widget-qualification.js',
+      'widget-data.js',
+      'widget.js',
+      
+      // <resource reference="elicitationWidgetsJs',
+      // <!-- Support code for out-of-process acceptance testing -->
+      // 'widget-test.js',
+
+      'register-elicitation-widgets.js'
+    ]
   }
+
 };
+
+/*
+site.css:
+      <resource reference="elicitation-categories"/>
+
+      <resource path="~/Content/chosen/chosen.css"/>
+      <resource path="~/Content/themes/base/all.css"/>
+      <resource path="~/Content/nearzero-confidentiality-indicator.css"/>      
+*/
+
+// 	{{includeCSS "elicitationCSS"}}
+// 	{{includeJS "siteJs"}}
+//	{{includeJS "elicitationJs"}}
+
 
 var assetManagerConfig = {
   rootRoute: assetsUrl,
@@ -210,7 +342,6 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
 
             /* elicitation.adminURLs */
             /* elicitation.allowEditing */
-            // TODO: these should be hidden unless allowEditing=true
             reviewAdminURL: allowEditing ? Url.Action("Review", { ReviewToken: elicitation.ReviewToken }) : null,
             assignedToAdminURL: allowEditing ? Url.Action("AssignedTo", "Task", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
             dataAdminURL: allowEditing ? Url.Action("Data", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,

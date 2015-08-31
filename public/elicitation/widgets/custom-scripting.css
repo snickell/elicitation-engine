@@ -1,0 +1,15 @@
+.widget.custom-scripting {
+    background-color: #19b5eb;
+    color: white;
+    margin-left: -40px;
+    margin-right: -40px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+/* Hide the "Qualify your answer", which is a sibling element of the widget in the DOM */
+.widget.custom-scripting ~ .select-qualifications {
+    display: none;
+}

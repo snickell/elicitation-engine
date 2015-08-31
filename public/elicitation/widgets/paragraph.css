@@ -1,0 +1,8 @@
+.widget.paragraph {
+  margin-left: 35px;
+  margin-right: 35px;
+  position: relative;
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

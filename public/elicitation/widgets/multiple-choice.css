@@ -1,0 +1,22 @@
+.widget.multiple-choice {
+    margin-left: 50px; 
+    margin-top: 0.5em; 
+    margin-bottom: 1em;
+}
+
+.widget.multiple-choice .markdown-label, .widget.multiple-choice .markdown {
+    display: inline;
+}
+
+.widget.multiple-choice p:first-child {
+    margin: 0px;
+    display: inline;
+}
+
+.widget.multiple-choice label {
+    cursor: default;
+}
+
+.widget.multiple-choice label:hover {
+    background-color: #19b5eb;
+}

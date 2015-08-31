@@ -1,0 +1,32 @@
+.widget.image {
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.widget.image.align-center {
+    text-align: center;
+}
+
+.widget.image img {
+    max-width: 100%;
+}
+
+.widget.image .no-image {
+    border: 2px solid #ddd;
+    border-radius: 3px;
+    padding: 30px;
+    color: #aaa;
+    background-color: #f8f8f8;
+    font-style: italic;
+    white-space: pre;
+}
+
+.widget.image .caption {
+    font-size: 75%;
+}
+
+.widget.image img.thumbnail {
+    width: 160px;
+    max-width: 320px;
+    max-height: 240px;
+}
