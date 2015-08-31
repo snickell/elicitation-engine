@@ -1,4 +1,8 @@
-Validate identity of current person against Forms auth (do a call to asp.net mvc)
+1) TAKE Desktop/NearZero Web templates, and convert for use here!
+2) TAKE Desktop/NearZero Web scripts and embed them here
+3) TAKE Desktop/NearZero Web css and embed them here
+
+
 
 DB:
 - get elicitation AND definition in one join call
@@ -9,5 +13,3 @@ DB:
 1) convert combres assets into express-asset-manager bundles
 2) use bower or npm (???) to include many of our assets
 3) Use connect-assets instead of express-asset-manager?
-
-Convert Elicitation.cshtml from Razor to Handlebars

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+{{#if isMobileDevice}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+{{/if}}
+
+    <!-- <link rel="SHORTCUT ICON" href="@Url.Content("~/Content/favicon.ico")" /> -->
+
+    <title>{{elicitationName}} - Expert Elicitation</title>
+    
+{{includeStatic "_GoogleAnalytics"}}
+
+{{#if isMobileDevice}}
+	{{includeCSS "elicitationCSS-mobile"}}
+    <script>
+        window.IsMobileDevice = true;
+    </script>
+{{else}}
+	{{includeCSS "elicitationCSS"}}
+{{/if}}
+    
+	<!-- FIXME RAZOR -->
+    <!-- We can't include this in combres, because it makes use of URL relative CSS import statements -->
+    <link href="@Url.Content("~/Content/themes/base/all.css")" rel="stylesheet" type="text/css" />
+
+    <script>
+        ENV = {
+            CP_DEFAULT_CACHEABLE: true,
+            VIEW_PRESERVES_CONTEXT: true
+        };
+    </script>
+
+    <!--[if IE 8]>
+		{{includeJS "shimsForIE8"}}
+    <![endif]-->
+    <!--[if IE 7]>
+		{{includeJS "shimsForIE7"}}
+        @Html.CombresLink("shimsForIE7")
+    <![endif]-->
+
+	{{includeJS "siteJs"}}
+	{{includeJS "elicitationJs"}}
+
+	{{includeStatic "_ElicitationTemplates"}}
+	{{includeStatic "_ElicitationWidgets"}}
+
+
+    <script>
+        window.DEFAULT_ELICITATION_CONFIGURATION = {{jsonStringify settings}};
+
+        // Load expert list for the dropdown widget
+        EAT.experts = {{jsonStringify expertNames}};
+
+        EAT.advanceReadiness();
+    </script>
+</head>
+<body class="{{nzCategory}} {{#if settings.embedded}}embedded{{else}}not-embedded{{/if}}">
+
+	{{#if showNZLogo}}
+        <div id="vertical-spacer">
+        </div>
+        <div id="logo">
+            <img src="/Content/elicitation/images/logo_s.png" />
+        </div>
+	{{/if}}
+
+
+    <div id="page-load-throbber">
+        Loading elicitation...<br />
+        <img src="/Content/elicitation/images/page-load-throbber.gif" width="220" height="19" />
+    </div>
+
+    <div id="confidentiality-indicator-box"></div>
+
+    <!--[if lte IE 7]>
+        <style>
+            .elicitation-application {
+                display: none;
+            }
+            #page-load-throbber {
+                display: none;
+            }
+        </style>
+        <div style="width:100%">
+            <div id="browser-version-warning">
+                <h1>Internet Explorer 7 isn't supported</h1>
+                    
+                <p>The elicitation system is incompatible with older versions of Internet Explorer. Sorry for the hassle!</p>
+        
+                <p>Do you have another computer available?  
+            Or perhaps another web browser like Google Chrome or Mozilla Firefox?</p>
+
+                <p>If you don't, check with the elicitor (you can reply to your invitation email!), as they may have a backup option available for you.</p>
+            </div>
+        </div>
+    <![endif]-->
+
+    <script type="text/x-elicitation-definition">{{{elicitationDefinition}}}</script>
+	{{#if elicitationPriorSessionData}}
+		<script type="text/x-elicitation-prior-session-data">{{{elicitationPriorSessionData}}}</script>
+	{{/if}}
+</body>
+</html>

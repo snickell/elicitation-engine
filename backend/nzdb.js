@@ -62,7 +62,7 @@ NZDB.prototype.query = function (query, params, cb) {
 
     cb(err, rowResults);
   });
-   
+  
   params.forEach(function (param) {
     request.addParameter(param.name, param.type, param.value);
   });
@@ -86,7 +86,15 @@ NZDB.prototype.getElicitationFromID = function (id, cb) {
     [
       { name: "id", type: TYPES.Int, value: id}
     ],
-    cb
+    function (err, rows) {
+      if (err) {
+        cb(err, null);
+      } else if (rows.length == 1){
+        cb(null, rows[0]);
+      } else {
+        cb("uhoh, more than 1 elicitation was returned", null);
+      }
+    }
   )
 }
 

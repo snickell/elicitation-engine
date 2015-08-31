@@ -1,0 +1,592 @@
+﻿
+<script type="text/x-handlebars">
+    {{#unless elicitation.unsupportedBrowser}}
+        {{outlet}}
+    {{else}}
+        <div style="width:100%">
+            <div id="browser-version-warning">
+                <h1>Tablets and phones aren't yet supported</h1>
+                    
+                <p>The NearZero elicitation system is currently incompatible with mobile phones and tablets such as Android, iPhone and iPad.</p>
+
+                <p>We're working to add support for mobile devices, but until then, please use a computer.</p>
+
+                <p>If you have any questions, please email Seth Nickell <a href="mailto: snickell@gmail.com">snickell@gmail.com</a>.</p><p>Sorry for the hassle!</p>
+            </div>
+        </div>   
+    {{/unless}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="dropdown-qualification-editor-view">
+    <label>{{view.content.prettyName}}:</label>
+    {{view Ember.Select 
+        contentBinding="view.selections" 
+        prompt=" " 
+        optionValuePath="content.value"
+        optionLabelPath="content.label"
+        selectionBinding="view.content.content"
+    }} 
+</script>
+
+<script type="text/x-handlebars" data-template-name="text-comment-qualification-editor-view">
+    <label>{{view.content.prettyName}}:</label>
+    {{view ElicitationUtils.ExpandingTextArea placeholder="Leave your comment here" valueBinding="view.content.content"}}
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="widget-layout">
+    {{yield}}
+    {{#if view.qualifications}}
+        {{#unless view.definition.hideOptionalQualifications}}
+            <div class="select-qualifications">
+                {{#view ElicitationUtils.DropDownMenuView}}
+                    {{#each qualification in view.parentView.qualifications}}
+                        <li>
+                            <label>
+                                {{view Ember.Checkbox checkedBinding="qualification.showQualification" disabledBinding="qualification.disableTogglingForParticipant"}} 
+                                <span>{{qualification.prettyName}}</span>
+                            </label>
+                        </li>
+                    {{/each}}
+                {{/view}}
+                <div class="caption">Qualify your answer</div>
+            </div>
+        {{/unless}}
+        {{#if view.hasQualificationsToShow}}
+            <div class="qualifications-rhs-bar"></div>
+            <div class="qualifications">
+                {{#each qualification in view.qualificationsToShow}}
+                    {{view qualification.editorView contentBinding="qualification"}}
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="drop-down-menu">
+    <div class="button" {{bindAttr placeholder="placeholder"}}></div>
+    <ul>
+        {{yield}}
+    </ul>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="edit-controls">
+    {{#unless unsupportedBrowserForEditing}}
+        {{#if elicitation.editMode}}
+            <div class='contents'>
+                <div class="header">
+                    Authoring Elicitation
+                    {{#view ElicitationUtils.DropDownMenuView downArrowButton="true" placeholder="Qualify your answer"}}
+                        <li>
+                            <a href="#" {{action "saveChangesAs" target="elicitation"}}>
+                                <span class="ui-icon ui-icon-disk"></span>
+                                Save a Copy As...
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" {{action "print" target="elicitation"}}>
+                                <span class="ui-icon ui-icon-print"></span>
+                                Print...
+                            </a>
+                        </li>
+                        <li class="category">Share:</li>
+                        <li>
+                            <a {{bindAttr href="elicitation.reviewAdminURL"}} target="blank">
+                                <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                Reviewer Link (shareable url)
+                            </a>
+                        </li>
+                        <li>
+                            <a {{bindAttr href="elicitation.assignedToAdminURL"}} target="_blank">
+                                <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                Assign to Participants...
+                            </a>
+                        </li>
+                        <li class="category">Navigate To:</li>
+                        <li>
+                            <a {{bindAttr href="elicitation.dataAdminURL"}} target="_blank">
+                                <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                Participant Response Data...
+                            </a>
+                        </li>
+                        <li>
+                            <a {{bindAttr href="elicitation.changeHistoryAdminURL"}} target="blank">
+                                <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                Revision History...
+                            </a>
+                        </li>
+
+                        {{#if elicitation.discussionURL}}
+                            <li>
+                                <a {{bindAttr href="elicitation.discussionURL"}} target="_blank">
+                                    <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                    Discussion...
+                                </a>
+                            </li>
+                        {{/if}}
+                    {{/view}}
+                </div>
+                <hr/>
+
+                {{elicitation.numPages}} pages:
+                <input type="submit" {{action "addNewPage" target="view" on="click"}} value="Add New Page" />
+            </div>
+        {{/if}}
+
+        <div id="nav">
+            <a href="#" class="edit button" {{action "toggleEditMode" target="view"}}>{{view.toggleEditModeLabel}}</a>
+
+            {{#if elicitation.editMode}}
+                {{#if view.editedSinceSaving}}
+                    <a href="#" 
+                        {{bindAttr class=":save :button elicitation.definitionIsSaved"}} 
+                        {{action "saveChanges" target="elicitation" }}
+                    >
+                        {{#if elicitation.saveInProgress}}
+                            Saving...
+                        {{else}}
+                            Save
+                        {{/if}}
+                    </a>
+                    <div class="save-message">
+                        {{elicitation.saveMessage}}
+                    </div>
+                {{/if}}
+            {{/if}}
+        </div>
+    {{else}}
+        <div id="unsupported-browser-warning">
+            <b>FYI:</b> Edit-Mode doesn't work on IE7/8
+        </div>
+    {{/unless}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="widget-gallery">
+    <div class="gallery-frame">
+        <div class="header">
+            <h1>Choose Yer' Poison</h1>
+            <input type="submit" value="X" {{action "closeWidgetGallery" target="view"}}/>
+        </div>
+        {{#each widget in view.widgets}}
+            <div class="widget" {{bindAttr widget-name="widget.widgetName"}} {{action widgetClicked widget target="view"}}>
+                <div class="thumbnail">
+                    <img {{bindAttr src="widget.thumbnailURL"}} />
+                </div>
+                <h1>{{widget.prettyName}}</h1>
+            </div>
+        {{/each}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="page-footer">
+    {{#if elicitation.editMode}}
+        <div class="editor">
+            <h3>Edit Page Footer:</h3>
+            {{view Ember.TextArea valueBinding="view.content.label"}}
+        </div>
+    {{/if}}
+    <div class="view">
+        {{view EAT.MarkdownLabel contentBinding="view.content.label" elicitationBinding="elicitation"}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="custom-widgets">
+    {{#if elicitation.editMode}}
+    <div class="editor">
+        <h3>Program Custom Widgets:</h3>
+        <h4>Javascript:</h4>
+        {{view Ember.TextArea valueBinding="view.content.javascript"}}
+        <h4>CSS:</h4>
+        {{view Ember.TextArea valueBinding="view.content.css"}}
+        <br/>
+        <button {{action "injectCSSAndJavascript" target="view"}}>Apply Changes</button>
+    </div>
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="elicitation">
+    <div {{bindAttr class="elicitation.editMode elicitation.reviewMode elicitation.showAllPages"}}>
+        {{#if elicitation.allowEditing}}
+            {{#if elicitation.editMode}}
+                {{view EAT.EditSidebarView}}
+
+                {{view EAT.PhraseDefinitionsView}}
+
+                {{#if elicitation.widgetGalleryIsOpen}}
+                    {{view EAT.WidgetGalleryView addToPageBinding="elicitation.widgetGalleryAddsToPage"}}
+                {{/if}}
+            {{/if}}     
+
+            {{view EAT.EditControlsView}}
+        {{/if}}
+
+        <div id="elicitation-box" >
+            <div class="elicitation">
+                {{#if elicitation.embedded}}
+                    {{#view EAT.CloseEmbeddedView}}
+                        <div class="close-embedded-view" {{action "closeEmbeddedViewConfirm" target="view"}}>X</div>
+                    {{/view}}
+                {{/if}}
+
+                {{#if elicitation.reviewMode}}
+                <div class="review-header">Review Mode (read-only)</div>
+                {{/if}}
+
+                {{view EAT.PagesView}}
+
+                {{#if elicitation.errorSubmittingToServer}}
+                    <div class="error-submitting-to-server">
+                        <div class="header">
+                            {{#if elicitation.showSerializedData}}
+                                <span class="title">Ugh! Submit failed :-(</span> We really want to record your data, try to submit again?
+                            {{else}}
+                                <span class="title">WARNING</span> could not contact the server... is your internet connected?</>
+                            {{/if}}
+                        </div>
+                        {{#if elicitation.showSerializedData}}
+                            If that doesn't work, email your data (as follows) to <a target="_blank" href="mailto:help@nearzero.org">help@nearzero.org</a>:
+                            <div class="copy-paste">{{elicitation.showSerializedData}}</div>
+                        {{/if}}
+                    </div>
+                {{/if}}
+                {{view EAT.PageFooterView contentBinding="elicitation.pageFooter"}}
+                {{view EAT.CustomWidgetsView contentBinding="elicitation.customWidgets"}}
+
+            </div>
+            <div id="page-notes">
+                <div id="note-contents">
+                </div>
+            </div>
+            {{view EAT.PostSubmitView elicitationBinding="elicitation"}}
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="post-submit">
+    <h2>Thanks, your responses have been recorded.</h2>
+
+    <div class="message">{{view EAT.MarkdownLabel contentBinding="elicitation.completePageMessage" elicitationBinding="elicitation"}}</div>
+
+    {{#if elicitation.embedded}}
+        {{#view EAT.CloseEmbeddedView}}
+            <div class="continue-to-discussion">
+                <input type="submit" style="font-size: 120%" {{action "closeEmbeddedViewPostSubmit" target="view"}} value="Continue to Discussion" />
+            </div>
+        {{/view}}
+    {{else}}
+        {{#if elicitation.completePageIncludeLinkToDiscussion}}
+            <div class="continue-to-discussion">
+                <input type="submit" {{action "gotoDiscussion" target="view"}} value="Continue to Discussion" />
+            </div>
+        {{/if}}
+    {{/if}}
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="property-label">
+    <label>{{property.prettyName}}:</label>
+</script>
+
+<script type="text/x-handlebars" data-template-name="markdown-label">
+{{view.html}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="widget-label">
+    <div class="prompt">{{view EAT.MarkdownLabel contentBinding="view.definition.label" elicitationBinding="view.elicitation"}}</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-help-text">
+    {{#if property.helpText}}
+        <span class="help-button" {{action "toggleHelpText" target="view"}}>?</span>
+        <div class="help-text">{{property.helpText}}</div>
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-string">
+    {{partial property-label}}
+    {{view Ember.TextField valueBinding="value"}}
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-formula">
+    {{partial property-label}}
+    {{view Ember.TextField valueBinding="value"}}
+    {{view Ember.Select contentBinding="view.formulaElements" prompt="Add reference:" selectionBinding="view.dataKeyToAppend"}}
+    Result: '<i>{{view.result}}</i>'
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-millions-of-dollars">
+    {{partial property-label}}
+    ${{view Ember.TextField width="10" valueBinding="value"}}m<br/>
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-boolean">
+    {{view Ember.Checkbox checkedBinding="value"}} {{property.prettyName}}<br/>
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-text">
+    {{partial property-label}}
+    {{view ElicitationUtils.ExpandingTextArea valueBinding="value"}}<br/>
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-color">
+    {{partial property-label}}
+    {{view Ember.TextField id="color" valueBinding="value"}}<br/>
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-image">
+    {{partial property-label}}
+
+    <form class="image-upload" enctype="multipart/form-data">
+        <input {{action "fileChanged" on="change" target="view"}} class="file" name="file" type="file" />
+        <progress></progress>
+    </form>
+
+    {{#if view.message}}
+        <div class="message">
+            {{view.message}}
+        </div>
+    {{/if}}
+
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-enum">
+    {{partial property-label}}
+    {{view Ember.Select contentBinding="property.values" optionValuePath="content.value" optionLabelPath="content.label" valueBinding="value"}}
+    {{partial property-help-text}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="property-editor-hasmany">
+    <div class="has-many-box">
+        <div class="header">{{property.prettyNamePlural}}: <input type="submit" {{action "addChild" target="view"}} value="Add a {{unbound ../property.prettyName}}"/></div>
+        {{#each subProperty in value}}
+            <div class="has-many-child">
+                <div class="controls">
+                    <a class="move up" title="Move this {{unbound ../property.prettyName}} up" {{action "moveChildUp" subProperty target="view"}}>▲</a>
+                    <a class="move down" title="Move this {{unbound ../property.prettyName}} down" {{action "moveChildDown" subProperty target="view"}}>▼</a>
+                    |
+                    <input type="submit" class="delete" title="Delete this {{unbound ../property.prettyName}}" {{action "removeChild" subProperty target="view"}} value="X"/>
+                </div>
+                {{view EAT.WidgetDefinitionEditorView definitionBinding="subProperty"}}
+            </div>
+        {{else}}
+            <div class="is-empty-message">
+                {{#if ../property.emphasizeWhenEmpty}}
+                    <p style="font-size:120%; font-style: normal;"><span style='background-color: black; color: white'>Start Here:</span> click the button above to add a few {{property.prettyNamePlural}}.</p>
+                {{else}}
+                    None added yet.
+                {{/if}}
+            </div>
+        {{/each}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="widget-definition-editor">
+    {{#each view.definition.categories}}
+        {{#view EAT.WidgetDefinitionEditorCategoryView}}
+            <div {{bindAttr class=":category defaultCategory view.expanded"}}>
+                {{#unless defaultCategory}}<div class="category-header" {{action "toggleExpanded" target="view"}}>{{name}}</div>{{/unless}}
+        
+                <div class="category-body">
+                    {{#each propertiesAndValues}}
+                        {{#if property.visible}}
+                            {{view property.editorView propertyBinding="property" valueBinding="value" parentDefinitionBinding="view.definition"}}
+                        {{/if}}
+                    {{/each}}
+                </div>
+            </div>
+        {{/view}}
+    {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="edit-sidebar">
+    {{#if elicitation.widgetBeingEdited}}
+        <div class="widget-being-edited">{{elicitation.widgetBeingEdited.prettyName}} <input style="float: right" type="submit" {{action "closeWidgetEditor" target="view" on="click"}} value="Close"/></div>
+    {{/if}}
+    <div class="editor-box">
+        {{outlet widgetBeingEdited}}
+        {{#unless elicitation.widgetBeingEdited}}
+            <div class="no-widget-being-edited-message">Hover over a widget and click <b>Edit</b> to set its properties here.</div>
+        {{/unless}}
+    </div>
+
+    {{#if elicitation.widgetBeingEdited}}
+        {{view EAT.WidgetDataExplorer widgetBinding="elicitation.widgetBeingEdited"}}
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="phrase-definitions-view">
+    <div class="editor-box phrase-definitions">
+        <div class="editor-box-header" title="Click to show the definition list" {{action "togglePopout" target="view" }}>
+            <span>Definitions</span>
+        </div>
+        <div class="box-body slim-scrollbars" {{bindAttr class="view.showBody"}}>
+            {{#each phraseDefinition in elicitation.phraseDefinitions}}
+                {{#view EAT.PhraseDefinitionView contentBinding="phraseDefinition" phrasesBinding="view"}}
+                    <label>{{view.content.phrase}}:</label>
+                        {{view ElicitationUtils.ExpandingTextArea valueBinding="view.content.definition"}}
+                {{/view}}
+            {{else}}
+                <i>No definitions.</i>
+            {{/each}}
+            <p>
+                To add a definitional popup, use the syntax:<br/>
+                [[this phrase will have a popup]]
+                inside a label. Then you can edit <i>this phrase will have a popup</i> here.
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="widget-data-explorer">
+    <div class="editor-box data-explorer">
+        <div class="editor-box-header">
+            <span>Data Tester</span>
+            <input type="submit" value="Store Data" {{action "storeData" target="view"}} />
+        </div>
+
+        {{#if view.data}}
+            <ul>
+                {{#each view.data}}
+                    <li><b>{{key}}:</b> {{value}}</li>
+                {{else}}
+                    <li><i>No data was stored.</i></li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <i>Click "Store Data" to test this widget's data.</i>
+        {{/if}}
+
+        {{#if view.errors}}
+            <b>Validation Messages:</b>
+            <ul>
+                {{#each view.errors}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+
+        <div style="font-size: 75%; margin-top: 2em;">WidgetID is: {{view.widgetID}}</div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="editable-widget">
+    {{#if elicitation.editMode}}
+        <div class="edit-widget">
+            <a href="#" title="Configure widget's content and properties" id="edit" {{action "editWidget" target="view" on="click"}}>Edit</a>
+            |
+            <span class="order">
+                <a href="#" title="Move widget up" id="up" {{ action "moveWidgetUp" target="view" on="click"}}>▲</a>
+                <a href="#" title="Move widget down" id="down" {{ action "moveWidgetDown" target="view" on="click"}}>▼</a>
+            </span>
+            |
+            <a href="#" title="Delete widget" id="remove" {{action "removeWidget" target="view" on="click"}}>X</a>
+        </div>
+    {{/if}}
+    {{view EAT.WidgetViewWrapper currentViewBinding="view.content"}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="page">
+    <div {{bindAttr class=":page view.isVisible"}} >
+        {{#if elicitation.editMode}}
+            <div class="edit-widget edit-page">
+                {{#view view.addWidgetToPageView pageBinding="view.page"}}
+                    <select>
+                        <option value="prompt-no-action-required">Add a Widget:</option>
+                        <optgroup label="Gallery:">
+                            <option value="show-gallery">Browse widgets...</option>
+                        </optgroup>
+                        <optgroup label="Add:">
+                            {{#each widget in view.widgetNames}}
+                                <option {{bindAttr value="widget.widgetName"}}>{{widget.prettyName}}</option>
+                            {{/each}}
+                        </optgroup>
+                    </select>
+                    <!--
+                    view Ember.Select viewName="select"
+                                    contentBinding="view.widgetNames"
+                                    optionLabelPath="content.prettyName"
+                                    optionValuePath="content.widgetName"
+                                    prompt="Add a Widget:" 
+                                    selectionBinding="view.newWidgetToAdd"
+                    -->
+                {{/view}}
+                |
+                <span class="order">
+                    <a href="#" title="Move Page Up" id="up" {{ action "movePageUp" target="view" on="click"}}>▲</a>
+                    <a href="#" title="Move Page Down" id="up" {{ action "movePageDown" target="view" on="click"}}>▼</a>
+                </span>
+                |
+                <a href="#" title="Delete Page" id="remove" {{action "removePage" target="view" on="click"}}>X</a>
+            </div>
+        {{/if}}
+
+        <div class="contents">
+            {{#each view.page.widgets}}
+                {{view EAT.EditableWidgetView contentBinding="this"}}
+            {{else}}
+                {{#if elicitation.editMode}}
+                    <div class="blank-page-message">This is a blank page. To add a widget to this page, hover over the page and click <b>Add a Widget</b>.</div>
+                {{/if}}
+            {{/each}}
+        </div>
+
+        <div class="footer">
+            <div id="title">
+                {{#unless elicitation.editMode}}
+                    {{view.page.title}}
+                {{else}}
+                    {{view Ember.TextField valueBinding="view.page.title"}}
+                {{/unless}}
+            </div>
+            <div id="navigation">
+                {{#unless elicitation.showAllPages}}
+                    {{#unless view.page.firstPageAfterResume}}
+                        {{#unless view.page.isFirstPage}}
+                            <input href="#" id="back" value="«" type="submit" {{action "gotoPrevPage" target="view" on="click"}}>
+                        {{/unless}}
+                    {{else}}
+                        <div id="resume-info-box">
+                            <input href="#" id="back" value="«" type="submit" disabled="true" {{action "none" target="view" on="click"}}>
+                            <div class="info">
+                                <b>Resuming where you left off.</b> Your earlier responses have been saved, but you won't be able go backward to review or revise them.</p>
+                                <p style="font-size: 90%">You could also <a href="#" {{action "restartElicitationWithoutPriorData" target="view" on="click"}}>start over from scratch</a>.</p>
+                            </div>
+                        </div>
+                        
+                    {{/unless}}
+
+                    <input id="next" type="submit" {{bindAttr disabled="view.nextButtonDisabled"}} {{bindAttr value="view.nextButtonLabel"}} {{action "gotoNextPage" target="view" on="click"}}>
+                {{else}}
+
+                {{/unless}}
+            </div>
+
+            <div class="counter">
+                {{#if elicitation.editMode}}
+                    <span class="page-num-editor">
+                        {{view Ember.Select contentBinding="elicitation.pagesController.pageRangeForSelect" valueBinding="view.page.pageNum"}}
+                    </span>
+                {{/if}}
+                <span class="page-num">{{view.page.pageNum}}</span>
+                of {{ elicitation.pagesController.numPages }}
+            </div>
+        </div>
+    </div>
+
+    {{#if elicitation.editMode}}
+        <div class="page-author-notes">
+            {{view ElicitationUtils.ExpandingTextArea valueBinding="view.page.authorNotes" rows="1" placeholder="Elicitation authors' notes"}}
+        </div>
+
+        <div class="insert-a-new-page">
+            <a href="#" title="Move Page Down" {{ action "insertNewPageAfter" target="view" on="click"}}>Add a New Page</a>
+        </div>
+    {{/if}}
+</script>

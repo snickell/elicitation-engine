@@ -1,0 +1,687 @@
+﻿<script type="text/x-handlebars" data-template-name="text-area">
+    {{partial widget-label}}
+    <div class="widget text-area">
+        {{#if view.definition.optional}}
+        <div id="optionallabel">optional</div>
+        {{/if}}
+        {{view Ember.TextArea placeholderBinding="view.definition.placeholder" rowsBinding="view.definition.numRows" valueBinding="view.data.text"}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="multiple-choice-table-row">
+    <td class="row-label">{{view EAT.MarkdownLabel contentBinding="row.definition.label" elicitationBinding="view.elicitation"}} {{view.fetchMe}}</td>
+    {{#each cell in row.cells}}
+        <td class="choice">
+            <label>
+                {{#if cell.radioButton}}
+                    {{view view.RadioButton valueBinding="cell.choice"}}
+                {{/if}}
+
+                {{#if cell.checkBox}}
+                    {{view Ember.Checkbox checkedBinding="cell.value"}}
+                {{/if}}
+
+                {{#if cell.textEntry}}
+                    {{view Ember.TextField valueBinding="cell.value"}}
+                {{/if}}
+                
+                {{#if cell.dropDown}}
+                    {{view Ember.Select selectionBinding="cell.value" contentBinding="cell.col.definition.dropDownChoices"}}
+                {{/if}}                          
+            </label>
+        </td>
+    {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="multiple-choice-table">
+    <div class="widget multiple-choice-table">
+        {{partial widget-label}}
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    {{#each col in view.data.table.cols}}
+                        <th class="choice">{{view EAT.MarkdownLabel contentBinding="col.definition.label" elicitationBinding="view.elicitation"}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+    
+            {{#if view.showTableFooter}}
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        {{#each col in view.data.table.cols}}
+                            <th class="choice">{{view EAT.MarkdownLabel contentBinding="col.definition.label" elicitationBinding="view.elicitation"}}</th>
+                        {{/each}}
+                    </tr>
+                </tfoot>
+            {{/if}}
+
+            <tbody>
+            {{#each row in view.data.table.reorderedRows}}
+                {{view view.RowView rowBinding="row" elicitationBinding="view.elicitation"}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="allocation-table-cell-chips">
+    {{#each chip in view.content.chips}}
+        {{view view.chipView contentBinding="chip"}}
+    {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="allocation-table-cell-graphic">
+    <div class="dragtest">
+
+    </div>
+    <div class="graphic" {{bindAttr style="view.graphicStyle"}}>
+            <div class="oversize">{{view.content.allocatedString}}</div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="allocation-table-cell">
+    {{#if view.graphicalInput}}
+        {{view view.graphicView contentBinding="view.content"}}
+    {{else}}
+        <div class="cell-contents">
+            <div class="locking-input">
+                {{view view.allocatedTextField 
+                    allocatedBinding="view.content.allocatedString"
+                    precisionBinding="view.content.allocatedStringPrecision"
+                }}<div class="lock-toggler" {{action "toggleLocked" target="view"}}>
+                    <div {{bindAttr class=":lock-button :ui-icon :ui-icon-locked view.content.locked"}} title="Lock this allocation, so it isn't modified automatically when you change sums"></div>
+                    <div class="click-catcher"></div>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="allocation-table">
+    <div class="widget allocation-table">
+        <label class="switch-to-graphical-input">
+            {{view Ember.Checkbox checkedBinding="view.data.graphicalInput"}}
+            Experimental graphical input
+        </label>
+
+        {{partial widget-label}}
+
+
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th>
+                </th>
+                {{#each col in view.data.table.cols}}
+                    <th>{{col.definition.label}}</th>
+                {{/each}}
+                {{#if view.showRowSums}}
+                    <th></th>
+                {{/if}}
+            </tr>
+            </thead>
+            <tbody>
+            {{#each row in view.data.table.rows}}
+                <tr>
+                    <th>{{row.definition.label}}</th>
+                    {{#each cell in row.cells}}
+                        {{view view.cellView contentBinding="cell" class="plain"}}
+                    {{/each}}
+                    {{#if view.showRowSums}}
+                        {{view view.summationCellView labelBinding="row.definition.label" contentBinding="row" class="sum col"}}
+                    {{/if}}
+                </tr>
+            {{/each}}
+            {{#if view.showColSums}}
+                <tr>
+                    <th></th>
+                    {{#each col in view.data.table.cols}}
+                        {{view view.summationCellView labelBinding="col.definition.label" contentBinding="col" class="sum row"}}
+                    {{/each}}
+                    {{#if view.showRowSums}}
+                        {{view view.summationCellView label="Total" contentBinding="view.data.table" class="sum row col total"}}
+                    {{/if}}
+                </tr>
+            {{/if}}
+            </tbody>
+        </table>
+        <p style="font-size: 80%">
+            {{#if view.data.fullyAllocated}}
+                <i>{{view.definition.unitPrefix}}{{view.definition.totalAllocation}}{{view.definition.unitSuffix}} fully allocated.</i>
+            {{else}}
+                <a href="#" class="scale-to-total" {{action scaleToTotal target="view"}}>Scale your allocation</a>
+                from {{view.definition.unitPrefix}}{{view.data.allocatedString}}{{view.definition.unitSuffix}} to {{view.definition.unitPrefix}}{{view.definition.totalAllocation}}{{view.definition.unitSuffix}}
+            {{/if}}
+        </p>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="agree-disagree">
+    <div class="widget agree-disagree">
+        <div id="statement">{{view EAT.MarkdownLabel contentBinding="view.definition.label" elicitationBinding="view.elicitation"}}</div>
+        <div class="radiobox">
+            <label><input type="radio" value="agree" name="agreeDisagree{{unbound view.agreeDisagreeNum}}">I agree</label> 
+            <label><input type="radio" value="disagree" name="agreeDisagree{{unbound view.agreeDisagreeNum}}">I disagree</label>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="multiple-choice">
+    {{partial widget-label}}
+    <div class="widget multiple-choice">
+        {{#each choice in view.definition.choices}}
+            <div class="choice">
+                <label>
+                    <input type="radio" {{bindAttr value="choice.label"}} name="multiple-choice-{{unbound view.multipleChoiceNum}}">
+                    {{view EAT.MarkdownLabel contentBinding="choice.label" elicitationBinding="view.elicitation"}}
+                </label>
+            </div>
+        {{/each}}
+        {{#if view.definition.writein}}
+            <div class="choice writein">
+                <label>
+                    <input type="radio" {{bindAttr value="view.data.writein"}} name="multiple-choice-{{unbound view.multipleChoiceNum}}">
+                    {{view Ember.TextField valueBinding="view.data.writein" placeholder="Write-in another answer"}}
+                </label>
+            </div>
+        {{/if}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="image">
+    <div {{bindAttr class=":widget :image view.definition.alignCenter"}}>
+        {{#if view.imageURL}}
+            <a {{bindAttr href="view.linkToURL"}} target="_blank">
+                <img {{bindAttr class="view.definition.thumbnail"}} {{bindAttr src="view.imageURL"}}/>
+            </a>
+        {{else}}
+            <div class="no-image">{{unbound view.imageMissingMessage}}</div>
+        {{/if}}
+        {{#if view.definition.label}}
+            <div class="caption">
+                {{view EAT.MarkdownLabel contentBinding="view.definition.label" elicitationBinding="view.elicitation"}}
+            </div>
+        {{/if}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="likert">
+    <div class="widget likert">
+        {{partial widget-label}}
+        <table class="degrees">
+            <tr>
+                <td><label>{{view.definition.stronglyNegativeLabel}}<br /><input type="radio" value="stronglynegative" name="likert{{unbound view.likertNum}}"></label></td>
+                <td><label>{{view.definition.negativeLabel}}<br /><input type="radio" value="negative" name="likert{{unbound view.likertNum}}"></label></td>
+                <td><label>{{view.definition.neutralLabel}}<br /><input type="radio" value="neutral" name="likert{{unbound view.likertNum}}"></label></td>
+                <td><label>{{view.definition.positiveLabel}}<br /><input type="radio" value="positive" name="likert{{unbound view.likertNum}}"></label></td>
+                <td><label>{{view.definition.stronglyPositiveLabel}}<br /><input type="radio" value="stronglypositive" name="likert{{unbound view.likertNum}}"></label></td>
+            </tr>
+        </table>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="area-allocation">
+    <div class="widget area-allocation">
+        <i style="display: block; background-color: #f00; color: white; padding: 10px; font-size: 120%">
+            WARNING: the area allocation widget is deprecated, and will soon be removed. If the "allocation table" widget is NOT
+            a suitable replacement, please contact me ASAP. <br/>-<a href="mailto:snickell@gmail.com">Seth</a>
+        </i>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="new-area-allocation">
+    {{partial widget-label}}
+    <div class="widget area-allocation">
+        {{#each view.definition.rows}}
+            {{partial "area-allocation-row"}}
+        {{/each}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="area-allocation-row">
+    <div class="row" {{bindAttr color="color"}} {{bindAttr dataKey="dataKey"}} >
+        {{#if label}}
+            <div id="label-holder">
+                <div id="label">{{label}}</div>
+            </div>
+        {{/if}}
+        <div class="colbox" {{bindAttr style="style"}}>
+            {{#each cols}}<div class="col" {{bindAttr value="value"}} {{bindAttr dataKey="dataKey"}} >
+                    <div id="contents">
+                        <div id="percent"></div>
+                        <div id="vertical-aligner">
+                            <div id="label"><span id="measurer">{{label}}</span></div>
+                        </div>
+                    </div>
+                </div><div class="coldragger" style=""></div>{{/each}}
+        </div>
+        <div id="percent"></div>
+    </div>
+    <div class='rowdragger'></div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="old-area-allocation">
+    {{partial widget-label}}
+    <div class="widget area">
+        {{#each view.definition.rows}}
+            {{partial "area-allocation-row"}}
+        {{/each}}
+    </div>
+</script>
+<script type="text/x-handlebars" data-template-name="old-area-allocation-row">
+    <div class="row" {{bindAttr color="color"}} {{bindAttr dataKey="dataKey"}} >
+        {{#if label}}
+            <div id="label-holder">
+                <div id="label">{{label}}</div>
+            </div>
+        {{/if}}
+        <div class="colbox" {{bindAttr style="style"}}>
+            {{#each cols}}<div class="col" {{bindAttr value="value"}} {{bindAttr dataKey="dataKey"}} >
+                    <div id="contents">
+                        <div id="percent"></div>
+                        <div id="vertical-aligner">
+                            <div id="label"><span id="measurer">{{label}}</span></div>
+                        </div>
+                    </div>
+                </div><div class="coldragger" style=""></div>{{/each}}
+        </div>
+        <div id="percent"></div>
+    </div>
+    <div class='rowdragger'></div>
+</script>
+
+
+
+<script type="text/x-handlebars" data-template-name="box-and-whiskers">
+    <div class="widget box-and-whiskers">
+        <div id="instructions-and-label">
+            <div id="instructions">
+                {{#if view.doneClicking}}
+                    <div id="action">Done!</div>
+                    You can adjust the box plot by dragging.
+                {{else}}
+                    <div id="action">Click the axis:</div>
+		            <div id="questions">
+			            <li key="_0th" class="current">Minimum</li>
+			            <li key="_100th">Maximum</li>
+			            <li key="_25th">25th Percentile</li>
+			            <li key="_75th">75th Percentile</li>
+			            <li key="_50th">Median</li>
+		            </div>
+                {{/if}}
+            </div>
+            {{partial widget-label}}
+            <div class="clear-float"></div>
+        </div>
+        <div id="instruction" style="display: none">
+            {{#if view.doneClicking}}
+                Done! You can drag elements to adjust your answer
+            {{else}}
+                Click the axis to define the <b>{{view.currentQuestionText}}</b>
+            {{/if}}
+        </div>
+        {{#view view.BoxPlotSubView boxAndWhiskersBinding="view"}}
+		    <canvas id="axis"></canvas>
+		    <div id="axis-label">{{view.parentView.definition.axisLabel}}</div>
+		
+		    <div id="whiskers"><div id="line"></div></div>
+		    <div id="box"></div>
+		    <div id="median"></div>
+            {{#unless view.parentView.doneClicking}}
+		        <div id="mouse-cursor"><span id="value">{{view.parentView.currentQuestionText}}</span></div>
+            {{/unless}}
+        {{/view}}
+    </div>
+
+    <div class="DEBUG">
+        Location: {{view Ember.TextField valueBinding="view.location"}} <div id="location-slider"></div><br/>
+        Scale: {{view Ember.TextField valueBinding="view.scale"}} <div id="scale-slider"></div><br/>
+        Shape: {{view Ember.TextField valueBinding="view.shape"}} <div id="shape-slider"></div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="card-rank-card">
+    <div {{bindAttr class=":card hasDefinition:defined-term"}} {{bindAttr dataKey="dataKey"}} {{bindAttr title="popup"}}>
+        {{#if writein}}
+            {{view Ember.TextArea valueBinding="label" placeholder="Describe your new card"}}
+        {{else}}
+            <span class="phrase">{{label}}</span>
+        {{/if}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="card-rank-container">
+    {{#each view.content.cards}}
+        {{view EAT.CardRankCard contentBinding="this"}}
+    {{/each}}
+    <div class='instruction-card'>
+        {{#if view.content.optional}}
+            <span class="optional-indicator">Optional:</span>
+        {{/if}}
+        {{#if view.content.initial}}
+            You may return cards here.
+        {{else}}
+            {{#if view.content.allowOnlyOneCard}}
+                Drag a card here.
+            {{else}}
+                Drag one or more cards here.
+            {{/if}}
+        {{/if}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="card-rank">
+    {{partial widget-label}}
+    <div class="widget card-rank">
+        <table class="everything">
+            <tr valign="top">
+                <td class="initial-cards-column">
+                    {{view EAT.CardRankContainer contentBinding="view.definition.initialCardsContainer"}}
+
+                    {{#if view.definition.allowWriteInCards}}
+                        <input type="submit" class="add-writein-card" {{action "addAWriteInCard" target="view"}} value="Add a Write-In Card"/>
+                    {{/if}}
+                </td>
+                <td align="center" width="100%">
+                    <table class="drop-targets" cellpadding="0" cellspacing="0" width="100%">
+                        {{#if view.definition.enableRadioButtonsOnDropTargets}}
+                            <tr valign="bottom">
+                                <th rowspan="2" width="100%"><div><i>{{view.definition.topLabel}}</i></div></th>
+                                <td {{bindAttr colspan="view.definition.radioButtons.length"}} class="radio-button-header">{{view.definition.radioButtonLabel}}</td>
+                            </tr>
+                            <tr valign="bottom">
+                                {{#each view.definition.radioButtons}}
+                                    <td class="radio-button-label">{{label}}</td>
+                                {{/each}}
+                            </tr>
+                        {{else}}
+                            <tr><th><div><i>{{view.definition.topLabel}}</i></div></th></tr>
+                        {{/if}}
+                        {{#each container in view.definition.containers}}
+                            <tr>
+                                <td width="100%">
+                                    {{view EAT.CardRankContainer contentBinding="container"}}
+                                </td>
+                                {{#if view.definition.enableRadioButtonsOnDropTargets}}
+                                    {{#each view.definition.radioButtons}}
+                                        <td class="radio-button">
+                                            <input type="radio" {{bindAttr title="label"}} name="card-rank-radio-{{unbound container.multipleChoiceNum}}" {{bindAttr value="dataKey"}} />
+                                        </td>
+                                    {{/each}}
+                                {{/if}}
+                            </tr>
+                        {{/each}}
+                        <tr>
+                            <th rowspan="2">
+                                <div><i>{{view.definition.bottomLabel}}</i></div>
+                            </th>
+                        </th>
+                    </table>
+                </td>
+
+            </tr>
+        </table>
+        <div class="draggable-parent"></div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="dropdown">
+    {{partial widget-label}}
+    <div class="widget dropdown">
+        <span class="outline">
+            {{view Ember.Select contentBinding="view.selections" promptBinding="view.definition.placeholder" selectionBinding="view.data.selection"}}
+        </span>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="paragraph">
+    <div class="widget paragraph">
+        {{partial widget-label}}
+    </div>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="slider-allocation">
+    {{partial widget-label}}
+    <div class="widget zero-sum-slider">
+        <div valign='bottom' id='leftLabel'>
+            {{view.definition.leftLabel}}
+            <div id='value'>{{view.definition.unitPrefix}}{{view.data.leftValue}}{{view.definition.unitSuffix}}</div>
+        </div>
+
+        <div valign='bottom' id='rightLabel'>
+            {{view.definition.rightLabel}}
+            <div id='value'>{{view.definition.unitPrefix}}{{view.data.rightValue}}{{view.definition.unitSuffix}}</div>
+        </div>
+
+        <div id='slider' valign='bottom' width='100%'>
+            <div id='jquery-slider'></div>
+        </div>
+    </div>
+</script>
+
+
+
+<script type="text/x-handlebars" data-template-name="tabular-input">
+    <div class="widget tabular-input">
+        {{partial widget-label}}
+        <table>
+            <thead>
+                <tr valign="bottom">
+                    {{#each view.definition.columns}}
+                        <th>{{label}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each view.data.rows}}
+                <tr>
+                    {{#with this as row}}
+                        {{#each columns}}
+                            <td>{{view EAT.TabularInputTextField valueBinding="text" widgetBinding="view" rowBinding="row"}}</td>
+                        {{/each}}
+                    {{/with}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="text-box">
+    {{partial widget-label}}
+    <div class="widget text-box">
+        <div class="answer-box">
+            {{view.definition.unitPrefix}}
+            {{view Ember.TextField classNames="answer" valueBinding="view.data.text"}}
+            {{view.definition.unitSuffix}}
+        </div>
+        {{#if view.definition.askForUncertaintyRange}}
+            {{partial "uncertainty-range-slider"}}
+        {{/if}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="uncertainty-range-slider">
+    <div class="prompt">{{view EAT.MarkdownLabel contentBinding="view.definition.uncertaintyRangeLabel" elicitationBinding="view.elicitation"}}</div>
+    <div class='uncertainty-range'>
+        <div id='slider'>
+            <div id='jquery-slider'>
+
+                {{#if view.uncertaintyRangeMin}}
+                    <div class="tickmark center"><div class="line">&nbsp;</div>{{view.data.text}}</div>
+                    <div class="tickmark min-label"><div class="line">&nbsp;</div>{{view.uncertaintyRangeMin}}</div>
+                    <div class="tickmark max-label"><div class="line">&nbsp;</div>{{view.uncertaintyRangeMax}}</div>
+                {{/if}}
+
+                <a class="ui-slider-handle ui-state-default ui-corner-left" href="#" >
+                    <div class="label">{{view.data.uncertaintyRangeLower}}</div>
+                </a>
+                <a class="ui-slider-handle ui-state-default ui-corner-right" href="#" >
+                    <div class="label">{{view.data.uncertaintyRangeUpper}}</div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="time-trend-point">
+{{#if label}}
+    <div class="label">{{label}}</div>
+{{/if}}
+{{#if isNextUndefinedPoint}}
+    <div class="drag-me">Drag Me</div>
+{{/if}}
+{{#unless fixedValue}}
+    <div class="dragger"> </div>
+{{/unless}}
+<div class="dot"> </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="time-trend">
+    {{partial widget-label}}
+    <div class="widget time-trend">
+	    <div class="frame">
+            <div class="series-names">
+                {{#each view.frame.series}}
+                    <span {{bindAttr class=":series-name isCurrentSeries complete"}} {{bindAttr style="labelStyle"}} {{bindAttr title="title"}}>{{name}}</span>
+                {{/each}}
+            </div>
+            <div class="value-axis-label-clipping">
+                <div class="value-axis-label-holder">
+                    <div class="value-axis-label">
+                        {{view EAT.MarkdownLabel contentBinding="view.definition.valueAxisLabel" elicitationBinding="view.elicitation"}}
+                    </div>
+                </div>
+            </div>
+		    <canvas id="axis"></canvas>
+            <canvas id="lines"></canvas>
+            {{#each view.frame.series}}
+                {{#view EAT.TimeTrendSeriesView seriesBinding="this" frameBinding="view.frame"}}
+                    {{#each reversePoints}}
+                        {{view EAT.TimeTrendPointView pointBinding="this" frameBinding="view.frame"}}
+                    {{/each}}
+                {{/view}}
+            {{/each}}
+
+            {{#if view.frame.aPointIsBeingDragged}}
+                <div class="status">
+                    {{view.frame.pointBeingDraggedYStatus}}
+                </div>
+            {{/if}}
+	    </div>
+        <div class="time-axis-label">
+            {{view EAT.MarkdownLabel contentBinding="view.definition.timeAxisLabel" elicitationBinding="view.elicitation"}}
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="custom-scripting">
+    <div class="widget custom-scripting">
+        <b>Custom Script: </b>{{view.definition.label}}
+        <ul>
+            {{#each eventHandler in view.definition.activeEventHandlers}}
+                <li>
+                    <button {{action "testEventHandler" eventHandler.name target="view"}}>Test {{eventHandler.name}}() Script</button>
+                    
+                </li>
+            {{else}}
+                <li>No custom scripts defined.</li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="iea-wind-lcoe">
+    {{partial widget-label}}
+
+    <div class="widget iea-wind-lcoe" ng-controller="calcController">
+
+        <p>{{label}}</p>
+
+        <form class="form-horizontal lcoe-calculator-form">
+            <!-- CapEx -->
+            <div class="form-group">
+                <label class="col-xs-3 control-label">
+                    Total capital costs ({{view.definition.currPrefix}}/kW):
+                </label>
+                <div class="col-xs-1">
+                    <input type="text" class="form-control" ng-model="cap_ex" enabled />
+                </div>
+                <div class="col-xs-5 bg-info" style="padding: 5px; color: #000" id="slider-capex">
+                    <rzslider rz-slider-model="cap_ex" rz-slider-floor="cap_ex_min" rz-slider-ceil="cap_ex_max" rz-slider-step="50" rz-slider-translate="translateKW"></rzslider>
+                </div>
+            </div>
+
+            <!-- OpEx -->
+            <div class="form-group">
+                <label class="col-xs-3 control-label">
+                    Levelized operating expenditures ({{view.definition.currPrefix}}/kW-yr):
+                </label>
+                <div class="col-xs-1">
+                    <input type="text" class="form-control" ng-model="opex_avg_annual" ng-blur="calculateLCOE()" enabled />
+                </div>
+                <div class="col-xs-5 bg-info" style="padding: 5px">
+                    <rzslider rz-slider-model="opex_avg_annual" rz-slider-floor="opex_avg_annual_min" rz-slider-ceil="opex_avg_annual_max" rz-slider-step="5" rz-slider-translate="translateKWOpex"></rzslider>
+                </div>
+            </div>
+
+            <!-- Net Capacity Factor -->
+            <div class="form-group">
+                <label class="col-xs-3 control-label">
+                    Net project-level capacity factor (%):
+                </label>
+                <div class="col-xs-1">
+                    <input type="text" class="form-control" ng-model="net_capacity_factor" ng-blur="calculateLCOE()" enabled />
+                </div>
+                <div class="col-xs-5 bg-info" style="padding: 5px">
+                    <rzslider rz-slider-model="net_capacity_factor" rz-slider-floor="net_capacity_factor_min" rz-slider-ceil="net_capacity_factor_max" rz-slider-step="1" rz-slider-translate="translatePercent"></rzslider>
+                </div>
+            </div>
+
+            <!-- Project Design Life -->
+            <div class="form-group">
+                <label class="col-xs-3 control-label">
+                    Project design life (years):
+                </label>
+                <div class="col-xs-1">
+                    <input type="text" class="form-control" ng-model="project_design_life" ng-blur="calculateLCOE()" enabled />
+                </div>
+                <div class="col-xs-5 bg-info" style="padding: 5px">
+                    <rzslider rz-slider-model="project_design_life" rz-slider-floor="project_design_life_min" rz-slider-ceil="project_design_life_max" rz-slider-step="1" rz-slider-translate="translateYears"></rzslider>
+                </div>
+            </div>
+
+            <!-- WACC -->
+            <div class="form-group">
+					<label class="col-xs-3 control-label">
+                    Cost of financing (after-tax WACC, % nominal):
+                    </label>
+					<div class="col-xs-1">
+						<input type="text" class="form-control" ng-model="wacc_nominal" ng-blur="calculateLCOE()" enabled />
+					</div>
+					<div class="col-xs-5 bg-info" style="padding: 5px">
+						<rzslider rz-slider-model="wacc_display_value" rz-slider-floor="wacc_nominal_min" rz-slider-ceil="wacc_nominal_max" rz-slider-step="1" rz-slider-translate="translatePercentWacc"></rzslider> 
+					</div> 
+				</div>
+
+            <!-- Real LCOE -->
+            <div class="form-group alert alert-info">
+                <h2 class="text-center">
+                    <label class="col-xs-3 control-label">
+                        Real LCOE ({{view.definition.currPrefix}}/MWh):
+                        <span class="form-control-static" ng-bind="(real_lcoe | number:0)"></span>
+                    </label>
+                </h2>
+            </div>
+
+        </form>
+    </div>
+
+</script>
