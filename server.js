@@ -6,9 +6,9 @@
 var express = require('express')
 , http = require('http')
 , path = require('path')
-, request = require('request');
-, Handlebars = require('handlebars');
-, exphbs  = require('express-handlebars');
+, request = require('request')
+, Handlebars = require('handlebars')
+, exphbs  = require('express-handlebars')
 , connectAssets = require('connect-assets');
 
 var app = express();
@@ -38,7 +38,7 @@ app.configure(function(){
     
   app.use(app.router);
 
-  app.use(express.static(staticDir));
+  app.use(express.static('public'));
 });
 
 app.configure('development', function(){
