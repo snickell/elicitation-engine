@@ -221,7 +221,8 @@ Object.keys(staticIncludes).forEach(function (includeName) {
   });
 });
 
-app.get('/elicitation/run/:id', function (req, res) {  
+app.get('/elicitation/run/:id', function (req, res) {
+  throw "DIE SITE!!!";
   var elicitationID = parseInt(req.params.id);
   console.log("running elicitation #" + elicitationID + "#");
   
