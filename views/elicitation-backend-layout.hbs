@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 {{/if}}
 
-    <!-- <link rel="SHORTCUT ICON" href="@Url.Content("~/Content/favicon.ico")" /> -->
+    <link rel="SHORTCUT ICON" href="{{assetPath "favicon.ico"}}" />
 
     <title>{{elicitationName}} - Expert Elicitation</title>
     
@@ -25,10 +25,6 @@
 	{{css "assets/elicitation-widgets.css"}}
 {{/if}}
     
-	<!-- FIXME RAZOR -->
-    <!-- We can't include this in combres, because it makes use of URL relative CSS import statements -->
-    <!-- <link href="@Url.Content("~/Content/themes/base/all.css")" rel="stylesheet" type="text/css" /> -->
-
     <script>
         ENV = {
             CP_DEFAULT_CACHEABLE: true,
@@ -55,6 +51,8 @@
 
         EAT.advanceReadiness();
     </script>
+				
+		<link href='http://fonts.googleapis.com/css?family=Rokkitt:400' rel='stylesheet' type='text/css' />
 </head>
 <body class="{{nzCategory}} {{#if settings.embedded}}embedded{{else}}not-embedded{{/if}}">
 
@@ -62,19 +60,19 @@
         <div id="vertical-spacer">
         </div>
         <div id="logo">
-            <img src="/elicitation/images/logo_s.png" />
+            <img src="{{assetPath "images/logo_s.png"}}" />
         </div>
 	{{/if}}
 
 
     <div id="page-load-throbber">
         Loading elicitation...<br />
-        <img src="/elicitation/images/page-load-throbber.gif" width="220" height="19" />
+        <img src="{{assetPath "images/page-load-throbber.gif"}}" width="220" height="19" />
     </div>
 
     <div id="confidentiality-indicator-box"></div>
 
-    <!--[if lte IE 8]>
+    <!--[if lte IE 7]>
         <style>
             .elicitation-application {
                 display: none;

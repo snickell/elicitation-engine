@@ -252,11 +252,10 @@ app.get('/elicitation/run/:id', function (req, res) {
 
       setupElicitation(person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
-          includeStatic: function(filename) { 
-            return new Handlebars.SafeString(staticIncludes[filename].content); 
-          },
+          includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
           css: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.css(filename)); },
           js: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.js(filename)); },
+          assetPath: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.assetPath(filename)); },
           jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
         };
         
