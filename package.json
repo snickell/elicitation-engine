@@ -10,6 +10,7 @@
     "connect-assets": "^5.0.1",
     "express": "~3.1.0",
     "express-handlebars": "^2.0.1",
+    "glob": "^5.0.14",
     "handlebars": "^3.0.3",
     "node-connection-string-builder": "0.0.1",
     "request": "^2.61.0",
