@@ -1,7 +1,13 @@
-2) TAKE Desktop/NearZero Web scripts and embed them here
-3) TAKE Desktop/NearZero Web css and embed them here
+1) Fix Url.Action
+	a) Research (reverse) routers for express similar to asp.net mvc router
+	b) Deploy new router, convert basic admin scripts over
+	c) Update Url.Action to use router
 
+2) Fix Url.Content
 
+3) Fix authentication so it gets personID
+
+4) Fix authentication so it redirects to login properly
 
 DB:
 - get elicitation AND definition in one join call
