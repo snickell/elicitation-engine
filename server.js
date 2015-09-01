@@ -44,6 +44,7 @@ app.configure(function(){
   app.use(app.router);
 
   app.use(express.static('public'));
+  app.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 });
 
 app.configure('development', function(){
@@ -133,8 +134,7 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
         return "http://www.fixme.org/" + controller + "/" + method;
       },
       Content: function(path) {
-        console.error("FIXME Url.Content(", path, ")");
-        return "http://static.fixme.org/" + path;
+        return path;
       }
     }
 
@@ -161,7 +161,7 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
             /* elicitation.settings */
             imageURL: Url.Action("Index", "ImageInElicitation", { ElicitationID: elicitation.ID }),
 
-            widgetGalleryThumbnailsURL: Url.Content("~/Content/elicitation/widgets/thumbnails"),
+            widgetGalleryThumbnailsURL: Url.Content("/app/widgets/thumbnails"),
             elicitationDefinitionID: elicitationDefinition.ID,
 
             allowEditing: allowEditing,
