@@ -9,6 +9,8 @@
 
 4) Fix authentication so it redirects to login properly
 
+5) Figure out why dropdown menu (editing dropdown) jquery not working in production mode
+
 DB:
 - get elicitation AND definition in one join call
 - get elicitation assignment for elicitation and person ID
