@@ -13,6 +13,11 @@ var express = require('express')
 
 var app = express();
 
+var expressHandlebars = exphbs.create({
+  defaultLayout: "main",
+  extname: ".hbs"
+});
+
 var connectAssetsHelpers = {};
 
 console.log("env is: ", app.get('env'));
@@ -20,8 +25,8 @@ console.log("env is: ", app.get('env'));
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
 
-  app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-  app.set('view engine', 'handlebars');
+  app.engine('.hbs', expressHandlebars.engine);
+  app.set('view engine', '.hbs');
 
   app.use(express.favicon());
   app.use(express.logger('dev'));
@@ -194,16 +199,16 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
 }
 
 var staticIncludes = {
-  _GoogleAnalytics: {
-    filename: "app/templates/_GoogleAnalytics.cshtml",
+  "google-analytics.html": {
+    filename: "app/templates/google-analytics.html",
     content: null
   },
-  _ElicitationTemplates: {
-    filename: "app/templates/_ElicitationTemplates.cshtml",
+  "eat.hbs": {
+    filename: "app/templates/eat.hbs",
     content: null
   },
-  _ElicitationWidgets: {
-    filename: "app/templates/_ElicitationWidgets.cshtml",
+  "widgets.hbs": {
+    filename: "app/templates/widgets.hbs",
     content: null
   }
 };
@@ -219,9 +224,6 @@ Object.keys(staticIncludes).forEach(function (includeName) {
 app.get('/elicitation/run/:id', function (req, res) {  
   var elicitationID = parseInt(req.params.id);
   console.log("running elicitation #" + elicitationID + "#");
-  
-  console.log("HELPERS: ", connectAssetsHelpers);
-  var asset = res.locals.asset;
   
   authenticateAcessTo(elicitationID, function (err) {
     if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
@@ -250,7 +252,9 @@ app.get('/elicitation/run/:id', function (req, res) {
 
       setupElicitation(person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
-          includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
+          includeStatic: function(filename) { 
+            return new Handlebars.SafeString(staticIncludes[filename].content); 
+          },
           css: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.css(filename)); },
           js: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.js(filename)); },
           jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
@@ -258,7 +262,7 @@ app.get('/elicitation/run/:id', function (req, res) {
         
         elicitationViewModel.layout = false;
         
-        res.render('elicitation', elicitationViewModel);
+        res.render('elicitation-backend-layout', elicitationViewModel);
       });
     }); 
   });

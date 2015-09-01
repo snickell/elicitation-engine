@@ -11,7 +11,7 @@
 
     <title>{{elicitationName}} - Expert Elicitation</title>
     
-{{includeStatic "_GoogleAnalytics"}}
+{{includeStatic "google-analytics.html"}}
 
 {{#if isMobileDevice}}
 	{{css "elicitationCSS-mobile"}}
@@ -44,9 +44,8 @@
 	{{js "assets/elicitation.js"}}
 	{{js "assets/elicitation-widgets.js"}}
 
-	{{includeStatic "_ElicitationTemplates"}}
-	{{includeStatic "_ElicitationWidgets"}}
-
+	{{includeStatic "eat.hbs"}}
+	{{includeStatic "widgets.hbs"}}
 
     <script>
         window.DEFAULT_ELICITATION_CONFIGURATION = {{jsonStringify settings}};
