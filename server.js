@@ -14,20 +14,14 @@ var app = express();
 
 var devEnv = app.get('env') === 'development';
 
+console.log("env is: ", app.get('env'));
+
 var staticDir = path.join(__dirname, 'public');
 var assetsDir = path.join(__dirname, 'builtAssets');
 var assetsUrl = devEnv ? '/' : '/assets';
 var maxAge = 86400000; // one day
 
 var assets = {
-  'elicitation.css' : {
-    type: 'css',
-    dir: 'css',
-    files: [
-      'one.css',
-      'two.css'
-    ]
-  },
   'elicitation-widgets.js' : {
     type: 'js',
     dir: 'elicitation/widgets',
@@ -199,6 +193,8 @@ var assetManagerConfig = {
 
 
 var Handlebars = require('handlebars');
+var connectAssets = require('connect-assets');
+var connectAssetsHelpers = {};
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -211,14 +207,24 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   
-  app.use(require("express-asset-manager")(assets, assetManagerConfig));
+  app.use(connectAssets({
+    paths: [
+      'assets',
+      'app',
+      'public'
+    ],
+    helperContext: connectAssetsHelpers
+  }));
+  
+  // app.use(require("express-asset-manager")(assets, assetManagerConfig));
   
   app.use(app.router);
 
+  /*
   if (!devEnv) app.use(assetsUrl, 
     express.static(assetsDir, { maxAge: maxAge })
   );
-  
+  */
   app.use(express.static(staticDir));
 });
 
@@ -376,15 +382,15 @@ function setupElicitation(person, membership, logName, elicitation, elicitationD
 
 var staticIncludes = {
   _GoogleAnalytics: {
-    filename: "app/views/_GoogleAnalytics.cshtml",
+    filename: "app/templates/_GoogleAnalytics.cshtml",
     content: null
   },
   _ElicitationTemplates: {
-    filename: "app/views/_ElicitationTemplates.cshtml",
+    filename: "app/templates/_ElicitationTemplates.cshtml",
     content: null
   },
   _ElicitationWidgets: {
-    filename: "app/views/_ElicitationWidgets.cshtml",
+    filename: "app/templates/_ElicitationWidgets.cshtml",
     content: null
   }
 };
@@ -401,6 +407,7 @@ app.get('/elicitation/run/:id', function (req, res) {
   var elicitationID = parseInt(req.params.id);
   console.log("running elicitation #" + elicitationID + "#");
   
+  console.log("HELPERS: ", connectAssetsHelpers);
   var asset = res.locals.asset;
   
   authenticateAcessTo(elicitationID, function (err) {
@@ -431,8 +438,8 @@ app.get('/elicitation/run/:id', function (req, res) {
       setupElicitation(person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
           includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
-          includeCSS: function(filename) { return new Handlebars.SafeString(asset(filename)); },
-          includeJS: function(filename) { return new Handlebars.SafeString(asset(filename)); },
+          includeCSS: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.css(filename)); },
+          includeJS: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.js(filename)); },
           jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
         };
         

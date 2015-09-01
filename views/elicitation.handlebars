@@ -19,10 +19,10 @@
         window.IsMobileDevice = true;
     </script>
 {{else}}
-	{{includeCSS "site.css"}}
-	{{includeCSS "elicitation.css"}}
-	{{includeCSS "elicitation-categories.css"}}	
-	{{includeCSS "elicitation-widgets.css"}}
+	{{includeCSS "assets/site.css"}}
+	{{includeCSS "assets/elicitation.css"}}
+	{{includeCSS "assets/elicitation-categories.css"}}	
+	{{includeCSS "assets/elicitation-widgets.css"}}
 {{/if}}
     
 	<!-- FIXME RAZOR -->
@@ -37,16 +37,12 @@
     </script>
 
     <!--[if IE 8]>
-		{{includeJS "shimsForIE8"}}
-    <![endif]-->
-    <!--[if IE 7]>
-		{{includeJS "shimsForIE7"}}
-        @Html.CombresLink("shimsForIE7")
+		{{includeJS "assets/shims-for-ie8.js"}}
     <![endif]-->
 
-	{{includeJS "site.js"}}
-	{{includeJS "elicitation.js"}}
-	{{includeJS "elicitation-widgets.js"}}
+	{{includeJS "assets/site.js"}}
+	{{includeJS "assets/elicitation.js"}}
+	{{includeJS "assets/elicitation-widgets.js"}}
 
 	{{includeStatic "_ElicitationTemplates"}}
 	{{includeStatic "_ElicitationWidgets"}}
@@ -79,7 +75,7 @@
 
     <div id="confidentiality-indicator-box"></div>
 
-    <!--[if lte IE 7]>
+    <!--[if lte IE 8]>
         <style>
             .elicitation-application {
                 display: none;
