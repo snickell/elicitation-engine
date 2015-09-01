@@ -7,194 +7,15 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , request = require('request');
+, Handlebars = require('handlebars');
+, exphbs  = require('express-handlebars');
+, connectAssets = require('connect-assets');
 
-var exphbs  = require('express-handlebars');
 var app = express();
 
-
-var devEnv = app.get('env') === 'development';
+var connectAssetsHelpers = {};
 
 console.log("env is: ", app.get('env'));
-
-var staticDir = path.join(__dirname, 'public');
-var assetsDir = path.join(__dirname, 'builtAssets');
-var assetsUrl = devEnv ? '/' : '/assets';
-var maxAge = 86400000; // one day
-
-var assets = {
-  'elicitation-widgets.js' : {
-    type: 'js',
-    dir: 'elicitation/widgets',
-    files: [
-        'agree-disagree.js',
-        'allocation-table.js',
-        'area-allocation.js',
-        'box-and-whiskers.js',
-        'card-rank.js',
-        'dropdown.js',
-        'image.js',
-        'likert.js',
-        'multiple-choice.js',
-        'multiple-choice-table.js',      
-        'paragraph.js',
-        'custom-scripting.js',
-        'slider-allocation.js',
-        'tabular-input.js',
-        'text-area.js',
-        'text-box.js',
-        'time-trend.js'
-    ]
-  },
-  'elicitation-widgets.css' : {
-    type: 'css',
-    dir: 'elicitation/widgets',
-    files: [
-        'agree-disagree.css',
-        'allocation-table.css',
-        'area-allocation.css',
-        'box-and-whiskers.css',
-        'card-rank.css',
-        'dropdown.css',
-        'image.css',
-        'likert.css',
-        'multiple-choice.css',
-        'multiple-choice-table.css',
-        'paragraph.css',
-        'custom-scripting.css',
-        'slider-allocation.css',
-        'tabular-input.css',
-        'text-area.css',        
-        'text-box.css',
-        'time-trend.css',
-    ]
-  }, 
-  'elicitation.css' : {
-    type: 'css',
-    dir: 'elicitation/css',
-    files: [
-      'elicitation.css',
-      /* elicitation editing */
-      'jquery.miniColors.css',
-      'elicitation-editor.css',
-      'elicitation-print.css',
-    ]
-  },
-  'elicitation-categories.css' : {
-    type: 'css',
-    dir: 'categories',
-    files: [  
-        'other/elicitation.css',
-        'biomass/elicitation.css',
-        'buildings/elicitation.css',
-        'ccs/elicitation.css',
-        'climate/elicitation.css',
-        'fossil/elicitation.css',
-        'geothermal/elicitation.css',
-        'hydro/elicitation.css',
-        'industry/elicitation.css',
-        'nuclear/elicitation.css',
-        'solar/elicitation.css',
-        'storage-and-transmission/elicitation.css',
-        'transportation/elicitation.css',
-        'wind/elicitation.css',
-    ]
-  },
-  'site.css' : {
-    type: 'css',
-    dir: 'css',
-    files: [
-      'chosen/chosen.css',
-      'themes/base/all.css',
-      'nearzero-confidentiality-indicator.css'      
-    ]
-  },
-  'site.js' : {
-    type: 'js',
-    dir: 'js',
-    files: [
-      'jquery-1.11.3.js',
-      'jquery.textarea_auto_expand.js',      
-      'browser-detection-from-old-jquery.js',
-      'jquery.scrollTo.js',
-      'jquery-ui-1.11.4.js',
-      'nearzero-confidentiality-indicator.js',
-      'handlebars.js',
-      'ember.js'
-    ]
-  },
-  'elicitation.js' : {
-    type: 'js',
-    dir: 'elicitation/scripts',
-    files: [
-      'libs/jquery.miniColors.js',
-
-
-      'pagedown/Markdown.Converter.js',
-      'pagedown/Markdown.Editor.js',
-      'pagedown/Markdown.Sanitizer.js',
-            
-      // This bad hack library is required because APPLE SUX and so does JQUERY UI
-      'libs/jquery.ui.touch-punch.js',
-      'libs/jquery.color.js',
-      'libs/jquery.placeholder.js',
-
-      'elicitation-utils.js',
-      'app.js',
-
-      'rate-limited-view.js',
-      'markdown-label.js',
-      'phrase-definition.js',
-      'page.js',
-      'pages.js',
-      'widget-gallery.js',
-
-      'eat.js',
-      'eat-views.js',
-      'elicitation.js',
-      
-      'schema.js',
-      'property-editor.js',
-      
-      'widget-definition.js',
-      'widget-qualification.js',
-      'widget-data.js',
-      'widget.js',
-      
-      // <resource reference="elicitationWidgetsJs',
-      // <!-- Support code for out-of-process acceptance testing -->
-      // 'widget-test.js',
-
-      'register-elicitation-widgets.js'
-    ]
-  }
-
-};
-
-/*
-site.css:
-      <resource reference="elicitation-categories"/>
-
-      <resource path="~/Content/chosen/chosen.css"/>
-      <resource path="~/Content/themes/base/all.css"/>
-      <resource path="~/Content/nearzero-confidentiality-indicator.css"/>      
-*/
-
-// 	{{includeCSS "elicitationCSS"}}
-// 	{{includeJS "siteJs"}}
-//	{{includeJS "elicitationJs"}}
-
-
-var assetManagerConfig = {
-  rootRoute: assetsUrl,
-  srcDir: staticDir,
-  buildDir: assetsDir,
-  process: true
-};
-
-
-var Handlebars = require('handlebars');
-var connectAssets = require('connect-assets');
-var connectAssetsHelpers = {};
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -209,22 +30,14 @@ app.configure(function(){
   
   app.use(connectAssets({
     paths: [
-      'assets',
       'app',
       'public'
     ],
     helperContext: connectAssetsHelpers
   }));
-  
-  // app.use(require("express-asset-manager")(assets, assetManagerConfig));
-  
+    
   app.use(app.router);
 
-  /*
-  if (!devEnv) app.use(assetsUrl, 
-    express.static(assetsDir, { maxAge: maxAge })
-  );
-  */
   app.use(express.static(staticDir));
 });
 
