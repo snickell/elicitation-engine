@@ -251,8 +251,8 @@ app.get('/elicitation/run/:id', function (req, res) {
       setupElicitation(person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
         elicitationViewModel.helpers = {
           includeStatic: function(filename) { return new Handlebars.SafeString(staticIncludes[filename].content); },
-          includeCSS: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.css(filename)); },
-          includeJS: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.js(filename)); },
+          css: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.css(filename)); },
+          js: function(filename) { return new Handlebars.SafeString(connectAssetsHelpers.js(filename)); },
           jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
         };
         

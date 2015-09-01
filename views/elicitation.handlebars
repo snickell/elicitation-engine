@@ -14,15 +14,15 @@
 {{includeStatic "_GoogleAnalytics"}}
 
 {{#if isMobileDevice}}
-	{{includeCSS "elicitationCSS-mobile"}}
+	{{css "elicitationCSS-mobile"}}
     <script>
         window.IsMobileDevice = true;
     </script>
 {{else}}
-	{{includeCSS "assets/site.css"}}
-	{{includeCSS "assets/elicitation.css"}}
-	{{includeCSS "assets/elicitation-categories.css"}}	
-	{{includeCSS "assets/elicitation-widgets.css"}}
+	{{css "assets/site.css"}}
+	{{css "assets/elicitation.css"}}
+	{{css "assets/elicitation-categories.css"}}	
+	{{css "assets/elicitation-widgets.css"}}
 {{/if}}
     
 	<!-- FIXME RAZOR -->
@@ -37,12 +37,12 @@
     </script>
 
     <!--[if IE 8]>
-		{{includeJS "assets/shims-for-ie8.js"}}
+		{{js "assets/shims-for-ie8.js"}}
     <![endif]-->
 
-	{{includeJS "assets/site.js"}}
-	{{includeJS "assets/elicitation.js"}}
-	{{includeJS "assets/elicitation-widgets.js"}}
+	{{js "assets/site.js"}}
+	{{js "assets/elicitation.js"}}
+	{{js "assets/elicitation-widgets.js"}}
 
 	{{includeStatic "_ElicitationTemplates"}}
 	{{includeStatic "_ElicitationWidgets"}}
