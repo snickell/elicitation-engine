@@ -29,7 +29,6 @@ var connectAssetsHelpers = {};
 
 console.log("env is: ", app.get('env'));
 
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,7 +42,15 @@ app.engine('.hbs', expressHandlebars.engine);
 app.set('view engine', '.hbs');
 app.set('views', viewsDir);
 
-app.use(connectAssets({
+// NZ Database
+var connectionString = process.env['SQLAZURECONNSTR_DefaultConnection'];
+var NZDB = require('./server/nzdb');
+var db = new NZDB(connectionString);
+
+// Setup basic app routes
+var router = express.Router();
+
+router.use(connectAssets({
   paths: [
     'app',
     'public'
@@ -51,36 +58,30 @@ app.use(connectAssets({
   helperContext: connectAssetsHelpers
 }));
   
+router.use(express.static('public'));
+router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
-app.use(express.static('public'));
-app.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
-
-
-// E4generator: app.use(express.static(path.join(__dirname, 'public')));
-  
-
-if (app.get('env') === 'development') {
-  app.use(errorHandler());
-}
-
-app.get('/', function (req, res) {  
+router.get('/', function (req, res) {  
   res.render('index', {
     title: req.originalUrl
   });
 });
 
-app.get('/gorilla', function (req, res) {  
+router.get('/gorilla', function (req, res) {  
   res.render('index', {
     title: "Gorilla"
   });
 });
 
-var connectionString = process.env['SQLAZURECONNSTR_DefaultConnection'];
-var NZDB = require('./server/nzdb');
-var db = new NZDB(connectionString);
-
 var elicitationRoutes = require('./server/elicitation')(db, connectAssetsHelpers);
-app.use('/elicitation', elicitationRoutes);
+router.use('/elicitation', elicitationRoutes);
+
+
+app.use('/gorilla', router);
+
+if (app.get('env') === 'development') {
+  app.use(errorHandler());
+}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
