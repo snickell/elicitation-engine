@@ -80,8 +80,7 @@ var NZDB = require('./server/nzdb');
 var db = new NZDB(connectionString);
 
 var elicitationRoutes = require('./server/elicitation')(db, connectAssetsHelpers);
-
-app.get('/elicitation/run/:id', elicitationRoutes.run);
+app.use('/elicitation', elicitationRoutes);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
