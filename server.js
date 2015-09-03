@@ -13,9 +13,12 @@ var cookieParser = require('cookie-parser')
 
 var app = express();
 
+var viewsDir = __dirname + "/server/views";
+
 var expressHandlebars = exphbs.create({
   defaultLayout: "main",
-  extname: ".hbs"
+  extname: ".hbs",
+  layoutsDir: viewsDir + "/layouts"
 });
 
 var connectAssetsHelpers = {};
@@ -30,7 +33,7 @@ app.configure(function(){
   app.engine('.hbs', expressHandlebars.engine);
   app.set('view engine', '.hbs');
   
-  app.set('views', __dirname + '/server/views');
+  app.set('views', viewsDir);
 
   app.use(express.favicon());
   app.use(express.logger('dev'));
@@ -56,7 +59,7 @@ app.configure('development', function(){
 });
 
 app.get('/', function (req, res) {  
-  res.render('home', {
+  res.render('index', {
     title: "Index"
   });
 });
