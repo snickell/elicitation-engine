@@ -1,18 +1,23 @@
 var request = require('request');
 
-module.exports = function authenticateAcessTo(elicitationID, cb) {
-  console.log("Authenticating acess to ", elicitationID);
-  var url = "http://www.nearzero.org/authenticate-access-to-elicitation/" + elicitationID;
-  console.log(url);
+var baseURL = "http://www.nearzero.org/authenticate-access-to-elicitation/";
+
+module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {  
+  var returnURL = req.originalUrl;
   
-  console.error("DISABLED AUTHENTICATION");
-  cb();
-  return;
+  console.log("Authenticating acess to ", elicitationID, req.cookies);
+  var url = baseURL + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
-  request(url, function (error, response, body) {
-    console.log("error ", error, "response.statusCode", response.statusCode);
-    if (!error && response.statusCode == 200) {
-      cb();
+  request({
+    url: url,
+    followRedirect: false
+  }, function (error, response, body) {
+    if (!error && response.statusCode >= 300 && response.statusCode < 400) {
+      console.log("Redirecting to ", response.headers.location);
+      res.redirect(response.headers.location);
+    } else if (!error && response.statusCode == 200) {
+      console.log("Imallowit");
+      cb(null, 666);
     } else {
       cb("couldn't authenticate access to elicitation");
     }

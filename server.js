@@ -9,6 +9,8 @@ var express = require('express')
 , exphbs  = require('express-handlebars')
 , connectAssets = require('connect-assets');
 
+var cookieParser = require('cookie-parser')
+
 var app = express();
 
 var expressHandlebars = exphbs.create({
@@ -21,6 +23,8 @@ var connectAssetsHelpers = {};
 console.log("env is: ", app.get('env'));
 
 app.configure(function(){
+  app.use(cookieParser());
+  
   app.set('port', process.env.PORT || 3000);
 
   app.engine('.hbs', expressHandlebars.engine);

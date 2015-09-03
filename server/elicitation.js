@@ -10,7 +10,7 @@ module.exports = function (db, assetHelpers) {
       var elicitationID = parseInt(req.params.id);
       console.log("running elicitation #" + elicitationID + "#");
   
-      authenticateAccessTo(elicitationID, function (err) {
+      authenticateAccessTo(elicitationID, req, res, function (err, personID) {
         if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
     
         db.getElicitationAndAssets(elicitationID, function (err, result) {
@@ -25,7 +25,7 @@ module.exports = function (db, assetHelpers) {
           };
       
           var person = {
-            ID: 666,
+            ID: personID,
             DisallowLoginViaAccessToken: false,
             access_token: "markofbeast",
             email: "fixme@fixme.org"
