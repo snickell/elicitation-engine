@@ -3,13 +3,17 @@
 * Module dependencies.
 */
 
-var express = require('express')
-, http = require('http')
-, path = require('path')
-, exphbs  = require('express-handlebars')
-, connectAssets = require('connect-assets');
-
+var express = require('express');
+var http = require('http');
+var path = require('path');
 var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser');
+var logger = require('morgan');
+var errorHandler = require('errorhandler');
+
+var exphbs  = require('express-handlebars');
+var connectAssets = require('connect-assets');
+
 
 var app = express();
 
@@ -25,38 +29,39 @@ var connectAssetsHelpers = {};
 
 console.log("env is: ", app.get('env'));
 
-app.configure(function(){
-  app.use(cookieParser());
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// Set port for azure web app environment
+app.set('port', process.env.PORT || 3000);
+
+// Use handlebars
+app.engine('.hbs', expressHandlebars.engine);
+app.set('view engine', '.hbs');
+app.set('views', viewsDir);
+
+app.use(connectAssets({
+  paths: [
+    'app',
+    'public'
+  ],
+  helperContext: connectAssetsHelpers
+}));
   
-  app.set('port', process.env.PORT || 3000);
 
-  app.engine('.hbs', expressHandlebars.engine);
-  app.set('view engine', '.hbs');
+app.use(express.static('public'));
+app.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
+
+
+// E4generator: app.use(express.static(path.join(__dirname, 'public')));
   
-  app.set('views', viewsDir);
 
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  
-  app.use(connectAssets({
-    paths: [
-      'app',
-      'public'
-    ],
-    helperContext: connectAssetsHelpers
-  }));
-    
-  app.use(app.router);
-
-  app.use(express.static('public'));
-  app.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+if (app.get('env') === 'development') {
+  app.use(errorHandler());
+}
 
 app.get('/', function (req, res) {  
   res.render('index', {
