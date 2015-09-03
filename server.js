@@ -59,9 +59,10 @@ app.configure('development', function(){
 });
 
 app.get('/', function (req, res) {  
-  res.render('index', {
+  /*res.render('index', {
     title: "Index"
-  });
+  });*/
+    res.redirect("/admin");
 });
 
 app.get('/gorilla', function (req, res) {  
