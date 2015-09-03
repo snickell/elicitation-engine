@@ -8,6 +8,10 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
   console.log("Authenticating acess to ", elicitationID, req.cookies);
   var url = baseURL + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
+  console.error("AUTH DISABLED");
+  cb(null, 666);
+  return;
+  
   request({
     url: url,
     followRedirect: false
