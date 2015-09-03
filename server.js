@@ -56,8 +56,14 @@ app.configure('development', function(){
 });
 
 app.get('/', function (req, res) {  
+  res.render('home', {
+    title: "Index"
+  });
+});
+
+app.get('/gorilla', function (req, res) {  
   res.render('index', {
-    title: "bumpy"
+    title: "Gorilla"
   });
 });
 
