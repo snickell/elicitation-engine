@@ -1,3 +1,4 @@
+var baseURL = '/gorilla';
 
 /**
 * Module dependencies.
@@ -50,14 +51,15 @@ var db = new NZDB(connectionString);
 // Setup basic app routes
 var router = express.Router();
 
-router.use(connectAssets({
+app.use(connectAssets({
   paths: [
     'app',
     'public'
   ],
+  servePath: baseURL + "/assets",
   helperContext: connectAssetsHelpers
 }));
-  
+
 router.use(express.static('public'));
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
@@ -74,10 +76,10 @@ router.get('/gorilla', function (req, res) {
 });
 
 var elicitationRoutes = require('./server/elicitation')(db, connectAssetsHelpers);
-router.use('/elicitation', elicitationRoutes);
+router.use('/', elicitationRoutes);
 
 
-app.use('/gorilla', router);
+app.use(baseURL, router);
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());
