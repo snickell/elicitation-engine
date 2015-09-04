@@ -83,6 +83,14 @@ app.use(baseURL, router);
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());
+  
+  // Convenience authenticator for dev mode
+  app.get('/authenticate-access-to-elicitation/:id', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ 
+      personID: 666
+    }));
+  });
 }
 
 http.createServer(app).listen(app.get('port'), function(){

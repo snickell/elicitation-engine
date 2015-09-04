@@ -1,16 +1,13 @@
 var request = require('request');
 
-var baseURL = "http://www.nearzero.org/authenticate-access-to-elicitation/";
+var authPath = "/authenticate-access-to-elicitation/";
 
 module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {  
   var returnURL = req.originalUrl;
   
-  console.log("Authenticating acess to ", elicitationID, req.cookies);
-  var url = baseURL + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
+  var host = req.protocol + '://' + req.get('host');
   
-  console.error("AUTH DISABLED");
-  cb(null, 666);
-  return;
+  var url = host + authPath + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
   request({
     url: url,
@@ -20,10 +17,20 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
       console.log("Redirecting to ", response.headers.location);
       res.redirect(response.headers.location);
     } else if (!error && response.statusCode == 200) {
-      console.log("Imallowit");
-      cb(null, 666);
+      var authResponse = JSON.parse(body);
+      
+      console.log("Auth succeeded: ", authResponse);
+      
+      var personID = parseInt(authResponse.personID)
+      if (personID > 0) {
+        // auth succeeded
+        cb(null, authResponse.personID);
+      } else {
+        cb("you were logged in, but you don't have permission to access this elicitation");
+      }
     } else {
-      cb("couldn't authenticate access to elicitation");
+      console.error("error auntheticating access to elicitation: ", error);
+      cb("couldn't authenticate access to elicitation: " + error.toString());
     }
   });
 }

@@ -14,7 +14,10 @@ module.exports = function (db, assetHelpers) {
     console.log("running elicitation #" + elicitationID + "#");
 
     authenticateAccessTo(elicitationID, req, res, function (err, personID) {
-      if (err) res.status(404).send("Oh uh, something went wrong: " + err);    
+      if (err) {
+        res.status(404).send("Oh uh, something went wrong: " + err);
+        return;
+      }
   
       db.getElicitationAndAssets(elicitationID, function (err, result) {
         var elicitation = result.elicitation;
