@@ -9,6 +9,8 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
   
   var url = host + authPath + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
+  consele.log("auth url is: ", url);
+  
   request({
     url: url,
     followRedirect: false
