@@ -30,7 +30,7 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
       }
     } else {
       console.error("error auntheticating access to elicitation: ", error);
-      cb("couldn't authenticate access to elicitation: " + error.toString());
+      cb("couldn't authenticate access to elicitation: " + error);
     }
   });
 }
