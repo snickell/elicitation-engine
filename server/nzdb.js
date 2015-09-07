@@ -2,7 +2,6 @@ var Sequelize = require('sequelize');
 var ncsBuilder = require('node-connection-string-builder');
 var nzdbModels = require('./nzdb-models');
 
-
 function connectionStringToConfig(connectionString) {
   var config = {
     server: undefined,
@@ -37,8 +36,6 @@ function connectionStringToConfig(connectionString) {
   return config;
 }
 
-
-
 var NZDB = function (connectionString) {
   var config = connectionStringToConfig(connectionString)
 
@@ -66,42 +63,29 @@ var NZDB = function (connectionString) {
     });
 }
 
-
-NZDB.prototype.getElicitationDefinitionFromID = function(id, cb) {
-  this.models.ElicitationDefinitions.findOne({ where: { ID: id } })
-  .then(function (def) {
-    cb(null, def);
-  }).catch(function (err) { 
-    cb(err, null);
-  });
-}
-
-NZDB.prototype.getElicitationFromID = function (id, cb) {
-  this.models.Tasks.findOne({ 
+NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
+  var result = {};
+  var m = this.models;
+  
+  m.Tasks.findOne({ 
     where: {
-      ID: id, 
+      ID: elicitationID, 
       Discriminator: 'Elicitation' 
-    }})
+  }})
   .then(function (elicitation) {
-    cb(null, elicitation);
-  }).catch(function (err) { 
+    result.elicitation = elicitation;
+    return m.People.findOne({ where: { ID: personID } });
+  })
+  .then(function (person) {
+    result.person = person;
+    return m.ElicitationDefinitions.findOne({ where: { ID: result.elicitation.ElicitationDefinition_ID } })
+  })
+  .then(function (def) {
+    result.definition = def;    
+    cb(null, result);
+  }).catch(function (err) {
     cb(err, null);
-  });
-}
-
-NZDB.prototype.getElicitationAndAssets = function(elicitationID, cb) {
-  this.getElicitationFromID(elicitationID, function (err, elicitation) {
-    if (err) {
-      cb(err, null);
-    } else {
-      this.getElicitationDefinitionFromID(elicitation.ElicitationDefinition_ID, function (err, definition) {
-        cb(null, {
-          elicitation: elicitation,
-          definition: definition
-        });
-      });
-    }
-  }.bind(this));
+  }); 
 }
 
 module.exports = NZDB;

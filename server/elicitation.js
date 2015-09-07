@@ -19,7 +19,7 @@ module.exports = function (db, assetHelpers) {
         return;
       }
   
-      db.getElicitationAndAssets(elicitationID, function (err, result) {
+      db.getElicitationAndAssets(elicitationID, personID, function (err, result) {
         var elicitation = result.elicitation;
         var definition = result.definition;
     
@@ -27,18 +27,18 @@ module.exports = function (db, assetHelpers) {
         var embedded = false;
     
         var membership = {
-          AllowModerator: true
+          AllowModerator: true // FIXME: need to implement this
         };
     
         var person = {
-          ID: personID,
-          DisallowLoginViaAccessToken: false,
-          access_token: "markofbeast",
-          email: "fixme@fixme.org"
+          ID: result.person.ID,
+          DisallowLoginViaAccessToken: false, // FIXME: what do we compute this from? see c# code
+          access_token: result.person.access_token,
+          email: result.person.email
         };
     
         var discussion = {
-          category: "solar"
+          category: "solar" // FIXME: need to implement this
         };
 
         setupViewModel(db, person, membership, "Elicitation.View+", elicitation, definition, discussion, startEditing, embedded, function (err, elicitationViewModel) {
