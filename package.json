@@ -19,7 +19,7 @@
     "node-connection-string-builder": "0.0.1",
     "request": "^2.61.0",
     "sequelize": "^3.7.1",
-    "tedious": "^1.12.2"
+    "tedious": "^1.12.3"
   },
   "noAnalyze": true,
   "license": "LicenseRef-LICENSE",

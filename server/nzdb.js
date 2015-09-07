@@ -1,9 +1,7 @@
-
-var Connection = require('tedious').Connection;
-var Request = require('tedious').Request;
-var TYPES = require('tedious').TYPES;
-
+var Sequelize = require('sequelize');
 var ncsBuilder = require('node-connection-string-builder');
+var nzdbModels = require('./nzdb-models');
+
 
 function connectionStringToConfig(connectionString) {
   var config = {
@@ -39,78 +37,56 @@ function connectionStringToConfig(connectionString) {
   return config;
 }
 
+
+
 var NZDB = function (connectionString) {
   var config = connectionStringToConfig(connectionString)
-  this.connection = new Connection(config);
 
-  this.connection.on('connect', function(err) {
-    console.log("DB Connected");
-  }); 
-}
-
-NZDB.prototype.query = function (query, params, cb) {
-  var con = this.connection;
-  
-  var rowResults = [];
-    
-  request = new Request(query, function(err, rowCount) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(rowCount + ' rows');
+  this.sql = new Sequelize(config.database, config.userName, config.password, {
+    host: config.server,
+    dialect: 'mssql',
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    },
+    dialectOptions: {
+      encrypt: true,
+      database: 'NearZero'
     }
-
-    cb(err, rowResults);
   });
   
-  params.forEach(function (param) {
-    request.addParameter(param.name, param.type, param.value);
-  });
-    
-  request.on('row', function(columns) {
-    var result = {};
-    
-    columns.forEach(function(column) {
-      result[column.metadata.colName] = column.value;
+  this.sql.authenticate()
+    .then(function () {
+      console.log("NZDB(): connected  via sequelize");  
+      this.models = nzdbModels(this.sql, Sequelize);
+    }.bind(this))
+    .catch(function (err) { 
+      console.log("NZDB(): couldn't auth with db: ", err);
     });
-
-    rowResults.push(result);
-  });
-    
-  con.execSql(request);
 }
 
-NZDB.prototype.queryOne = function (query, params, cb) {
-  this.query(query, params, function (err, rows) {
-      if (err) {
-        cb(err, null);
-      } else if (rows.length == 1){
-        cb(null, rows[0]);
-      } else {
-        cb("uhoh, more than 1 was returned", null);
-      }
-    }
-  )  
-}
 
 NZDB.prototype.getElicitationDefinitionFromID = function(id, cb) {
-  this.queryOne(
-    "SELECT * FROM ElicitationDefinitions WHERE ID=@id",
-    [
-      { name: "id", type: TYPES.Int, value: id}
-    ],    
-    cb
-  )
+  this.models.ElicitationDefinitions.findOne({ where: { ID: id } })
+  .then(function (def) {
+    cb(null, def);
+  }).catch(function (err) { 
+    cb(err, null);
+  });
 }
 
 NZDB.prototype.getElicitationFromID = function (id, cb) {
-  this.queryOne(
-    "SELECT * FROM Tasks WHERE Discriminator='Elicitation' and ID=@id",
-    [
-      { name: "id", type: TYPES.Int, value: id}
-    ],
-    cb
-  )
+  this.models.Tasks.findOne({ 
+    where: {
+      ID: id, 
+      Discriminator: 'Elicitation' 
+    }})
+  .then(function (elicitation) {
+    cb(null, elicitation);
+  }).catch(function (err) { 
+    cb(err, null);
+  });
 }
 
 NZDB.prototype.getElicitationAndAssets = function(elicitationID, cb) {
