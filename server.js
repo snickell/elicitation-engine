@@ -45,8 +45,10 @@ app.set('views', viewsDir);
 
 // NZ Database
 var connectionString = process.env['SQLAZURECONNSTR_DefaultConnection'];
-var NZDB = require('./server/nzdb');
+//var NZDB = require('./server/nzdb');
+var NZDB = require('./server/nzdb-sequelize');
 var db = new NZDB(connectionString);
+
 
 // Setup basic app routes
 var router = express.Router();
