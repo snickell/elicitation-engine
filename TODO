@@ -14,10 +14,6 @@
 6) use bower or npm (???) to include many of our assets
 	a) Research bower vs npm vs ???
 
-7) Evaluate sequelize with azure (?)
-
-8) Update to Express 4
-
 9) Consider updating to ember-cli (?). Figure out if that is even a relevant idea...
 
 10) Get es6 processing going so we can stop using es3
