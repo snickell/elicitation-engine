@@ -14,21 +14,37 @@ module.exports = function (db, assetHelpers) {
   });
   
   router.get('/edit/:id', function (req, res) {
-    elicit(req, res, "Elicitation.Edit+", { startEditing: true });
+    elicit(req, res, "Elicitation.Edit+", { 
+      startEditing: true,
+      modifyViewModel: function (viewModel, cb) {
+        /*
+        if (revision != null) {
+            var definition = db.ElicitationDefinitions.Find(revision);
+
+            if (!elicitation.DefinitionHistory.Contains(definition)) throw new Exception("Specified definitionID " + revision + " is not in the history of elicitation");
+            elicitationViewModel.elicitationDefinition = definition.Definition;
+            elicitationViewModel.settings.notTheLatestRevision = true;
+        }*/
+        console.log("Modifying view model!");
+        cb(null, viewModel);
+      }
+    });
   }); 
 
-  function renderElicitation(res, models, logName, startEditing, embedded) {
+  function renderElicitation(req, res, models, logName, startEditing, embedded, modifyViewModel) {
     setupViewModel(db, models, logName, startEditing, embedded, function (err, viewModel) {
-      viewModel.helpers = {
-        includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
-        css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
-        js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
-        assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
-        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
-      };
-      viewModel.layout = false;
+      modifyViewModel(viewModel, function (err, viewModel) {
+        viewModel.helpers = {
+          includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
+          css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
+          js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
+          assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
+          jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
+        };
+        viewModel.layout = false;
             
-      res.render('elicitation-backend-layout', viewModel);
+        res.render('elicitation-backend-layout', viewModel);        
+      });
     });
   }
   
@@ -37,6 +53,7 @@ module.exports = function (db, assetHelpers) {
     var options = options || {};
     var startEditing = options.startEditing != undefined ? options.startEditing : false;
     var embedded = options.embedded != undefined ? options.embedded : false;
+    var modifyViewModel = options.modifyViewModel || function (viewModel, cb) { cb(null, viewModel); };
     
     var elicitationID = parseInt(req.params.id);
     console.log(logName + "(" + elicitationID + ")");
@@ -48,7 +65,7 @@ module.exports = function (db, assetHelpers) {
       }
   
       db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
-        renderElicitation(res, models, "Elicitation.View+", startEditing, embedded);
+        renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel);
       }); 
     });    
   } 
