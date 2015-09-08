@@ -9,6 +9,14 @@ var authenticateAccessTo = require('./elicitation/auth');
 
 module.exports = function (db, assetHelpers) {
 
+  router.get('/run/:id', function (req, res) {
+    elicit(req, res, "Elicitation.View+", false, false);
+  });
+  
+  router.get('/edit/:id', function (req, res) {
+    elicit(req, res, "Elicitation.Edit+", true, false);
+  }); 
+
   function renderElicitation(res, models, logName, startEditing, embedded) {
     setupViewModel(db, models, logName, startEditing, embedded, function (err, viewModel) {
       viewModel.helpers = {
@@ -25,9 +33,9 @@ module.exports = function (db, assetHelpers) {
   }
   
 
-  router.get('/run/:id', function (req, res) {
+  function elicit(req, res, logName, startEditing, embedded) {
     var elicitationID = parseInt(req.params.id);
-    console.log("running elicitation #" + elicitationID + "#");
+    console.log(logName + "(" + elicitationID + ")");
 
     authenticateAccessTo(elicitationID, req, res, function (err, personID) {
       if (err) {
@@ -36,30 +44,10 @@ module.exports = function (db, assetHelpers) {
       }
   
       db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
-        var startEditing = false;
-        var embedded = false;
         renderElicitation(res, models, "Elicitation.View+", startEditing, embedded);
       }); 
-    });
-  });
-  
-  router.get('/edit/:id', function (req, res) {
-    var elicitationID = parseInt(req.params.id);
-    console.log("editing elicitation #" + elicitationID + "#");
-
-    authenticateAccessTo(elicitationID, req, res, function (err, personID) {
-      if (err) {
-        res.status(404).send("Oh uh, something went wrong: " + err);
-        return;
-      }
-  
-      db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
-        var startEditing = true;
-        var embedded = false;
-        renderElicitation(res, models, "Elicitation.Edit+", startEditing, embedded);
-      }); 
-    });
-  });  
+    });    
+  } 
   
 /*
         [ModeratorsOnly]
