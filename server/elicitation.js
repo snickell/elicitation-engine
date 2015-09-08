@@ -38,10 +38,46 @@ module.exports = function (db, assetHelpers) {
       db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
         var startEditing = false;
         var embedded = false;
-        renderElicitation(res, models, "Elicitation.View+", startEditing, embedded)
+        renderElicitation(res, models, "Elicitation.View+", startEditing, embedded);
       }); 
     });
   });
+  
+  router.get('/edit/:id', function (req, res) {
+    var elicitationID = parseInt(req.params.id);
+    console.log("editing elicitation #" + elicitationID + "#");
+
+    authenticateAccessTo(elicitationID, req, res, function (err, personID) {
+      if (err) {
+        res.status(404).send("Oh uh, something went wrong: " + err);
+        return;
+      }
+  
+      db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
+        var startEditing = true;
+        var embedded = false;
+        renderElicitation(res, models, "Elicitation.Edit+", startEditing, embedded);
+      }); 
+    });
+  });  
+  
+/*
+        [ModeratorsOnly]
+        public ActionResult Edit(int id, int? revision) {
+            var elicitation = getElicitationFromID(id);
+            var elicitationViewModel = setupElicitation("Elicitation.Edit", elicitation, startEditing: true);
+
+            if (revision != null) {
+                var definition = db.ElicitationDefinitions.Find(revision);
+
+                if (!elicitation.DefinitionHistory.Contains(definition)) throw new Exception("Specified definitionID " + revision + " is not in the history of elicitation");
+                elicitationViewModel.elicitationDefinition = definition.Definition;
+                elicitationViewModel.settings.notTheLatestRevision = true;
+            }
+
+            return View("Elicitation", elicitationViewModel);
+        }
+*/  
   
   return router;
 }

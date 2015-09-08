@@ -17,10 +17,6 @@ module.exports = function setupElicitation(db, m, logName, startEditing, embedde
   var elicitationDefinition = m.elicitationDefinition;
   var discussion = m.discussion;
 
-
-  startEditing = startEditing !== undefined ? startEditing : false;
-  embedded = embedded !== undefined ? embedded : false;
-
   if (elicitation != null) {
       addLogEntry(db, logName, "ElicitationID: " + elicitation.ID + ", ElicitationName: " + elicitation.ElicitationName);
   } else {
