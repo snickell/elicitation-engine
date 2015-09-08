@@ -1,3 +1,4 @@
+var Promise = require("bluebird");
 
 function addLogEntry(db, logName, text) {
   // FIXME
@@ -10,7 +11,7 @@ function dbSaveChanges(db, cb) {
   cb();
 }
 
-module.exports = function setupElicitation(db, m, logName, startEditing, embedded, cb) {
+module.exports = function setupElicitation(db, m, logName, startEditing, embedded) {
   var person = m.person;
   var membership = m.membership;
   var elicitation = m.elicitation;
@@ -57,7 +58,7 @@ module.exports = function setupElicitation(db, m, logName, startEditing, embedde
     var isMobileDevice = false; // FIXME: HttpContext.Request.Browser.IsMobileDevice,
     console.error("FIXME isMobileDevice=false");
 
-    cb(null, {
+    return Promise.resolve({
 
         // @Html.Raw()
         elicitationDefinition: elicitationDefinition.Definition,
