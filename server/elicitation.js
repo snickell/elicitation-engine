@@ -10,11 +10,11 @@ var authenticateAccessTo = require('./elicitation/auth');
 module.exports = function (db, assetHelpers) {
 
   router.get('/run/:id', function (req, res) {
-    elicit(req, res, "Elicitation.View+", false, false);
+    elicit(req, res, "Elicitation.View+");
   });
   
   router.get('/edit/:id', function (req, res) {
-    elicit(req, res, "Elicitation.Edit+", true, false);
+    elicit(req, res, "Elicitation.Edit+", { startEditing: true });
   }); 
 
   function renderElicitation(res, models, logName, startEditing, embedded) {
@@ -33,7 +33,11 @@ module.exports = function (db, assetHelpers) {
   }
   
 
-  function elicit(req, res, logName, startEditing, embedded) {
+  function elicit(req, res, logName, options) {
+    var options = options || {};
+    var startEditing = options.startEditing != undefined ? options.startEditing : false;
+    var embedded = options.embedded != undefined ? options.embedded : false;
+    
     var elicitationID = parseInt(req.params.id);
     console.log(logName + "(" + elicitationID + ")");
 
