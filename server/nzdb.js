@@ -67,6 +67,17 @@ NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
   var result = {};
   var m = this.models;
   
+  result.membership = {
+    AllowModerator: true // FIXME: need to implement this
+  };
+  console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.membership");
+  
+  result.discussion = {
+    category: "solar" // FIXME: need to implement this
+  };  
+  console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.discussion");
+
+    
   m.Tasks.findOne({ 
     where: {
       ID: elicitationID, 

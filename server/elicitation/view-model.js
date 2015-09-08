@@ -10,7 +10,14 @@ function dbSaveChanges(db, cb) {
   cb();
 }
 
-module.exports = function setupElicitation(db, person, membership, logName, elicitation, elicitationDefinition, discussion, startEditing, embedded, cb) {
+module.exports = function setupElicitation(db, m, logName, startEditing, embedded, cb) {
+  var person = m.person;
+  var membership = m.membership;
+  var elicitation = m.elicitation;
+  var elicitationDefinition = m.elicitationDefinition;
+  var discussion = m.discussion;
+
+
   startEditing = startEditing !== undefined ? startEditing : false;
   embedded = embedded !== undefined ? embedded : false;
 
@@ -91,7 +98,7 @@ module.exports = function setupElicitation(db, person, membership, logName, elic
 
 
             /* elicitation.loggedInPerson */
-            saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken ? Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName, login: person.access_token }) : Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName })) : null,
+            saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName, login: person.access_token }) : Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName })) : null,
             email: person != null ? person.email : null,
 
             /* elicitation.discussionURL */
@@ -106,7 +113,18 @@ module.exports = function setupElicitation(db, person, membership, logName, elic
             saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
             uploadImageURL: allowEditing ? Url.Action("CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
 
-        }
+        },
+        
+        /* These are for handlebars */
+        helpers = {
+          includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
+          css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
+          js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
+          assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
+          jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
+        },
+        layout: false
+        
     });
   });
 };

@@ -403,7 +403,12 @@ module.exports = function(sequelize, DataTypes) {
     }, {
       freezeTableName: true,
       createdAt: false,
-      updatedAt: false
+      updatedAt: false,
+      instanceMethods: {
+        DisallowLoginViaAccessToken: function () {
+          return this.access_token == null;
+        }
+      }
     }),
     LogEntries: sequelize.define('LogEntries', {
       ID: {
