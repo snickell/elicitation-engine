@@ -113,18 +113,7 @@ module.exports = function setupElicitation(db, m, logName, startEditing, embedde
             saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
             uploadImageURL: allowEditing ? Url.Action("CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
 
-        },
-        
-        /* These are for handlebars */
-        helpers = {
-          includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
-          css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
-          js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
-          assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
-          jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
-        },
-        layout: false
-        
+        }
     });
   });
 };

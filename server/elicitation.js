@@ -9,6 +9,22 @@ var authenticateAccessTo = require('./elicitation/auth');
 
 module.exports = function (db, assetHelpers) {
 
+  function renderElicitation(res, models, logName, startEditing, embedded) {
+    setupViewModel(db, models, logName, startEditing, embedded, function (err, viewModel) {
+      viewModel.helpers = {
+        includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
+        css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
+        js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
+        assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
+        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
+      };
+      viewModel.layout = false;
+            
+      res.render('elicitation-backend-layout', viewModel);
+    });
+  }
+  
+
   router.get('/run/:id', function (req, res) {
     var elicitationID = parseInt(req.params.id);
     console.log("running elicitation #" + elicitationID + "#");
@@ -22,10 +38,7 @@ module.exports = function (db, assetHelpers) {
       db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
         var startEditing = false;
         var embedded = false;
-
-        setupViewModel(db, models, "Elicitation.View+", startEditing, embedded, function (err, viewModel) {      
-          res.render('elicitation-backend-layout', viewModel);
-        });
+        renderElicitation(res, models, "Elicitation.View+", startEditing, embedded)
       }); 
     });
   });

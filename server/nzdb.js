@@ -92,9 +92,10 @@ NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
     return m.ElicitationDefinitions.findOne({ where: { ID: result.elicitation.ElicitationDefinition_ID } })
   })
   .then(function (def) {
-    result.definition = def;    
+    result.elicitationDefinition = def;    
     cb(null, result);
   }).catch(function (err) {
+    console.log("CATCHING AN ERROR...", err);
     cb(err, null);
   }); 
 }
