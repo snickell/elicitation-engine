@@ -18,7 +18,7 @@
     "handlebars": "^3.0.3",
     "morgan": "^1.6.1",
     "node-connection-string-builder": "0.0.1",
-    "request": "^2.61.0",
+    "request-promise": "^0.4.3",
     "sequelize": "^3.7.1",
     "tedious": "^1.12.3"
   },
