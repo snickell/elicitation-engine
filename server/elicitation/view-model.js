@@ -1,5 +1,3 @@
-var Promise = require("bluebird");
-
 function addLogEntry(db, logName, text) {
   // FIXME
   console.error("FIXME: addLogEntry(", logName, text, ")");

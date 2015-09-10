@@ -1,5 +1,4 @@
-var Promise = require('bluebird');
-var request = Promise.promisify(require('request-promise'));
+var request = require('request-promise');
 
 var authPath = "/authenticate-access-to-elicitation/";
 
