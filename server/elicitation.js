@@ -3,7 +3,7 @@ var router = express.Router();
 
 var Handlebars = require('handlebars');
 
-var setupViewModel = require('./elicitation/view-model');
+var elicitationViewModel = require('./elicitation/view-model');
 var includeStatic = require('./elicitation/static-includes');
 var authenticateAccessTo = require('./elicitation/auth');
 
@@ -32,7 +32,7 @@ module.exports = function (db, assetHelpers) {
   }); 
 
   function renderElicitation(req, res, models, logName, startEditing, embedded, modifyViewModel) {
-    setupViewModel(db, models, logName, startEditing, embedded)
+    elicitationViewModel(db, models, logName, startEditing, embedded)
     .then(modifyViewModel)
     .then(function (viewModel) {
       viewModel.helpers = {
@@ -53,7 +53,7 @@ module.exports = function (db, assetHelpers) {
     var options = options || {};
     var startEditing = options.startEditing != undefined ? options.startEditing : false;
     var embedded = options.embedded != undefined ? options.embedded : false;
-    var modifyViewModel = options.modifyViewModel || function (viewModel, cb) { cb(null, viewModel); };
+    var modifyViewModel = options.modifyViewModel || function (viewModel) { return viewModel; };
     
     var elicitationID = parseInt(req.params.id);
     console.log(logName + "(" + elicitationID + ")");
@@ -64,7 +64,9 @@ module.exports = function (db, assetHelpers) {
         return;
       }
   
-      db.getElicitationAndAssets(elicitationID, personID, function (err, models) {
+      db.getElicitationAndAssets(elicitationID, personID)
+      .then(function (models) {
+        console.log("Models is: ", models);
         renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel);
       }); 
     });    

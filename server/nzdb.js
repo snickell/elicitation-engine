@@ -78,7 +78,7 @@ NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
   console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.discussion");
 
     
-  m.Tasks.findOne({ 
+  return m.Tasks.findOne({
     where: {
       ID: elicitationID, 
       Discriminator: 'Elicitation' 
@@ -93,11 +93,8 @@ NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
   })
   .then(function (def) {
     result.elicitationDefinition = def;    
-    cb(null, result);
-  }).catch(function (err) {
-    console.log("CATCHING AN ERROR...", err);
-    cb(err, null);
-  }); 
+    return result;
+  });
 }
 
 module.exports = NZDB;
