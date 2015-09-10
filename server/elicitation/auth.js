@@ -23,6 +23,7 @@ function authenticateAccessTo(elicitationID, req, res) {
     followRedirect: false
   })
   .then(function (body) {
+    console.log("OK, got something: ", body);
     var authResponse = JSON.parse(body);
     
     console.log("Auth succeeded: ", authResponse);
@@ -35,8 +36,11 @@ function authenticateAccessTo(elicitationID, req, res) {
     }
   })  
   .catch(StatusCodeError, function (error) {
+    console.log("Dealing with error: ", error);
     if (error.statusCode >= 300 && error.statusCode < 400) {
       throw new RedirectToLoginError(error.response.headers.location)
+    } else {
+      throw error;
     }
   });
 }
