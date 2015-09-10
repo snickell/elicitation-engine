@@ -58,13 +58,15 @@ module.exports = function (db, assetHelpers) {
     var elicitationID = parseInt(req.params.id);
     console.log(logName + "(" + elicitationID + ")");
 
-    authenticateAccessTo(elicitationID, req, res)
+    return authenticateAccessTo(elicitationID, req, res)
     .then(
       personID => db.getElicitationAndAssets(elicitationID, personID)
     )
     .then(
       models => renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel)
-    ); 
+    ).catch(authenticateAccessTo.RedirectToLoginError, 
+      redirect => res.redirect(redirect.url)
+    );
     
   } 
   

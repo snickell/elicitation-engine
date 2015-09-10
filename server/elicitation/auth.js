@@ -1,8 +1,9 @@
 var request = require('request-promise');
+var StatusCodeError = require('request-promise/errors').StatusCodeError;
 
 var authPath = "/authenticate-access-to-elicitation/";
 
-module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {  
+function authenticateAccessTo(elicitationID, req, res) {  
   var returnURL = req.originalUrl;
   
   var hostname = req.get('host');
@@ -12,10 +13,7 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
     hostname = "www.nearzero.org";
   }
   
-  var host = req.protocol + '://' + hostname;
-  
-  
-  
+  var host = req.protocol + '://' + hostname;  
   var url = host + authPath + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
   console.log("auth url is: ", url);
@@ -23,21 +21,37 @@ module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {
   return request({
     url: url,
     followRedirect: false
-  }).then(function (response, body) {
-    if (response.statusCode >= 300 && response.statusCode < 400) {
-      console.log("Redirecting to ", response.headers.location);
-      res.redirect(response.headers.location);
-    } else if (response.statusCode == 200) {
-      var authResponse = JSON.parse(body);
-      
-      console.log("Auth succeeded: ", authResponse);
-      
-      var personID = parseInt(authResponse.personID)
-      if (personID > 0) {
-        return authResponse.personID;
-      } else {
-        throw "You don't have permission to access this elicitation";
-      }
+  })
+  .then(function (body) {
+    var authResponse = JSON.parse(body);
+    
+    console.log("Auth succeeded: ", authResponse);
+    
+    var personID = parseInt(authResponse.personID)
+    if (personID > 0) {
+      return authResponse.personID;
+    } else {
+      throw "You don't have permission to access this elicitation";
+    }
+  })  
+  .catch(StatusCodeError, function (error) {
+    if (error.statusCode >= 300 && error.statusCode < 400) {
+      throw new RedirectToLoginError(error.response.headers.location)
     }
   });
 }
+
+function RedirectToLoginError(url) {
+  this.name = 'RedirectToLogin';
+  this.message = 'redirect to login: ' + url;
+  this.url = url;
+
+  if (Error.captureStackTrace) {
+      Error.captureStackTrace(this);
+  }
+}
+RedirectToLoginError.prototype = Object.create(Error.prototype);
+RedirectToLoginError.prototype.constructor = RedirectToLoginError;
+authenticateAccessTo.RedirectToLoginError = RedirectToLoginError;
+
+module.exports = authenticateAccessTo;
