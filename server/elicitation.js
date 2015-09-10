@@ -59,12 +59,12 @@ module.exports = function (db, assetHelpers) {
     console.log(logName + "(" + elicitationID + ")");
 
     authenticateAccessTo(elicitationID, req, res)
-    .then(function (personID) {
-      return db.getElicitationAndAssets(elicitationID, personID);
-    })
-    .then(function (models) {
-      return renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel);
-    }); 
+    .then(
+      personID => db.getElicitationAndAssets(elicitationID, personID)
+    )
+    .then(
+      models => renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel)
+    ); 
     
   } 
   
