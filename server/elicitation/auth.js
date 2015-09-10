@@ -5,7 +5,16 @@ var authPath = "/authenticate-access-to-elicitation/";
 module.exports = function authenticateAcessTo(elicitationID, req, res, cb) {  
   var returnURL = req.originalUrl;
   
-  var host = req.protocol + '://' + req.get('host');
+  var hostname = req.get('host');
+  
+  if (hostname === "elicitation-gorilla.azurewebsites.net") {
+    console.warn("Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");
+    hostname = "www.nearzero.org";
+  }
+  
+  var host = req.protocol + '://' + hostname;
+  
+  
   
   var url = host + authPath + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
   
