@@ -34,7 +34,7 @@ module.exports = function (db, assetHelpers) {
   function renderElicitation(req, res, models, logName, startEditing, embedded, modifyViewModel) {
     return elicitationViewModel(db, models, logName, startEditing, embedded)
     .then(modifyViewModel)
-    .then(function (viewModel) {
+    .then(viewModel => {
       viewModel.helpers = {
         includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
         css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
