@@ -15,7 +15,7 @@ function connectionStringToConfig(connectionString) {
         token: false,
         log: true
       },
-      database: 'NearZero',
+      database: '',
       encrypt: true // for Azure users
     }
   };
@@ -39,7 +39,7 @@ function connectionStringToConfig(connectionString) {
 var NZDB = function (connectionString) {
   var config = connectionStringToConfig(connectionString)
 
-  this.sql = new Sequelize(config.database, config.userName, config.password, {
+  this.sql = new Sequelize(config.options.database, config.userName, config.password, {
     host: config.server,
     dialect: 'mssql',
     pool: {
@@ -47,10 +47,7 @@ var NZDB = function (connectionString) {
       min: 0,
       idle: 10000
     },
-    dialectOptions: {
-      encrypt: true,
-      database: 'NearZero'
-    }
+    dialectOptions: config.options
   });
   
   this.sql.authenticate()
