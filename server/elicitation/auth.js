@@ -28,6 +28,8 @@ function authenticateAccessTo(elicitationID, req, res) {
     cookieJar.setCookie(cookie);    
   }
   
+  console.log(req.headers);
+  
   return request({
     url: url,
     followRedirect: false,
@@ -48,6 +50,7 @@ function authenticateAccessTo(elicitationID, req, res) {
   })  
   .catch(StatusCodeError, function (error) {
     if (error.statusCode >= 300 && error.statusCode < 400) {
+      console.log("Redirecting to ", error.response.headers.location);
       throw new RedirectToLoginError(error.response.headers.location)
     } else {
       throw error;
