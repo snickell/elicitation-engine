@@ -8,6 +8,8 @@ function authenticateAccessTo(elicitationID, req, res) {
   
   var hostname = req.get('host');
   
+  console.log("Cookies: ", req.cookies);
+  
   if (hostname === "elicitation-gorilla.azurewebsites.net") {
     console.warn("Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");
     hostname = "www.nearzero.org";
