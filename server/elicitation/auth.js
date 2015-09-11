@@ -10,8 +10,8 @@ function authenticateAccessTo(elicitationID, req, res) {
   
   var hostname = req.get('host');
   
+  console.warn("FIXME: Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");  
   if (hostname === "elicitation-gorilla.azurewebsites.net") {
-    console.warn("Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");
     hostname = "www.nearzero.org";
   }
   
@@ -26,8 +26,6 @@ function authenticateAccessTo(elicitationID, req, res) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
     cookieJar.setCookie(cookie, url);    
   }
-  
-  console.log(req.headers);
   
   return request({
     url: url,
