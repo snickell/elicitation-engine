@@ -3,6 +3,8 @@ var StatusCodeError = require('request-promise/errors').StatusCodeError;
 
 var authPath = "/authenticate-access-to-elicitation/";
 
+var AUTH_COOKIE = ".ASPXAUTH";
+
 function authenticateAccessTo(elicitationID, req, res) {  
   var returnURL = req.originalUrl;
   
@@ -20,9 +22,17 @@ function authenticateAccessTo(elicitationID, req, res) {
   
   console.log("auth url is: ", url);
   
+  
+  var cookieJar = request.jar();
+  if (req.cookies[AUTH_COOKIE]) {
+    var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
+    cookieJar.setCookie(cookie);    
+  }
+  
   return request({
     url: url,
-    followRedirect: false
+    followRedirect: false,
+    jar: cookieJar
   })
   .then(function (body) {
     console.log("OK, got something: ", body);
