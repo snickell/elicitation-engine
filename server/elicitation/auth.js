@@ -10,8 +10,6 @@ function authenticateAccessTo(elicitationID, req, res) {
   
   var hostname = req.get('host');
   
-  console.log("Cookies: ", req.cookies);
-  
   if (hostname === "elicitation-gorilla.azurewebsites.net") {
     console.warn("Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");
     hostname = "www.nearzero.org";
@@ -26,6 +24,7 @@ function authenticateAccessTo(elicitationID, req, res) {
   var cookieJar = request.jar();
   if (req.cookies[AUTH_COOKIE]) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
+    console.log("Using cookie: ", cookie);
     cookieJar.setCookie(cookie);    
   }
   
@@ -48,7 +47,6 @@ function authenticateAccessTo(elicitationID, req, res) {
     }
   })  
   .catch(StatusCodeError, function (error) {
-    console.log("Dealing with error: ", error);
     if (error.statusCode >= 300 && error.statusCode < 400) {
       throw new RedirectToLoginError(error.response.headers.location)
     } else {
