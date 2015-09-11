@@ -20,12 +20,11 @@ function authenticateAccessTo(elicitationID, req, res) {
   
   console.log("auth url is: ", url);
   
-  
+  // Pass along the auth cookie, the whole point of this excercise...
   var cookieJar = request.jar();
   if (req.cookies[AUTH_COOKIE]) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
-    console.log("Using cookie: ", cookie);
-    cookieJar.setCookie(cookie);    
+    cookieJar.setCookie(cookie, url);    
   }
   
   console.log(req.headers);
