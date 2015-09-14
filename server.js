@@ -89,7 +89,7 @@ if (app.get('env') === 'development') {
   app.get('/authenticate-access-to-elicitation/:id', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({ 
-      personID: 666
+      personID: 2
     }));
   });
 }
