@@ -66,8 +66,6 @@ module.exports = function (db, assetHelpers) {
             assignment.LastAccessed = now;
             assignment.Modified = now;
             
-            console.log("Creating data");
-            
             return db.models.ElicitationData.create({
               ElicitationTask_ID: assignment.ID, // FIXME: sequelize association
               JSON: '',//json,
@@ -94,23 +92,19 @@ module.exports = function (db, assetHelpers) {
                   elicitation.Discussion.LastActivity = now; // FIXME: sequelize association
                 }
                 
-                return Promise.all([
-                  membership.save({transaction: t}),
-                  assignment.save({transaction: t}),
-                  elicitation.save({transaction: t}),
-                  elicitation.Discussion.save({transaction: t})
-                ]);
+                return membership.save({transaction: t})
+                .then( () => assignment.save({transaction: t}) )
+                .then( () => elicitation.save({transaction: t}) )
+                .then( () => elicitation.Discussion.save({transaction: t}) );
               } else {
-                return Promise.all([
-                  membership.save({transaction: t}),
-                  assignment.save({transaction: t})
-                ])
+                return membership.save({transaction: t})
+                .then( () => assignment.save({transaction: t}) );
               }
-            }).then(function () {
-              // update per-widget results
-              console.log("Success!");
             });
       
+          }).then(function () {
+            // update per-widget results
+            console.log("Success!");
           });
         })
       )
