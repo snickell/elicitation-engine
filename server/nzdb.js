@@ -1,6 +1,14 @@
 var Sequelize = require('sequelize');
+
 var ncsBuilder = require('node-connection-string-builder');
 var nzdbModels = require('./nzdb-models');
+
+
+console.warn("Monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
+var sqlString = require('sequelize/lib/sql-string');
+var dateToString = sqlString.dateToString;
+sqlString.dateToString = (d, tz, dialect) => dateToString(d, tz, 'mysql');
+
 
 function connectionStringToConfig(connectionString) {
   var config = {
@@ -60,7 +68,36 @@ var NZDB = function (connectionString) {
     });
 }
 
-NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
+NZDB.prototype.transaction = function (t) {
+  return this.sql.transaction(t);
+}
+
+NZDB.prototype.getElicitation = function (elicitationID) {
+  return this.models.Task.findOne({
+    where: {
+      ID: elicitationID, 
+      Discriminator: 'Elicitation' 
+  }});  
+}
+
+NZDB.prototype.getElicitationAssignment = function (id) {
+  return this.models.TaskAssignment.findOne({
+    where: {
+      ID: id, 
+      Discriminator: 'ElicitationAssignment' 
+  }});  
+}
+
+NZDB.prototype.getDiscussionMembership = function (discussionID, personID) {
+  return this.models.DiscussionMembership.findOne({
+    where: {
+      discussion_ID: discussionID,
+      Person_ID: personID
+  }});  
+}
+
+
+NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID) {
   var result = {};
   var m = this.models;
   
@@ -75,18 +112,14 @@ NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID, cb) {
   console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.discussion");
 
     
-  return m.Tasks.findOne({
-    where: {
-      ID: elicitationID, 
-      Discriminator: 'Elicitation' 
-  }})
+  return this.getElicitation(elicitationID)
   .then(function (elicitation) {
     result.elicitation = elicitation;
-    return m.People.findOne({ where: { ID: personID } });
+    return m.Person.findOne({ where: { ID: personID } });
   })
   .then(function (person) {
     result.person = person;
-    return m.ElicitationDefinitions.findOne({ where: { ID: result.elicitation.ElicitationDefinition_ID } })
+    return m.ElicitationDefinition.findOne({ where: { ID: result.elicitation.ElicitationDefinition_ID } })
   })
   .then(function (def) {
     result.elicitationDefinition = def;    

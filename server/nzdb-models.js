@@ -1,6 +1,52 @@
 module.exports = function(sequelize, DataTypes) {
-  return {
-    webpages_Roles: sequelize.define('webpages_Roles', {
+  var m = {
+    
+    Discussion: sequelize.define('Discussions', {
+      ID: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false
+      },
+      category: {
+        type: DataTypes.STRING(-1),
+        allowNull: false
+      }
+    }, {
+      freezeTableName: true,
+      createdAt: false,
+      updatedAt: false
+    }),  
+    DiscussionMembership: sequelize.define('DiscussionMemberships', {
+      ID: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false
+      },
+      Moderator: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },      
+      /*
+        [ForeignKey("discussion")]
+        public int discussion_ID { get; set; }
+        public virtual Discussion discussion { get; set; }
+
+        [ForeignKey("Person")]
+        public int Person_ID { get; set; }
+        public virtual Person Person { get; set; }
+
+        public bool AllowModerator {
+            get {
+                return this.Moderator || this.Person.IsAdministrator;
+            }
+        }
+      */
+    }, {
+      freezeTableName: true,
+      createdAt: false,
+      updatedAt: false
+    }),      
+    webpages_Role: sequelize.define('webpages_Roles', {
       RoleId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -15,7 +61,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    webpages_UsersInRoles: sequelize.define('webpages_UsersInRoles', {
+    webpages_UsersInRole: sequelize.define('webpages_UsersInRoles', {
       UserId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -110,121 +156,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    EmailToDiscussions: sequelize.define('EmailToDiscussions', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      MessageSubject: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      MessageBody: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      Sent: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      From_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      Discussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      AboutElicitation_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      AboutMessage_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      Created: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      Modified: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      DateSent: {
-        type: DataTypes.DATE,
-        allowNull: true
-      },
-      To: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      ToElicitationSubset: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    EmailsToOnePerson: sequelize.define('EmailsToOnePerson', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      ReadyToSend: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      Sent: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      MessageFrom: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      MessageTo: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      MessageSubject: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      MessageBody: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      RawEmailSent: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ToPerson_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      EmailToDiscussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      Discussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      DateSent: {
-        type: DataTypes.DATE,
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    Discussions: sequelize.define('Discussions', {
+    Discussion: sequelize.define('Discussions', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -275,7 +207,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    DiscussionMemberships: sequelize.define('DiscussionMemberships', {
+    DiscussionMembership: sequelize.define('DiscussionMemberships', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -358,7 +290,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    People: sequelize.define('People', {
+    Person: sequelize.define('People', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -410,7 +342,7 @@ module.exports = function(sequelize, DataTypes) {
         }
       }
     }),
-    LogEntries: sequelize.define('LogEntries', {
+    LogEntry: sequelize.define('LogEntries', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -453,113 +385,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    Messages: sequelize.define('Messages', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      date: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      lastUpdated: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      messageBodyStore: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      readyToUse: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      delivered: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      attemptedDelivery: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      deliveryError: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      EmailMessageID: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      summaryPoint: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      raw_body: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      from_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      inResponseTo_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      discussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      inResponseTosNotified: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      Topic_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      discussionPrompt: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    MessageSections: sequelize.define('MessageSections', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      bodyRawIndexStart: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      bodyRawIndexEnd: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      wholeMessage: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      Message_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      highlight: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    Profiles: sequelize.define('Profiles', {
+    Profile: sequelize.define('Profiles', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -578,7 +404,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    RawEmailMessages: sequelize.define('RawEmailMessages', {
+    RawEmailMessage: sequelize.define('RawEmailMessages', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -597,93 +423,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    Responses: sequelize.define('Responses', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      date: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      reason: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      Discriminator: {
-        type: DataTypes.STRING(128),
-        allowNull: false
-      },
-      messageSection_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      from_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      responseToMessage_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      createdByMessage_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      inResponseTosNotified: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    MediaCoverages: sequelize.define('MediaCoverages', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      MediaOutlet: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ArticleTitle: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      URL: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ArticleDate: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      DisplayOnReportPage: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      DisplayOnHomePage: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      Report_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      Importance: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    ElicitationDefinitions: sequelize.define('ElicitationDefinitions', {
+    ElicitationDefinition: sequelize.define('ElicitationDefinitions', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -711,320 +451,6 @@ module.exports = function(sequelize, DataTypes) {
       },
       ChangeSummary: {
         type: DataTypes.STRING(-1),
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    Reports: sequelize.define('Reports', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      Name: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      Category: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      Title: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      Subtitle: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ModeratorName: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ExecutiveSummary: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      IsPublished: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      PublicationDate: {
-        type: DataTypes.DATE,
-        allowNull: true
-      },
-      Discussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      ListSizedImage_ID: {
-        type: DataTypes.UUID,
-        allowNull: true
-      },
-      ReportSizedImage_ID: {
-        type: DataTypes.UUID,
-        allowNull: true
-      },
-      PDF_ID: {
-        type: DataTypes.UUID,
-        allowNull: true
-      },
-      DescriptionForList: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      ExecutiveSummaryIntro: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      Modified: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      ParticipantCountCached: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      TranscriptURL: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ExternalReportURL: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    ReportAsset: sequelize.define('ReportAsset', {
-      ID: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false
-      },
-      MimeType: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      NumBytes: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      Modified: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      ImageWidth: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      ImageHeight: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      ImageCaption: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      bytes: {
-        type: DataTypes.STRING.BINARY,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    ReportPersons: sequelize.define('ReportPersons', {
-      Report_ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      Person_ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    ImageInMessages: sequelize.define('ImageInMessages', {
-      ID: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false
-      },
-      Date: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      Image: {
-        type: DataTypes.STRING.BINARY,
-        allowNull: true
-      },
-      MimeType: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      NumBytes: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      Message_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      ImageWidth: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageHeight: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageLargeSized: {
-        type: DataTypes.STRING.BINARY,
-        allowNull: true
-      },
-      ImageLargeSizedWidth: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageLargeSizedHeight: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageLargeSizedMimeType: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ImagePageSized: {
-        type: DataTypes.STRING.BINARY,
-        allowNull: true
-      },
-      ImagePageSizedWidth: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImagePageSizedHeight: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImagePageSizedMimeType: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      ImageMobileSized: {
-        type: DataTypes.STRING.BINARY,
-        allowNull: true
-      },
-      ImageMobileSizedWidth: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageMobileSizedHeight: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      ImageMobileSizedMimeType: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    EmailAboutReportPublications: sequelize.define('EmailAboutReportPublications', {
-      ID: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false
-      },
-      Email: {
-        type: DataTypes.STRING(-1),
-        allowNull: false
-      },
-      IPAddress: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      Created: {
-        type: DataTypes.DATE,
-        allowNull: false
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    MessageDrafts: sequelize.define('MessageDrafts', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      lastUpdated: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      body: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      membership_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      topic_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      }
-    }, {
-      freezeTableName: true,
-      createdAt: false,
-      updatedAt: false
-    }),
-    Topics: sequelize.define('Topics', {
-      ID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-      },
-      Created: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      Updated: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      Description: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      Cached_PersonNames: {
-        type: DataTypes.STRING(-1),
-        allowNull: true
-      },
-      Cached_NumMessages: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      Discussion_ID: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      SummaryPoint_ID: {
-        type: DataTypes.INTEGER,
         allowNull: true
       }
     }, {
@@ -1075,7 +501,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    TaskAssignments: sequelize.define('TaskAssignments', {
+    TaskAssignment: sequelize.define('TaskAssignments', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -1122,11 +548,11 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    ElicitationDatas: sequelize.define('ElicitationDatas', {
+    ElicitationData: sequelize.define('ElicitationDatas', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        autoIncrement: true        
       },
       ElicitationTask_ID: {
         type: DataTypes.INTEGER,
@@ -1161,7 +587,7 @@ module.exports = function(sequelize, DataTypes) {
       createdAt: false,
       updatedAt: false
     }),
-    Tasks: sequelize.define('Tasks', {
+    Task: sequelize.define('Tasks', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -1316,4 +742,9 @@ module.exports = function(sequelize, DataTypes) {
       updatedAt: false
     })
   };
+  
+  m.Discussion.belongsToMany(m.Person, {through: 'DiscussionMemberships', foreignKey: 'Person_ID'  });
+  m.Person.belongsToMany(m.Discussion, {through: 'DiscussionMemberships', foreignKey: 'discussion_ID' });
+  
+  return m;
 };

@@ -45,7 +45,13 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
   var Url = {
     Action: function(method, controller, params) {
       console.error("FIXME Url.Action(", method, controller, params, ")");
-      return "http://www.fixme.org/" + controller + "/" + method;
+      
+      if (controller) {
+        return "http://www.fixme.org/" + controller + "/" + method;        
+      } else {
+        return "/gorilla/" + method.toLowerCase() + "/" + params.id;
+      }
+
     },
     Content: function(path) {
       return path;
@@ -92,7 +98,7 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
 
 
           /* elicitation.loggedInPerson */
-          saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName, login: person.access_token }) : Url.Action("SaveData", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName })) : null,
+          saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action("SaveData", undefined, { id: elicitation.ID, DiscussionName: elicitation.DiscussionName, login: person.access_token }) : Url.Action("SaveData", undefined, { id: elicitation.ID, DiscussionName: elicitation.DiscussionName })) : null,
           email: person != null ? person.email : null,
 
           /* elicitation.discussionURL */
@@ -100,11 +106,11 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
 
           /* elicitation.adminURLs */
           /* elicitation.allowEditing */
-          reviewAdminURL: allowEditing ? Url.Action("Review", { ReviewToken: elicitation.ReviewToken }) : null,
+          reviewAdminURL: allowEditing ? Url.Action("Review", undefined, { ReviewToken: elicitation.ReviewToken }) : null,
           assignedToAdminURL: allowEditing ? Url.Action("AssignedTo", "Task", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
           dataAdminURL: allowEditing ? Url.Action("Data", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
           changeHistoryAdminURL: allowEditing ? Url.Action("ChangeHistory", "ElicitationAdmn", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
-          saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
+          saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", undefined, { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
           uploadImageURL: allowEditing ? Url.Action("CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: elicitation.DiscussionName }) : null,
 
       }
