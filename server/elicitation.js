@@ -65,57 +65,64 @@ module.exports = function (db, assetHelpers) {
       Promise.all([
         db.getElicitation(elicitationID),
         db.getElicitationAssignment(elicitationID, personID),
-      ]).spread( (elicitation, assignment) =>
-        db.getDiscussionMembership(elicitation.Discussion_ID, personID)
-        .then( function (membership) {
-          return db.transaction(function (t) {
+        personID
+      ])
+    )
+    .spread( (elicitation, assignment, personID) =>
+      db.getDiscussionMembership(elicitation.Discussion_ID, personID)
+      .then( function (membership) {
+        return db.transaction(function (t) {
 
-            membership.LastAccessed = now;            
-            assignment.LastAccessed = now;
-            assignment.Modified = now;
-            
-            return db.models.ElicitationData.create({
-              ElicitationTask_ID: assignment.ID, // FIXME: sequelize association
-              JSON: '',//json,
-              Completed: ElicitationCompleted,
-              Created: now,
-              Modified: now,
-              ElicitationDefinition_ID: elicitation_definition_id,
-              BrowserUserAgent: req.headers['user-agent']
-            }, {transaction: t}).then( function (elicitationData) {
-              if (ElicitationCompleted) {                
-                assignment.CompletedElicitationData_ID = elicitationData.ID;
-                assignment.Completed = true;
-                
-                membership.HasParticipated = true;
-                membership.HasCompletedTask = true;
-                elicitation.lastCompleted = now;
-                membership.LastParticipated = now;
-
-                return addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
-                .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
-                .then( () => membership.save({transaction: t}) )                
-                .then( () => assignment.save({transaction: t}) )
-                .then( () => elicitation.save({transaction: t}) )
-                .then( () =>
-                  db.models.Discussion.update( 
-                    { LastActivity: now },
-                    { where: { ID: elicitation.Discussion_ID }, transaction: t }
-                  )
-                )
-              } else {
-                return membership.save({transaction: t})
-                .then( () => assignment.save({transaction: t}) );
-              }
-            });
+          membership.LastAccessed = now;            
+          assignment.LastAccessed = now;
+          assignment.Modified = now;
       
-          }).then(function () {
-            // update per-widget results
-            console.log("Success!");
+          return db.models.ElicitationData.create({
+            ElicitationTask_ID: assignment.ID, // FIXME: sequelize association
+            JSON: '',//json,
+            Completed: ElicitationCompleted,
+            Created: now,
+            Modified: now,
+            ElicitationDefinition_ID: elicitation_definition_id,
+            BrowserUserAgent: req.headers['user-agent']
+          }, {transaction: t}).then( function (elicitationData) {
+            if (ElicitationCompleted) {                
+              assignment.CompletedElicitationData_ID = elicitationData.ID;
+              assignment.Completed = true;
+          
+              membership.HasParticipated = true;
+              membership.HasCompletedTask = true;
+              elicitation.lastCompleted = now;
+              membership.LastParticipated = now;
+
+              return addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
+              .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
+              .then( () => membership.save({transaction: t}) )                
+              .then( () => assignment.save({transaction: t}) )
+              .then( () => elicitation.save({transaction: t}) )
+              .then( () =>
+                db.models.Discussion.update( 
+                  { LastActivity: now },
+                  { where: { ID: elicitation.Discussion_ID }, transaction: t }
+                )
+              )
+            } else {
+              return membership.save({transaction: t})
+              .then( () => assignment.save({transaction: t}) );
+            }
           });
-        })
-      )
+
+        }).then(function () {
+          // update per-widget results
+          if (ElicitationCompleted) {
+            console.warn("FIXME: not updating per-widget results as per ElicitationController.cs")              
+          }
+        });
+      })
     )    
+    .then(function () {
+      console.log("Success!");
+    });    
   });
 
         /* Accepts JSON data submissions from Expert participants, including page-by-page 'backup' submissions,
