@@ -34,7 +34,7 @@ module.exports = function (db, assetHelpers) {
   }); 
   
   function addLogEntry(method, text) {
-    console.warn("FIXME addLogEntry not implemented: ", method, text);
+    console.log("FIXME addLogEntry not implemented: ", method, text);
     return Promise.resolve();
   }
 
@@ -81,8 +81,7 @@ module.exports = function (db, assetHelpers) {
               ElicitationDefinition_ID: elicitation_definition_id,
               BrowserUserAgent: req.headers['user-agent']
             }, {transaction: t}).then( function (elicitationData) {
-              console.log("Submitting completed data...");
-              if (ElicitationCompleted) {
+              if (ElicitationCompleted) {                
                 assignment.CompletedElicitationData_ID = elicitationData.ID;
                 assignment.Completed = true;
                 
@@ -90,15 +89,16 @@ module.exports = function (db, assetHelpers) {
                 membership.HasCompletedTask = true;
                 elicitation.lastCompleted = now;
                 membership.LastParticipated = now;
-                   
-                return
-                addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
+
+                return addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
+                .then( function () { console.log("Doing it..."); })
                 .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
+                .then( function () { console.log("Doing it 2..."); })
                 .then( () => membership.save({transaction: t}) )                
                 .then( () => assignment.save({transaction: t}) )
                 .then( () => elicitation.save({transaction: t}) )
                 .then(
-                  db.Discussion.update( 
+                  db.models.Discussion.update( 
                     { LastActivity: now },
                     { where: { ID: elicitation.Discussion_ID }, transaction: t }
                   )
