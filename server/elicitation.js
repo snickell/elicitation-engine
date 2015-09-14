@@ -93,9 +93,7 @@ module.exports = function (db, assetHelpers) {
                 membership.LastParticipated = now;
 
                 return addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
-                .then( function () { console.log("Doing it..."); })
                 .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
-                .then( function () { console.log("Doing it 2..."); })
                 .then( () => membership.save({transaction: t}) )                
                 .then( () => assignment.save({transaction: t}) )
                 .then( () => elicitation.save({transaction: t}) )
