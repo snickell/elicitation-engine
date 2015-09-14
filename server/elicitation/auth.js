@@ -33,7 +33,6 @@ function authenticateAccessTo(elicitationID, req, res) {
     jar: cookieJar
   })
   .then(function (body) {
-    console.log("OK, got something: ", body);
     var authResponse = JSON.parse(body);
     
     console.log("Auth succeeded: ", authResponse);

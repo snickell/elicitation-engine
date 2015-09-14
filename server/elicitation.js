@@ -32,6 +32,11 @@ module.exports = function (db, assetHelpers) {
       }
     });
   }); 
+  
+  function addLogEntry(method, text) {
+    console.warn("FIXME addLogEntry not implemented: ", method, text);
+    return Promise.resolve();
+  }
 
   router.post('/savedata/:id/:humanreadable?', function (req, res) {
 
@@ -45,14 +50,15 @@ module.exports = function (db, assetHelpers) {
     // URL / Query params:
     var elicitationID = parseInt(req.params.id);
     var elicitation_definition_id = parseInt(req.body.elicitation_definition_id);    
-    var ElicitationCompleted = req.body.completed == "true";
+    var ElicitationCompleted = true; //req.body.completed == "true";
     var json = req.body.json;
     
     //console.log("Params are: ", JSON.stringify(req.body));
     
     var now = Date.now();
-        
-    return authenticateAccessTo(elicitationID, req, res)
+    
+    addLogEntry("Elicitation.SaveData", "ElicitationID: " + elicitationID)
+    .then( () => authenticateAccessTo(elicitationID, req, res) )
     .then(personID =>
       Promise.all([
         db.getElicitation(elicitationID),
@@ -75,26 +81,28 @@ module.exports = function (db, assetHelpers) {
               ElicitationDefinition_ID: elicitation_definition_id,
               BrowserUserAgent: req.headers['user-agent']
             }, {transaction: t}).then( function (elicitationData) {
-              console.log("Data created");
+              console.log("Submitting completed data...");
               if (ElicitationCompleted) {
-                assignment.CompletedElicitationData = elicitationData; // FIXME: sequelize association
+                assignment.CompletedElicitationData_ID = elicitationData.ID;
                 assignment.Completed = true;
-                elicitation.UpdateNumAssignedAndCompletedFromDB();
-                addLogEntry("Elicitation Complete", "ElicitationID: " + id);
                 
                 membership.HasParticipated = true;
                 membership.HasCompletedTask = true;
                 elicitation.lastCompleted = now;
                 membership.LastParticipated = now;
-                
-                // Update dates
-                if (elicitation.Discussion != null) {
-                  elicitation.Discussion.LastActivity = now; // FIXME: sequelize association
-                }
-                
-                return membership.save({transaction: t})
+                   
+                return
+                addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
+                .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
+                .then( () => membership.save({transaction: t}) )                
                 .then( () => assignment.save({transaction: t}) )
                 .then( () => elicitation.save({transaction: t}) )
+                .then(
+                  db.Discussion.update( 
+                    { LastActivity: now },
+                    { where: { ID: elicitation.Discussion_ID }, transaction: t }
+                  )
+                )
                 .then( () => elicitation.Discussion.save({transaction: t}) );
               } else {
                 return membership.save({transaction: t})
