@@ -8,6 +8,8 @@ var includeStatic = require('./elicitation/static-includes');
 var authenticateAccessTo = require('./elicitation/auth');
 
 var Promise = require('bluebird');
+// FIXME: should only use in dev, not prod
+Promise.longStackTraces();
 
 module.exports = function (db, assetHelpers) {
 
@@ -97,13 +99,12 @@ module.exports = function (db, assetHelpers) {
                 .then( () => membership.save({transaction: t}) )                
                 .then( () => assignment.save({transaction: t}) )
                 .then( () => elicitation.save({transaction: t}) )
-                .then(
+                .then( () =>
                   db.models.Discussion.update( 
                     { LastActivity: now },
                     { where: { ID: elicitation.Discussion_ID }, transaction: t }
                   )
                 )
-                .then( () => elicitation.Discussion.save({transaction: t}) );
               } else {
                 return membership.save({transaction: t})
                 .then( () => assignment.save({transaction: t}) );

@@ -97,18 +97,16 @@ NZDB.prototype.getDiscussionMembership = function (discussionID, personID) {
 }
 
 
-NZDB.prototype.updateNumAssignedAndCompletedFromDB = function (elicitation, transaction) {
+NZDB.prototype.updateNumAssignedAndCompletedFromDB = function (elicitation, transaction) {  
   return this.models.TaskAssignment.count({ where: { Task_ID: elicitation.ID }, transaction: transaction })
   .then(function (numAssigned) {
     elicitation.NumAssigned = numAssigned;
-    
-    console.log("numAssigned: ", numAssigned);
 
     return this.models.TaskAssignment.count({ where: { Task_ID: elicitation.ID, Completed: true }, transaction: transaction });
-  }).then(function (numCompleted) {
-    console.log("numCompleted: ", numCompleted);
-    
+  }.bind(this)).then(function (numCompleted) {    
     elicitation.NumCompleted = numCompleted;
+    
+    return elicitation;
   });
 }
 
