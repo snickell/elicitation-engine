@@ -57,7 +57,14 @@ module.exports = function (db, assetHelpers) {
     });
   });
   
-  function authAndLoad(logEventName, elicitationID, req, res) {
+  function authAndLoad(logEventName, elicitationID, req, res, options) {
+    options = extend(
+      {
+        includeElicitationDefinition: false,
+        includeDiscussion: false
+      }, options
+    );
+    
     return authenticateAccessTo(elicitationID, req, res)
     .then(personID =>
       Promise.props({
@@ -72,6 +79,22 @@ module.exports = function (db, assetHelpers) {
       .then( membership => extend(m, { 
         membership: membership
       }))
+    )
+    .then((m) =>
+      options.includeElicitationDefinition
+      ? db.models.ElicitationDefinition.findOne({ where: { ID: m.elicitation.ElicitationDefinition_ID } })
+        .then( definition => extend(m, {
+          elicitationDefinition: definition
+        }))
+      : m
+    )
+    .then((m) =>
+      options.includeDiscussion
+      ? db.models.Discussion.findOne({ where: { ID: m.elicitation.Discussion_ID } })
+        .then( discussion => extend(m, {
+          discussion: discussion
+        }))
+      : m
     );
   }
   
@@ -300,13 +323,14 @@ module.exports = function (db, assetHelpers) {
     var elicitationID = parseInt(req.params.id);
     console.log(logName + "(" + elicitationID + ")");
 
-    return authenticateAccessTo(elicitationID, req, res)
-    .then(
-      personID => db.getElicitationAndAssets(elicitationID, personID)
+    return authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res, { 
+      includeElicitationDefinition: true,
+      includeDiscussion: true
+    })
+    .then( models =>
+      renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel)
     )
-    .then(
-      models => renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel)
-    ).catch(authenticateAccessTo.RedirectToLoginError, 
+    .catch(authenticateAccessTo.RedirectToLoginError, 
       redirect => res.redirect(redirect.url)
     );
     

@@ -5,19 +5,6 @@
 
 2) Fix Url.Content
 
-5) Figure out why dropdown menu (editing dropdown) jquery not working in production mode
-
-6) use bower or npm (???) to include many of our assets
-	a) Research bower vs npm vs ???
-
-9) Consider updating to ember-cli (?). Figure out if that is even a relevant idea...
-
-10) Get es6 processing going so we can stop using es3
-
 DB:
-- get elicitation AND definition in one join call
-- get elicitation assignment for elicitation and person ID
 - update assignment lastaccessed
 - get last session data
-
-11) Get working w/ sql azure
