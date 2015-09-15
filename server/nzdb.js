@@ -1,7 +1,9 @@
 var Sequelize = require('sequelize');
+var colors = require('colors');
 
 var ncsBuilder = require('node-connection-string-builder');
 var nzdbModels = require('./nzdb-models');
+
 
 
 console.warn("Monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
@@ -55,7 +57,10 @@ var NZDB = function (connectionString) {
       min: 0,
       idle: 10000
     },
-    dialectOptions: config.options
+    dialectOptions: config.options,
+    logging: function (s) {
+      console.log(s.green);
+    }
   });
   
   this.ready = this.sql.authenticate()
