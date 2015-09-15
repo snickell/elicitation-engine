@@ -1,6 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
   var m = {
-    
     Discussion: sequelize.define('Discussions', {
       ID: {
         type: DataTypes.INTEGER,
@@ -346,7 +345,8 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true        
       },
       InternalEvent: {
         type: DataTypes.BOOLEAN,
