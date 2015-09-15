@@ -427,7 +427,7 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        autoIncrement: true 
       },
       Definition: {
         type: DataTypes.STRING(-1),

@@ -39,6 +39,80 @@ module.exports = function (db, assetHelpers) {
     console.log("FIXME addLogEntry not implemented: ", method, text);
     return Promise.resolve();
   }
+  
+  router.post('/savedefinition/:id/:humanreadable?', function (req, res) {
+    var now = Date.now();
+        
+    // URL / Query params:
+    var elicitationID = parseInt(req.params.id);
+    var changeSummary = req.body.ChangeSummary;
+    var definitionText = req.body.ElicitationDefinition;    
+    
+    var SaveAsNewElicitation = req.body.SaveAsNewElicitation == "true";
+    var SaveAsNewElicitationname = req.body.SaveAsNewElicitationName;    
+    console.warn("FIXME: elicitation.savedefinition.SaveAsNewElicitation is not implemented");    
+    if (SaveAsNewElicitation) {
+      throw "SaveAsNewElicitation is not implemented";
+      /* FIXME: TO IMPLEMENT:
+            if (SaveAsNewElicitation) {
+                var oldElicitation = elicitation;
+                elicitation = (Elicitation)oldElicitation.Clone(db, db);
+                elicitation.ElicitationName = SaveAsNewElicitationName;
+                db.SaveChanges();
+            }
+      */
+    }
+    
+    console.warn("FIXME: validate moderator");
+        
+    addLogEntry("Elicitation.SaveDefinition", "ElicitationID: " + elicitationID)
+    .then( () => authenticateAccessTo(elicitationID, req, res) )
+    .then(personID =>
+      Promise.all([
+        db.getElicitation(elicitationID),
+        db.getElicitationAssignment(elicitationID, personID),
+        personID
+      ])
+    )
+    .spread( (elicitation, assignment, personID) =>
+      db.getDiscussionMembership(elicitation.Discussion_ID, personID)
+      .then( (membership) =>
+        db.transaction(function (t) {
+          return db.models.ElicitationDefinition.create({
+            Definition: definitionText,
+            ChangeSummary: changeSummary,
+            Elicitation_ID: elicitationID,
+            Created: now,
+            Modified: now,
+            CreatedBy_ID: personID
+          }, {transaction: t}).then( newDefinition => {
+            elicitation.ElicitationDefinition_ID = newDefinition.ID;
+            elicitation.Modified = now;
+            
+            return elicitation.save({transaction: t})
+            .then( () =>
+              db.models.Discussion.update( 
+                { LastActivity: now },
+                { where: { ID: elicitation.Discussion_ID }, transaction: t }
+              )
+            )
+          });
+        }).then( function () {
+          console.warn("FIXME: updating per widget results not yet implemented");
+          /* FIXME TO IMPLEMENT:
+            foreach (var perWidgetResult in elicitation.PerWidgetResults) {
+                perWidgetResult.UpdateFromElicitationDefinition(dbRequiredForDeleting: this.db);
+            }
+            db.SaveChanges();
+          */
+        })
+      )
+    ).then(function () {
+      console.log("SaveDefinition succeeded!");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(true));
+    });
+  });
 
   router.post('/savedata/:id/:humanreadable?', function (req, res) {
 
@@ -52,12 +126,14 @@ module.exports = function (db, assetHelpers) {
     // URL / Query params:
     var elicitationID = parseInt(req.params.id);
     var elicitation_definition_id = parseInt(req.body.elicitation_definition_id);    
-    var ElicitationCompleted = true; //req.body.completed == "true";
+    var ElicitationCompleted = req.body.completed == "true";
     var json = req.body.json;
     
     //console.log("Params are: ", JSON.stringify(req.body));
     
     var now = Date.now();
+    
+    console.warn("FIXME: validate moderator");    
     
     addLogEntry("Elicitation.SaveData", "ElicitationID: " + elicitationID)
     .then( () => authenticateAccessTo(elicitationID, req, res) )
