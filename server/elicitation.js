@@ -65,7 +65,10 @@ module.exports = function (db, assetHelpers) {
       }, options
     );
     
-    return authenticateAccessTo(elicitationID, req, res)
+    return db.ready
+    .then( () =>
+      authenticateAccessTo(elicitationID, req, res)
+    )
     .then(personID =>
       Promise.props({
         elicitation: db.getElicitation(elicitationID),
@@ -75,10 +78,8 @@ module.exports = function (db, assetHelpers) {
     )
     .then((m) =>
       addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-      .then( db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
-      .then( membership => extend(m, { 
-        membership: membership
-      }))
+      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
+      .then( membership => extend(m, { membership: membership }) )
     )
     .then((m) =>
       options.includeElicitationDefinition

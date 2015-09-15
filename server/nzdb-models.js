@@ -24,22 +24,7 @@ module.exports = function(sequelize, DataTypes) {
       Moderator: {
         type: DataTypes.BOOLEAN,
         allowNull: false
-      },      
-      /*
-        [ForeignKey("discussion")]
-        public int discussion_ID { get; set; }
-        public virtual Discussion discussion { get; set; }
-
-        [ForeignKey("Person")]
-        public int Person_ID { get; set; }
-        public virtual Person Person { get; set; }
-
-        public bool AllowModerator {
-            get {
-                return this.Moderator || this.Person.IsAdministrator;
-            }
-        }
-      */
+      }
     }, {
       freezeTableName: true,
       createdAt: false,

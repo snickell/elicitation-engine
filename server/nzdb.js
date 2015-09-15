@@ -58,14 +58,15 @@ var NZDB = function (connectionString) {
     dialectOptions: config.options
   });
   
-  this.sql.authenticate()
-    .then(function () {
-      console.log("NZDB(): connected  via sequelize");  
-      this.models = nzdbModels(this.sql, Sequelize);
-    }.bind(this))
-    .catch(function (err) { 
-      console.log("NZDB(): couldn't auth with db: ", err);
-    });
+  this.ready = this.sql.authenticate()
+  .then(function () {
+    console.log("NZDB(): connected  via sequelize");  
+    this.models = nzdbModels(this.sql, Sequelize);
+  }.bind(this))
+  .catch(function (err) { 
+    console.log("NZDB(): couldn't auth with db: ", err);
+    throw err;
+  });
 }
 
 NZDB.prototype.transaction = function (t) {
@@ -107,36 +108,6 @@ NZDB.prototype.updateNumAssignedAndCompletedFromDB = function (elicitation, tran
     elicitation.NumCompleted = numCompleted;
     
     return elicitation;
-  });
-}
-
-NZDB.prototype.getElicitationAndAssets = function(elicitationID, personID) {
-  var result = {};
-  var m = this.models;
-  
-  result.membership = {
-    AllowModerator: true // FIXME: need to implement this
-  };
-  console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.membership");
-  
-  result.discussion = {
-    category: "solar" // FIXME: need to implement this
-  };  
-  console.warn("nzdb.getElicitationAndAssets: FIXME hardcoding models.discussion");
-
-    
-  return this.getElicitation(elicitationID)
-  .then(function (elicitation) {
-    result.elicitation = elicitation;
-    return m.Person.findOne({ where: { ID: personID } });
-  })
-  .then(function (person) {
-    result.person = person;
-    return m.ElicitationDefinition.findOne({ where: { ID: result.elicitation.ElicitationDefinition_ID } })
-  })
-  .then(function (def) {
-    result.elicitationDefinition = def;    
-    return result;
   });
 }
 
