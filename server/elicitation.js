@@ -114,6 +114,8 @@ module.exports = function (db, assetHelpers) {
     });
   });
 
+  /* Accepts JSON data submissions from Expert participants, including page-by-page 'backup' submissions,
+  * which will have completed=false, and the final data submit, which will have completed=true */
   router.post('/savedata/:id/:humanreadable?', function (req, res) {
 
     /* FIXME: todo
@@ -191,74 +193,8 @@ module.exports = function (db, assetHelpers) {
         }).then(function () {
           // update per-widget results
           if (ElicitationCompleted) {
-            console.warn("FIXME: not updating per-widget results as per ElicitationController.cs")              
-          }
-        });
-      })
-    )    
-    .then(function () {
-      console.log("Success!");
-    });    
-  });
-
-        /* Accepts JSON data submissions from Expert participants, including page-by-page 'backup' submissions,
-        * which will have completed=false, and the final data submit, which will have completed=true */
-/*
-        [AuthorizedOnly(authorizeDiscussionMembership: false)]
-        [HttpPost]
-        // FIXME: would be better to use a model with [AllowHtml] set on the json field
-        [ValidateInput(false)] // don't validate since json may contain HTML
-        public ActionResult SaveData(int id, int elicitation_definition_id, string json, string completed) {
-            Trace.TraceInformation("ElicitationController.SaveData on id: " + id + " from personID: " + person.ID);
-
-            this.addLogEntry("Elicitation.SaveData", Text: "ElicitationID: " + id);
-            db.SaveChanges();
-
-            try {
-                var elicitation = getElicitationFromID(id, setDiscussionFromElicitation: true);
-
-                var assignment = elicitation.ElicitationAssignments.Where(ea => ea.Person_ID == person.ID).FirstOrDefault();
-                if (assignment == null) throw new Exception("ElicitationAssignment not found");
-
-                var now = DateTime.Now;
-
-                membership.LastAccessed = now;
-                assignment.LastAccessed = now;
-
-                var ElicitationCompleted = completed != null;
-
-                var elicitationData = new ElicitationData {
-                    ElicitationAssignment = assignment,
-                    JSON = json,
-                    Completed = ElicitationCompleted,
-                    Created = now,
-                    Modified = now,
-                    ElicitationDefinition_ID = elicitation_definition_id,
-                    BrowserUserAgent = this.Request.UserAgent
-                };
-
-                db.ElicitationDatas.Add(elicitationData);
-
-                if (ElicitationCompleted) {
-                    assignment.CompletedElicitationData = elicitationData;
-                    assignment.Completed = true;
-                    elicitation.UpdateNumAssignedAndCompletedFromDB();
-                    this.addLogEntry("Elicitation Complete", Text: "ElicitationID: " + id);
-
-                    membership.HasParticipated = true;
-                    membership.HasCompletedATask = true;
-                    elicitation.LastCompleted = now;
-                    membership.LastParticipated = now;
-
-                    // Update dates
-                    if (elicitation.Discussion != null) {
-                        elicitation.Discussion.LastActivity = now;
-                    }
-                }
-                assignment.Modified = now;
-
-                db.SaveChanges();
-
+            console.warn("FIXME: not updating per-widget results as per ElicitationController.cs");
+            /* FIXME TO IMPLEMENT
                 if (ElicitationCompleted) {
                     // Update Per-Widget Results
                     try {
@@ -297,10 +233,19 @@ module.exports = function (db, assetHelpers) {
 
                     Trace.TraceInformation("ElicitationController.SaveData: complete submission from " + person.ID);
                 }
-
-                Trace.TraceInformation("ElicitationController.SaveData returning true on id: " + id + " from personID: " + person.ID);
-
-                return Content("true");
+            */
+          }
+        });
+      })
+    )    
+    .then(function () {
+      console.log("SaveData Success!");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(true));      
+    })
+    .catch(function (e) {
+      console.warn("FIXME: to implement exception logging and handling in savedata");
+      /* FIXME TO IMPLEMENT
             } catch (Exception ex) {
                 var exString = ex.ToString();
                 Trace.TraceError("ElicitationController.SaveData: error \n" + exString);
@@ -309,8 +254,9 @@ module.exports = function (db, assetHelpers) {
                 db.SaveChanges();
                 throw ex;
             }
-        }
-  */
+      */
+    });   
+  });
 
   function renderElicitation(req, res, models, logName, startEditing, embedded, modifyViewModel) {
     return elicitationViewModel(db, models, logName, startEditing, embedded)
