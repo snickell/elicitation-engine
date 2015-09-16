@@ -1,4 +1,4 @@
-var baseURL = '/gorilla';
+var baseURL = require('./server/base-url')();
 
 /**
 * Module dependencies.
@@ -70,7 +70,7 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/gorilla', function (req, res) {  
+router.get(baseURL, function (req, res) {  
   res.render('index', {
     title: "Gorilla"
   });

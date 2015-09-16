@@ -3,3 +3,4 @@
 3) Get last session data
 4) Support access_tokens
 5) Load previous revisions
+6) Implement /elicitation/review method
