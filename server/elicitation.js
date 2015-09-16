@@ -57,47 +57,22 @@ module.exports = function (db, assetHelpers) {
     });
   });
   
-  function authAndLoad(logEventName, elicitationID, req, res, options) {
-    options = extend(
-      {
-        includeElicitationDefinition: false,
-        includeDiscussion: false
-      }, options
-    );
-    
-    return db.ready
-    .then( () =>
-      authenticateAccessTo(elicitationID, req, res)
-    )
-    .then(personID =>
-      Promise.props({
-        elicitation: db.getElicitation(elicitationID),
-        assignment: db.getElicitationAssignment(elicitationID, personID),
-        person: db.models.Person.findOne({ where: { ID: personID } })
-      })
-    )
-    .then((m) =>
-      addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
-      .then( membership => extend(m, { membership: membership }) )
-    )
-    .then((m) =>
-      options.includeElicitationDefinition
-      ? db.models.ElicitationDefinition.findOne({ where: { ID: m.elicitation.ElicitationDefinition_ID } })
-        .then( definition => extend(m, {
-          elicitationDefinition: definition
-        }))
-      : m
-    )
-    .then((m) =>
-      options.includeDiscussion
-      ? db.models.Discussion.findOne({ where: { ID: m.elicitation.Discussion_ID } })
-        .then( discussion => extend(m, {
-          discussion: discussion
-        }))
-      : m
-    );
-  }
+  router.get('/review/:reviewtoken/:humanreadable?', function (req, res) {
+    elicit(req, res, "Elicitation.Edit+", {
+      loadModels: function (req, res, logName) {
+        var reviewToken = req.params.reviewtoken;
+        return loadReviewModels(reviewToken);
+      },
+      modifyViewModel: function (viewModel) {
+
+        viewModel.settings.switchToReviewModeAfterLoading = true;
+        viewModel.settings.allowEditing = false;
+        viewModel.settings.switchToEditModeAfterLoading = false;
+
+        return viewModel;
+      }
+    });
+  });
   
   router.post('/savedefinition/:id/:humanreadable?', function (req, res) {
     var now = Date.now();
@@ -297,7 +272,7 @@ module.exports = function (db, assetHelpers) {
     });   
   });
 
-  function renderElicitation(req, res, models, logName, startEditing, embedded, modifyViewModel) {
+  function setupViewModel(models, logName, startEditing, embedded, modifyViewModel) {
     return elicitationViewModel(db, models, logName, startEditing, embedded)
     .then(modifyViewModel)
     .then(viewModel => {
@@ -309,27 +284,92 @@ module.exports = function (db, assetHelpers) {
         jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
       };
       viewModel.layout = false;
-          
-      res.render('elicitation-backend-layout', viewModel);
+      return viewModel;
     });
   }
+
+  function loadReviewModels(reviewToken) {
+    return db.ready
+    .then( () =>
+      Promise.props({
+        elicitation: db.getElicitationForReview(reviewToken)
+      })
+    )
+    .then(loadElicitationDefinition)
+    .then(loadDiscussion);
+  }
   
+  function loadElicitationDefinition(m) {
+    return db.models.ElicitationDefinition.findOne({ where: { ID: m.elicitation.ElicitationDefinition_ID } })
+    .then( definition => extend(m, {
+      elicitationDefinition: definition
+    }));
+  }
+  
+  function loadDiscussion(m) {
+    return db.models.Discussion.findOne({ where: { ID: m.elicitation.Discussion_ID } })
+    .then( discussion => extend(m, {
+      discussion: discussion
+    }));
+  }
+  
+  function authAndLoad(logEventName, elicitationID, req, res, options) {
+    options = extend(
+      {
+        includeElicitationDefinition: false,
+        includeDiscussion: false,
+      }, options
+    );
+    
+    return db.ready
+    .then( () =>
+      authenticateAccessTo(elicitationID, req, res)
+    )
+    .then(personID =>
+      Promise.props({
+        elicitation: db.getElicitation(elicitationID),
+        assignment: db.getElicitationAssignment(elicitationID, personID),
+        person: db.models.Person.findOne({ where: { ID: personID } })
+      })
+    )
+    .then((m) =>
+      addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
+      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
+      .then( membership => extend(m, { membership: membership }) )
+    )
+    .then((m) =>
+      options.includeElicitationDefinition
+      ? loadElicitationDefinition(m)
+      : m
+    )
+    .then((m) =>
+      options.includeDiscussion
+      ? loadDiscussion(m)
+      : m
+    );
+  }  
 
   function elicit(req, res, logName, options) {
-    var options = options || {};
-    var startEditing = options.startEditing != undefined ? options.startEditing : false;
-    var embedded = options.embedded != undefined ? options.embedded : false;
-    var modifyViewModel = options.modifyViewModel || function (viewModel) { return viewModel; };
-    
-    var elicitationID = parseInt(req.params.id);
-    console.log(logName + "(" + elicitationID + ")");
+    var o = extend({
+      startEditing: false,
+      embedded: false,
+      modifyViewModel: (viewModel) => viewModel,
+      loadModels: function (req, res, logName) {
+        var elicitationID = parseInt(req.params.id);
+        console.log(logName + "(" + elicitationID + ")");
 
-    return authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res, { 
-      includeElicitationDefinition: true,
-      includeDiscussion: true
-    })
+        return authAndLoad(logName, elicitationID, req, res, { 
+          includeElicitationDefinition: true,
+          includeDiscussion: true
+        });        
+      }
+    }, options);
+
+    return o.loadModels(req, res, logName)
     .then( models =>
-      renderElicitation(req, res, models, "Elicitation.View+", startEditing, embedded, modifyViewModel)
+      setupViewModel(models, logName, o.startEditing, o.embedded, o.modifyViewModel)
+    ).then (viewModel =>
+      res.render('elicitation-backend-layout', viewModel)
     )
     .catch(authenticateAccessTo.RedirectToLoginError, 
       redirect => res.redirect(redirect.url)

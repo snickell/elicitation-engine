@@ -83,7 +83,16 @@ NZDB.prototype.getElicitation = function (elicitationID) {
     where: {
       ID: elicitationID, 
       Discriminator: 'Elicitation' 
-  }});  
+  }});
+}
+
+NZDB.prototype.getElicitationForReview = function (reviewToken) {
+  return this.models.Task.findOne({
+    where: {
+      ReviewToken: reviewToken,
+      Discriminator: 'Elicitation'
+    }
+  })
 }
 
 NZDB.prototype.getElicitationAssignment = function (id) {
