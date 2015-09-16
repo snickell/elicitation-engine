@@ -15,44 +15,27 @@ var extend = require('extend');
 
 module.exports = function (db, assetHelpers) {
 
-  function addLogEntry(req, eventType, text, personID, discussionID) {
-    var requestArgs = JSON.stringify({
-      ua: req.headers['user-agent'],
-      queryArgs: req.query,
-      postArgs: req.body
-    });
-    
-    return db.models.LogEntry.create({
-      InternalEvent: false,
-      Person_ID: personID,
-      Discussion_ID: discussionID,
-      PageInstance: null,
-      Date: Date.now(),
-      EventType: eventType,
-      Text: text,
-      RequestArgs: requestArgs
-    });
-  }
-
   router.get('/run/:id/:humanreadable?', function (req, res) {
     elicit(req, res, "Elicitation.View+");
   });
   
   router.get('/edit/:id/:humanreadable?', function (req, res) {
+    var revision = parseInt(req.query.revision);
+    
     elicit(req, res, "Elicitation.Edit+", { 
       startEditing: true,
-      modifyViewModel: function (viewModel) {
-        console.warn("FIXME not implemented elicitation.edit support revision version query string");
-        /*
-        if (revision != null) {
-            var definition = db.ElicitationDefinitions.Find(revision);
-
-            if (!elicitation.DefinitionHistory.Contains(definition)) throw new Exception("Specified definitionID " + revision + " is not in the history of elicitation");
-            elicitationViewModel.elicitationDefinition = definition.Definition;
-            elicitationViewModel.settings.notTheLatestRevision = true;
-        }*/
-        console.log("Modifying view model!");
-        return viewModel;
+      modifyViewModel: function (viewModel, models) {
+        if (revision) {
+          return db.models.ElicitationDefinition.findOne({ where: { ID: revision, Elicitation_ID: models.elicitation.ID } })
+          .then(function (definition) {
+            viewModel.elicitationDefinition = definition.Definition;
+            viewModel.settings.notTheLatestRevision = true;
+            
+            return viewModel;
+          });
+        } else {
+          return viewModel;
+        }
       }
     });
   });
@@ -272,9 +255,27 @@ module.exports = function (db, assetHelpers) {
     });   
   });
 
-  function setupViewModel(models, logName, startEditing, embedded, modifyViewModel) {
+  function addLogEntry(req, eventType, text, personID, discussionID) {
+    var requestArgs = JSON.stringify({
+      ua: req.headers['user-agent'],
+      queryArgs: req.query,
+      postArgs: req.body
+    });
+    
+    return db.models.LogEntry.create({
+      InternalEvent: false,
+      Person_ID: personID,
+      Discussion_ID: discussionID,
+      PageInstance: null,
+      Date: Date.now(),
+      EventType: eventType,
+      Text: text,
+      RequestArgs: requestArgs
+    });
+  }
+
+  function setupViewModel(models, logName, startEditing, embedded) {
     return elicitationViewModel(db, models, logName, startEditing, embedded)
-    .then(modifyViewModel)
     .then(viewModel => {
       viewModel.helpers = {
         includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
@@ -353,7 +354,7 @@ module.exports = function (db, assetHelpers) {
     var o = extend({
       startEditing: false,
       embedded: false,
-      modifyViewModel: (viewModel) => viewModel,
+      modifyViewModel: (viewModel, models) => viewModel,
       loadModels: function (req, res, logName) {
         var elicitationID = parseInt(req.params.id);
         console.log(logName + "(" + elicitationID + ")");
@@ -367,8 +368,10 @@ module.exports = function (db, assetHelpers) {
 
     return o.loadModels(req, res, logName)
     .then( models =>
-      setupViewModel(models, logName, o.startEditing, o.embedded, o.modifyViewModel)
-    ).then (viewModel =>
+      setupViewModel(models, logName, o.startEditing, o.embedded)
+      .then(viewModel => o.modifyViewModel(viewModel, models))
+    )
+    .then (viewModel =>
       res.render('elicitation-backend-layout', viewModel)
     )
     .catch(authenticateAccessTo.RedirectToLoginError, 
