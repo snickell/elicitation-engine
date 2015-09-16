@@ -1,10 +1,5 @@
 1) Fix Url.Action
-	a) Research (reverse) routers for express similar to asp.net mvc router
-	b) Deploy new router, convert basic admin scripts over
-	c) Update Url.Action to use router
-
-2) Fix Url.Content
-
-DB:
-- update assignment lastaccessed
-- get last session data
+2) Update assignment lastaccessed
+3) Get last session data
+4) Support access_tokens
+5) Load previous revisions
