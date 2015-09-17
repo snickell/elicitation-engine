@@ -16,7 +16,30 @@ var extend = require('extend');
 module.exports = function (db, assetHelpers) {
 
   router.get('/run/:id/:humanreadable?', function (req, res) {
-    elicit(req, res, "Elicitation.View+");
+    var resumePriorSessionData = req.query.resumePriorSessionData !== "false";
+        
+    elicit(req, res, "Elicitation.View+", {
+      modifyViewModel: function (viewModel, models) {
+        models.assignment.LastBrowserUserAgent = req.headers['user-agent'];
+        models.assignment.LastAccessed = Date.now();
+        
+        return models.assignment.save()
+        .then(function () {
+          if (resumePriorSessionData) {
+            return db.models.ElicitationData.findOne({
+              where: { ElicitationTask_ID: models.assignment.ID },
+              order: [['Modified', 'DESC']]
+            }).then(function (latestData) {
+              if (latestData && !latestData.Completed) {
+                viewModel.elicitationPriorSessionData = latestData.JSON;
+              }
+            });
+          }
+        }).then(function () {
+          return viewModel;
+        });
+      }
+    })
   });
   
   router.get('/edit/:id/:humanreadable?', function (req, res) {
@@ -154,7 +177,7 @@ module.exports = function (db, assetHelpers) {
         assignment.Modified = now;
     
         return db.models.ElicitationData.create({
-          ElicitationTask_ID: assignment.ID, // FIXME: sequelize association
+          ElicitationTask_ID: assignment.ID,
           JSON: json,
           Completed: ElicitationCompleted,
           Created: now,

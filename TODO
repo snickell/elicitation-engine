@@ -1,4 +1,2 @@
-- Update assignment lastaccessed
-- Get last session data
 - Support access_tokens
-- Load previous revisions
+- sequelize Model.findOne DOES NOT return an exception if nothing is found, it simply returns NULL
