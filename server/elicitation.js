@@ -50,9 +50,10 @@ module.exports = function (db, assetHelpers) {
       modifyViewModel: function (viewModel, models) {
         if (revision) {
           return db.models.ElicitationDefinition.findOne({ where: { ID: revision, Elicitation_ID: models.elicitation.ID } })
+          .then(throwIfNull)
           .then(function (definition) {
             viewModel.elicitationDefinition = definition.Definition;
-            viewModel.settings.notTheLatestRevision = true;
+            viewModel.settings.notTheLatestRevision = true;              
             
             return viewModel;
           });
@@ -296,6 +297,14 @@ module.exports = function (db, assetHelpers) {
       RequestArgs: requestArgs
     });
   }
+  
+  function throwIfNull(x) {
+    if (x === null) {
+      throw "Couldn't find required resource in database";
+    } else {
+      return x;
+    }
+  }
 
   function setupViewModel(models, logName, startEditing, embedded) {
     return elicitationViewModel(db, models, logName, startEditing, embedded)
@@ -325,6 +334,7 @@ module.exports = function (db, assetHelpers) {
   
   function loadElicitationDefinition(m) {
     return db.models.ElicitationDefinition.findOne({ where: { ID: m.elicitation.ElicitationDefinition_ID } })
+    .then(throwIfNull)
     .then( definition => extend(m, {
       elicitationDefinition: definition
     }));
@@ -332,6 +342,7 @@ module.exports = function (db, assetHelpers) {
   
   function loadDiscussion(m) {
     return db.models.Discussion.findOne({ where: { ID: m.elicitation.Discussion_ID } })
+    .then(throwIfNull)    
     .then( discussion => extend(m, {
       discussion: discussion
     }));
@@ -351,14 +362,14 @@ module.exports = function (db, assetHelpers) {
     )
     .then(personID =>
       Promise.props({
-        elicitation: db.getElicitation(elicitationID),
-        assignment: db.getElicitationAssignment(elicitationID, personID),
-        person: db.models.Person.findOne({ where: { ID: personID } })
+        elicitation: db.getElicitation(elicitationID).then(throwIfNull),
+        assignment: db.getElicitationAssignment(elicitationID, personID).then(throwIfNull),
+        person: db.models.Person.findOne({ where: { ID: personID } }).then(throwIfNull)
       })
     )
     .then((m) =>
       addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
+      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) ).then(throwIfNull)
       .then( membership => extend(m, { membership: membership }) )
     )
     .then((m) =>

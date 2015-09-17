@@ -1,2 +1,1 @@
 - Support access_tokens
-- sequelize Model.findOne DOES NOT return an exception if nothing is found, it simply returns NULL
