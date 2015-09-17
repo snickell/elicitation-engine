@@ -333,7 +333,7 @@ module.exports = function (db, assetHelpers) {
   }
   
   function loadElicitationDefinition(m) {
-    return db.models.ElicitationDefinition.findOne({ where: { ID: m.elicitation.ElicitationDefinition_ID } })
+    return db.models.ElicitationDefinition.findById(m.elicitation.ElicitationDefinition_ID)
     .then(throwIfNull)
     .then( definition => extend(m, {
       elicitationDefinition: definition
@@ -341,7 +341,7 @@ module.exports = function (db, assetHelpers) {
   }
   
   function loadDiscussion(m) {
-    return db.models.Discussion.findOne({ where: { ID: m.elicitation.Discussion_ID } })
+    return db.models.Discussion.findById(m.elicitation.Discussion_ID)
     .then(throwIfNull)    
     .then( discussion => extend(m, {
       discussion: discussion
@@ -364,7 +364,7 @@ module.exports = function (db, assetHelpers) {
       Promise.props({
         elicitation: db.getElicitation(elicitationID).then(throwIfNull),
         assignment: db.getElicitationAssignment(elicitationID, personID).then(throwIfNull),
-        person: db.models.Person.findOne({ where: { ID: personID } }).then(throwIfNull)
+        person: db.models.Person.findById(personID).then(throwIfNull)
       })
     )
     .then((m) =>
