@@ -1,20 +1,21 @@
 module.exports = function(sequelize, DataTypes) {
   var m = {
-    Discussion: sequelize.define('Discussions', {
+    Test: sequelize.define('Tests', {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true        
       },
       category: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       }
     }, {
       freezeTableName: true,
       createdAt: false,
       updatedAt: false
-    }),  
+    }),
     DiscussionMembership: sequelize.define('DiscussionMemberships', {
       ID: {
         type: DataTypes.INTEGER,
@@ -80,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       LargeMimeType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       NormalWidth: {
@@ -92,7 +93,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       NormalMimeType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       MobileWidth: {
@@ -104,7 +105,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       MobileMimeType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       Elicitation_ID: {
@@ -120,7 +121,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       UploadedBytesMimeType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       LargeBytes: {
@@ -144,18 +145,19 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true        
       },
       name: {
         type: DataTypes.STRING(128),
         allowNull: false
       },
       category: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       title: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       LastFigureNum: {
@@ -171,7 +173,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       TwitterHashtag: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Created: {
@@ -246,7 +248,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       ModeratorNotesAboutPerson: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       LastParticipated: {
@@ -281,7 +283,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       affiliation: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       email: {
@@ -289,7 +291,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       access_token: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Profile_ID: {
@@ -297,15 +299,15 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       FirstName: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       LastName: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: false
       },
       Title: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       DoNotEmail: {
@@ -338,7 +340,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       PageInstance: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Date: {
@@ -346,15 +348,15 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       EventType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Text: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       RequestArgs: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Person_ID: {
@@ -377,11 +379,11 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       title: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       bio: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       }
     }, {
@@ -396,7 +398,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       raw: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Message_ID: {
@@ -412,10 +414,10 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true 
+        autoIncrement: true
       },
       Definition: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Elicitation_ID: {
@@ -435,7 +437,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       ChangeSummary: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       }
     }, {
@@ -458,7 +460,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       JSON: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       numResultsInJSON: {
@@ -466,15 +468,15 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       WidgetInstance_ID: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       WidgetType: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       WidgetQuestionText: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Discriminator: {
@@ -490,7 +492,7 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        autoIncrement: true        
       },
       Task_ID: {
         type: DataTypes.INTEGER,
@@ -525,7 +527,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       LastBrowserUserAgent: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       }
     }, {
@@ -544,7 +546,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       JSON: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Completed: {
@@ -564,7 +566,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       BrowserUserAgent: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       }
     }, {
@@ -591,7 +593,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       ElicitationName: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       Discriminator: {
@@ -607,7 +609,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       IntroMessage: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       CompleteTaskInPopup: {
@@ -631,7 +633,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       CompletePageMessage: {
-        type: DataTypes.STRING(-1),
+        type: DataTypes.TEXT(),
         allowNull: true
       },
       CompletePageIncludeLinkToDiscussion: {

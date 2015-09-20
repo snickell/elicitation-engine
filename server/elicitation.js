@@ -286,16 +286,20 @@ module.exports = function (db, assetHelpers) {
       postArgs: req.body
     });
     
-    return db.models.LogEntry.create({
-      InternalEvent: false,
-      Person_ID: personID,
-      Discussion_ID: discussionID,
-      PageInstance: null,
-      Date: Date.now(),
-      EventType: eventType,
-      Text: text,
-      RequestArgs: requestArgs
-    });
+    if (discussionID) {
+      return db.models.LogEntry.create({
+        InternalEvent: false,
+        Person_ID: personID,
+        Discussion_ID: discussionID,
+        PageInstance: null,
+        Date: Date.now(),
+        EventType: eventType,
+        Text: text,
+        RequestArgs: requestArgs
+      });      
+    } else {
+      return Promise.resolve();
+    }
   }
   
   function throwIfNull(x) {
@@ -334,14 +338,14 @@ module.exports = function (db, assetHelpers) {
   
   function loadElicitationDefinition(m) {
     return db.models.ElicitationDefinition.findById(m.elicitation.ElicitationDefinition_ID)
-    .then(throwIfNull)
+    .then(throwIfNull)    
     .then( definition => extend(m, {
       elicitationDefinition: definition
     }));
   }
   
   function loadDiscussion(m) {
-    return db.models.Discussion.findById(m.elicitation.Discussion_ID)
+    return db.models.Discussion.findById(m.elicitation.Discussion_ID)    
     .then(throwIfNull)    
     .then( discussion => extend(m, {
       discussion: discussion
@@ -368,9 +372,11 @@ module.exports = function (db, assetHelpers) {
       })
     )
     .then((m) =>
-      addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-      .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) ).then(throwIfNull)
-      .then( membership => extend(m, { membership: membership }) )
+      m.elicitation.Discussion_ID
+      ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
+        .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) ).then(throwIfNull)
+        .then( membership => extend(m, { membership: membership }) )
+      : m
     )
     .then((m) =>
       options.includeElicitationDefinition
@@ -378,7 +384,7 @@ module.exports = function (db, assetHelpers) {
       : m
     )
     .then((m) =>
-      options.includeDiscussion
+      options.includeDiscussion && m.elicitation.Discussion_ID
       ? loadDiscussion(m)
       : m
     );

@@ -62,6 +62,8 @@ var NZDB = function (connectionString) {
       console.log(s.green);
     }
   });
+
+  // this.sql = new Sequelize('seth', 'seth', '', { host: 'localhost', dialect: 'postgres' });
   
   this.ready = this.sql.authenticate()
   .then(function () {
@@ -71,6 +73,59 @@ var NZDB = function (connectionString) {
   .catch(function (err) { 
     console.log("NZDB(): couldn't auth with db: ", err);
     throw err;
+  });
+}
+
+NZDB.prototype.seedDevServer = function () {  
+  console.log("Syncing first...");
+  
+  return this.ready
+  .bind(this)
+  .then( () => this.sql.sync({ force: true }) )
+  .then( () =>
+    this.models.Person.create({ ID: 2, affiliation: "Code Toad Inc.", email: "dev@dev.com",
+      FirstName: "Dev", LastName: "Account", Title: "Professor", 
+      DoNotEmail: false, DoNotEmailActiveOptOut: false 
+    })
+  ).then( (person) =>
+    this.models.Task.create({
+      ID: 97,
+      Created: Date.now(),
+      ElicitationName: "Dev Elicitation",
+      Discriminator: 'Elicitation',
+      Modified: Date.now(),
+      CompleteTaskInPopup: false,
+      ShowResultsInDiscussion: false,
+      NumCompleted: 0,
+      NumAssigned: 0,
+      ReviewToken: "60b4922a-5f47-11e5-9d70-feff819cdc9f",
+      CompleteTaskBeforeDiscussion: false,
+      CompletePageIncludeLinkToDiscussion: false,
+      CompleteTaskInline: false,
+      LastCompleted: Date.now()
+    }).then( (elicitation) =>
+      this.models.TaskAssignment.create({
+        Task_ID: elicitation.ID,
+        Person_ID: person.ID,
+        Completed: false,
+        Created: Date.now(),
+        Modified: Date.now(),
+        Modified: Date.now(),
+        Discriminator: 'ElicitationAssignment'
+      }).then( () => 
+        this.models.ElicitationDefinition.create({
+          Definition: "<elicitation><page title='hi'></page></elicitation>",
+          Elicitation_ID: elicitation.ID,
+          CreatedBy_ID: person.ID,
+          Created: Date.now(),
+          Modified: Date.now(),
+        })
+      ).then( (definition) =>
+        elicitation.updateAttributes({ ElicitationDefinition_ID: definition.ID })
+      )
+    )
+  ).then(function () {
+    console.log("Created!")
   });
 }
 
@@ -95,10 +150,11 @@ NZDB.prototype.getElicitationForReview = function (reviewToken) {
   })
 }
 
-NZDB.prototype.getElicitationAssignment = function (id) {
+NZDB.prototype.getElicitationAssignment = function (elicitationID, personID) {
   return this.models.TaskAssignment.findOne({
     where: {
-      ID: id, 
+      Task_ID: elicitationID,
+      Person_ID: personID,
       Discriminator: 'ElicitationAssignment' 
   }});  
 }
