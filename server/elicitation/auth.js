@@ -7,6 +7,7 @@ var AUTH_COOKIE = ".ASPXAUTH";
 
 function authenticateAccessTo(elicitationID, req, res) {  
   var returnURL = req.originalUrl;
+
   
   var hostname = req.get('host');
   
@@ -16,7 +17,9 @@ function authenticateAccessTo(elicitationID, req, res) {
   }
   
   var host = req.protocol + '://' + hostname;  
-  var url = host + authPath + elicitationID + "?ReturnURL=" + encodeURIComponent(returnURL);
+  var url = host + authPath + elicitationID 
+    + "?ReturnURL=" + encodeURIComponent(returnURL) 
+    + (req.query.login ? "&login=" + encodeURIComponent(req.query.login) : "");
   
   console.log("auth url is: ", url);
   
