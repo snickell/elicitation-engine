@@ -96,8 +96,8 @@ downloadNode4 () {
   echo "Installing Node 4.0 RC1"
   mkdir -p D:/home/site/bin
   mkdir -p D:/home/site/bin/node4
-  curl -L -o D:/home/site/bin/node4/node.exe https://nodejs.org/dist/v4.0.0/win-x64/node.exe
-  curl -L -o D:/home/site/bin/node4/node.lib https://nodejs.org/dist/v4.0.0/win-x64/node.lib
+  curl -L -o D:/home/site/bin/node4/node.exe https://nodejs.org/dist/v4.1.0/win-x64/node.exe
+  curl -L -o D:/home/site/bin/node4/node.lib https://nodejs.org/dist/v4.1.0/win-x64/node.lib
 
   NODE_EXE=D:/home/site/bin/node4/node.exe
 }
