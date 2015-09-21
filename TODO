@@ -1,1 +1,7 @@
-- Support access_tokens
+- Configuration DB table on Azure side (key value pair with key name as unique key? single row table?)
+- Support Auth URL and discussion URL prefix params
+
+- Basic invitation/access system for NON discussion elicitations
+- Basic data download for NON discussion elicitations
+- Basic mailmerge download for NON discussion elicitations
+- Get started page for blank DB
