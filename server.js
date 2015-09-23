@@ -76,7 +76,7 @@ router.get(baseURL, function (req, res) {
   });
 });
 
-var elicitationRoutes = require('./server/elicitation')(db, connectAssetsHelpers);
+var elicitationRoutes = require('./server/routes/elicitation')(db, connectAssetsHelpers);
 router.use('/', elicitationRoutes);
 
 
