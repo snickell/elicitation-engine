@@ -11,55 +11,6 @@
             }
         },
         Widgets: {},
-        ready: function () {
-            this.instantiateResultsViews();
-            this.instantiateInlineViews();
-
-            $("#page-load-throbber").remove();
-            $.Placeholder.init();
-
-            $("body").on("click", ".markdown a", function (evt) {
-                console.log("Opening markdown link in new window");
-                evt.preventDefault();
-                window.open($(this).attr("href"));
-            });
-        },
-        instantiateResultsViews: function () {
-            $("script[type='text/x-elicitation-widget-results-data']").each(function () {
-                var resultsDataString = $(this).html();
-                try {
-                    var resultsDataJSON = JSON.parse(resultsDataString);
-                    var widgetType = Ember.String.classify(resultsDataJSON.widgetType);
-                    // convert, e.g., card-rank to CardRank
-                    console.log("Widget type is: " + widgetType);
-                    var resultsViewClass = EAT.WidgetResultsViews[widgetType];
-                    if (!Ember.isNone(resultsViewClass)) {
-                        var resultsData = EAT.WidgetResultsData.create({
-                            json: resultsDataJSON,
-                            rawJSON: resultsDataString
-                        });
-                        var resultsView = resultsViewClass.create({
-                            content: resultsData
-                        });
-
-                        // Now add the results chart into the HTML
-                        var resultsHolder = $(this).closest(".chart-holder");
-                        resultsView.appendTo(resultsHolder);
-                    } else {
-                        // FIXME: we should instantiate a placeholder telling the conversation moderator that
-                        // no suitable resultsview can be found
-                        console.log("ERROR: couldn't find a ResultsView to display chart results of "
-                            + widgetType + " widget");
-                    }
-                } catch (e) {
-                    console.log("Error parsing JSON: " + e.toString());
-                    debug.resultsDataString = resultsDataString;
-                }
-            });
-        },
-        instantiateInlineViews: function () {
-
-        },
         isMobileDevice: function () {
             return window.isMobileDevice;
         }.property(),
@@ -216,5 +167,7 @@
         errors: null,
         data: null
     });
+    
+    window.EAT = EAT;
 
 })(EAT, window);

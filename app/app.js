@@ -26,60 +26,125 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
         }
     })();
 
-    var App = Ember.Application.create({
-        LOG_TRANSITIONS: true
-    });
+    var ElicitationAppClass = Ember.Application.extend({
+        LOG_TRANSITIONS: true,
+        ready: function () {
+            this.instantiateResultsViews();
+            this.instantiateInlineViews();
 
-    App.deferReadiness();
+            $("#page-load-throbber").remove();
+            $.Placeholder.init();
 
-    App.Router.map(function () {
-        //this.resource('widget', { path: '/widgets/:widget_id' });
-        this.route('edit', { path: '/edit/:widget_id' });
-    });
+            $("body").on("click", ".markdown a", function (evt) {
+                console.log("Opening markdown link in new window");
+                evt.preventDefault();
+                evt.stopPropagation();
+                window.open($(this).attr("href"));
+            });
+        },
+        instantiateResultsViews: function () {
+            $("script[type='text/x-elicitation-widget-results-data']").each(function () {
+                var resultsDataString = $(this).html();
+                try {
+                    var resultsDataJSON = JSON.parse(resultsDataString);
+                    var widgetType = Ember.String.classify(resultsDataJSON.widgetType);
+                    // convert, e.g., card-rank to CardRank
+                    console.log("Widget type is: " + widgetType);
+                    var resultsViewClass = EAT.WidgetResultsViews[widgetType];
+                    if (!Ember.isNone(resultsViewClass)) {
+                        var resultsData = EAT.WidgetResultsData.create({
+                            json: resultsDataJSON,
+                            rawJSON: resultsDataString
+                        });
+                        var resultsView = resultsViewClass.create({
+                            content: resultsData
+                        });
 
-    App.EditRoute = Ember.Route.extend({
-        setupController: function (controller) {
-            console.log("Setting up edit route controller!");
+                        // Now add the results chart into the HTML
+                        var resultsHolder = $(this).closest(".chart-holder");
+                        resultsView.appendTo(resultsHolder);
+                    } else {
+                        // FIXME: we should instantiate a placeholder telling the conversation moderator that
+                        // no suitable resultsview can be found
+                        console.log("ERROR: couldn't find a ResultsView to display chart results of "
+                        + widgetType + " widget");
+                    }
+                } catch (e) {
+                    console.log("Error parsing JSON: " + e.toString());
+                    debug.resultsDataString = resultsDataString;
+                }
+            });
+        },
+        instantiateInlineViews: function () {
+
         }
     });
+    
+    var EAT = Ember.Object.extend({
+        createApp: function (rootElement, getElicitationDefinition, getPriorSessionData) {
+            var app = ElicitationAppClass.create({
+                rootElement: rootElement
+            });
 
-    App.ApplicationView = Ember.View.extend({
-        classNames: ['elicitation-application']
-    });
+            app.deferReadiness();
 
-    App.IndexController = Ember.Controller.extend({
-        elicitationBinding: 'content',
-        content: null
-    });
+            app.Router.map(function () {
+                //this.resource('widget', { path: '/widgets/:widget_id' });
+                this.route('edit', { path: '/edit/:widget_id' });
+            });
 
-    App.IndexRoute = Ember.Route.extend({
-        setupController: function (controller) {
-            var elicitationDefinition = $("script[type='text/x-elicitation-definition']").html();
-            var priorSessionData = $("script[type='text/x-elicitation-prior-session-data']").html();
+            app.EditRoute = Ember.Route.extend({
+                setupController: function (controller) {
+                    console.log("Setting up edit route controller!");
+                }
+            });
 
-            if (!Ember.isNone(elicitationDefinition)) {
-                var elicitation = EAT.Elicitation.create($.extend(window.DEFAULT_ELICITATION_CONFIGURATION, {
-                    elicitationDefinition: elicitationDefinition,
-                    priorSessionData: priorSessionData,
-                    switchToEditModeAfterLoading: window.DEFAULT_ELICITATION_CONFIGURATION.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
-                }));
-                controller.set('content', elicitation);
-            } else {
-                console.log("WARNING: no elicitation-definition to load in EAT.IndexRoute.setupController, not initializing elicitation");
-            }
+            app.applicationView = Ember.View.extend({
+                classNames: ['elicitation-application']
+            });
+
+            app.IndexController = Ember.Controller.extend({
+                elicitationBinding: 'content',
+                content: null
+            });
+
+            app.IndexRoute = Ember.Route.extend({
+                setupController: function (controller) {
+                    var elicitationDefinition = getElicitationDefinition();
+                    var priorSessionData = getPriorSessionData();
+                    
+                    if (!Ember.isNone(elicitationDefinition)) {
+                        var elicitation = EAT.Elicitation.create($.extend(window.DEFAULT_ELICITATION_CONFIGURATION, {
+                            elicitationDefinition: elicitationDefinition,
+                            priorSessionData: priorSessionData,
+                            switchToEditModeAfterLoading: window.DEFAULT_ELICITATION_CONFIGURATION.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
+                        }));
+                        controller.set('content', elicitation);
+                    } else {
+                        throw "No elicitation-definition to load in IndexRoute.setupController, not initializing elicitation";
+                    }
+                }
+            });
+
+            app.IndexView = Ember.View.extend({
+                templateName: 'elicitation',
+                editModeBinding: 'controller.elicitation.editMode'
+            });
+      
+            return app;  
         }
-    });
+    }).create();
 
-    App.IndexView = Ember.View.extend({
-        templateName: 'elicitation',
-        editModeBinding: 'controller.elicitation.editMode'
-    });
 
     // Most EAT.* members are defined in eat.js
 
     // EXPORTS:
-    window.ElicitationApp = App;
-    window.EAT = Ember.Object.create();
-    //window.widgets = [];
+    window.ElicitationApp = EAT.createApp(
+        'body',
+        function () { return $("script[type='text/x-elicitation-definition']").html(); },
+        function () { return $("script[type='text/x-elicitation-prior-session-data']").html(); }
+    );
+    
+    window.EAT = EAT;
 
 })(window);
