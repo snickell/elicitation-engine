@@ -44,12 +44,22 @@
 	{{includeStatic "widgets.hbs"}}
 
     <script>
-        window.DEFAULT_ELICITATION_CONFIGURATION = {{jsonStringify settings}};
+	 			var ELICITATION_SETTINGS = {{jsonStringify settings}};
 
         // Load expert list for the dropdown widget
         EAT.experts = {{jsonStringify expertNames}};
-
-        ElicitationApp.advanceReadiness();
+				
+				$(document).ready(function () {
+			    window.ElicitationApp = EAT.createApp(
+			      'body',
+						$.extend(ELICITATION_SETTINGS, {
+							elicitationDefinition: $("script[type='text/x-elicitation-definition']").html(),
+							priorSessionData: $("script[type='text/x-elicitation-prior-session-data']").html(),
+							switchToEditModeAfterLoading: window.ELICITATION_SETTINGS.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
+						})
+					);
+	        ElicitationApp.advanceReadiness();					
+				});
     </script>
 				
 		<link href='http://fonts.googleapis.com/css?family=Rokkitt:400' rel='stylesheet' type='text/css' />
@@ -96,8 +106,8 @@
     <![endif]-->
 
     <script type="text/x-elicitation-definition">{{{elicitationDefinition}}}</script>
-	{{#if elicitationPriorSessionData}}
-		<script type="text/x-elicitation-prior-session-data">{{{elicitationPriorSessionData}}}</script>
-	{{/if}}
+		{{#if elicitationPriorSessionData}}
+			<script type="text/x-elicitation-prior-session-data">{{{elicitationPriorSessionData}}}</script>
+		{{/if}}
 </body>
 </html>

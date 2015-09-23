@@ -81,7 +81,7 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
     });
     
     var EAT = Ember.Object.extend({
-        createApp: function (rootElement, getElicitationDefinition, getPriorSessionData) {
+        createApp: function (rootElement, elicitationProperties) {
             var app = ElicitationAppClass.create({
                 rootElement: rootElement
             });
@@ -110,19 +110,8 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
 
             app.IndexRoute = Ember.Route.extend({
                 setupController: function (controller) {
-                    var elicitationDefinition = getElicitationDefinition();
-                    var priorSessionData = getPriorSessionData();
-                    
-                    if (!Ember.isNone(elicitationDefinition)) {
-                        var elicitation = EAT.Elicitation.create($.extend(window.DEFAULT_ELICITATION_CONFIGURATION, {
-                            elicitationDefinition: elicitationDefinition,
-                            priorSessionData: priorSessionData,
-                            switchToEditModeAfterLoading: window.DEFAULT_ELICITATION_CONFIGURATION.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
-                        }));
-                        controller.set('content', elicitation);
-                    } else {
-                        throw "No elicitation-definition to load in IndexRoute.setupController, not initializing elicitation";
-                    }
+                    var elicitation = EAT.Elicitation.create(elicitationProperties);
+                    controller.set('content', elicitation);
                 }
             });
 
@@ -139,12 +128,6 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
     // Most EAT.* members are defined in eat.js
 
     // EXPORTS:
-    window.ElicitationApp = EAT.createApp(
-        'body',
-        function () { return $("script[type='text/x-elicitation-definition']").html(); },
-        function () { return $("script[type='text/x-elicitation-prior-session-data']").html(); }
-    );
-    
     window.EAT = EAT;
 
 })(window);
