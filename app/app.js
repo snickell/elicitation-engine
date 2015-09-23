@@ -26,33 +26,33 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
         }
     })();
 
-    var EAT = Ember.Application.create({
+    var App = Ember.Application.create({
         LOG_TRANSITIONS: true
     });
 
-    EAT.deferReadiness();
+    App.deferReadiness();
 
-    EAT.Router.map(function () {
+    App.Router.map(function () {
         //this.resource('widget', { path: '/widgets/:widget_id' });
         this.route('edit', { path: '/edit/:widget_id' });
     });
 
-    EAT.EditRoute = Ember.Route.extend({
+    App.EditRoute = Ember.Route.extend({
         setupController: function (controller) {
             console.log("Setting up edit route controller!");
         }
     });
 
-    EAT.ApplicationView = Ember.View.extend({
+    App.ApplicationView = Ember.View.extend({
         classNames: ['elicitation-application']
     });
 
-    EAT.IndexController = Ember.Controller.extend({
+    App.IndexController = Ember.Controller.extend({
         elicitationBinding: 'content',
         content: null
     });
 
-    EAT.IndexRoute = Ember.Route.extend({
+    App.IndexRoute = Ember.Route.extend({
         setupController: function (controller) {
             var elicitationDefinition = $("script[type='text/x-elicitation-definition']").html();
             var priorSessionData = $("script[type='text/x-elicitation-prior-session-data']").html();
@@ -70,7 +70,7 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
         }
     });
 
-    EAT.IndexView = Ember.View.extend({
+    App.IndexView = Ember.View.extend({
         templateName: 'elicitation',
         editModeBinding: 'controller.elicitation.editMode'
     });
@@ -78,7 +78,8 @@ Date.now = Date.now || function () { return (new Date).valueOf(); };
     // Most EAT.* members are defined in eat.js
 
     // EXPORTS:
-    window.EAT = EAT;
+    window.ElicitationApp = App;
+    window.EAT = Ember.Object.create();
     //window.widgets = [];
 
 })(window);
