@@ -32,9 +32,10 @@
         dataAdminURL: null,
         changeHistoryAdminURL: null,
 
-
         completePageMessage: null,
         completePageIncludeLinkToDiscussion: null,
+
+        personID: null,
 
         /* END: initialization properties */
 

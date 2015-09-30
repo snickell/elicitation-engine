@@ -56,7 +56,6 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
       elicitationDefinition: elicitationDefinition.Definition,
       elicitationPriorSessionData: null,
 
-
       /* ETC ETC */
       nzCategory: NZCategory.toLowerCase(),
       isMobileDevice: isMobileDevice,
@@ -84,8 +83,6 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
 
           embedded: embedded,
 
-
-
           /* elicitation.loggedInPerson */
           saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action("SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName, login: person.access_token }) : Url.Action("SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName })) : null,
           email: person != null ? person.email : null,
@@ -101,6 +98,8 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
           changeHistoryAdminURL: allowEditing ? Url.Action("ChangeHistory", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           uploadImageURL: allowEditing ? Url.Action("CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          
+          personID: personID,
 
       }
   });
