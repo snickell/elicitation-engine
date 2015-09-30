@@ -31,6 +31,10 @@
                 accessor: EAT.WidgetDefinition.Attr('is-thumbnail'),
                 prettyName: "Thumbnail",
                 type: "Boolean"
+            },
+            imageURL: {
+                accessor: EAT.WidgetDefinition.Attr('src'),
+                prettyName: "Manual Image URL (instead of upload)"
             }
         },
         linkToURL: function () {
@@ -56,11 +60,17 @@
             }
         }.property('baseImageURL', 'definition.thumbnail'),
         baseImageURL: function () {
-            var imageID = this.get('definition.image');
-            if (Ember.isNone(imageID)) return undefined;
+            var imageURL = this.get('definition.imageURL');
 
-            return this.get('elicitation.imageURL') + "&id=" + imageID;
-        }.property('definition.image'),
+            if (!Ember.isNone(imageURL) && imageURL.length > 0) {
+                return imageURL.replace('[[PERSON_ID]]', encodeURIComponent(this.get('elicitation.personID')));
+            } else {
+                var imageID = this.get('definition.image');
+                if (Ember.isNone(imageID)) return undefined;
+
+                return this.get('elicitation.imageURL') + "&id=" + imageID;
+            }
+        }.property('definition.image', 'definition.imageURL'),
         imageMissingMessage: function () {
             var messageNum = Math.floor(Math.random() * 4);
             if (messageNum == 0) {
