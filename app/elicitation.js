@@ -149,12 +149,14 @@
             this.set('widgetBeingEdited', null);
         }.observes('editMode'),
         beforeUnload: function () {
+            var firefox = /Firefox[\/\s](\d+)/.test(navigator.userAgent);
+
             if (this.get('allowEditing') && !this.get('definitionIsSaved')) {
                 return "You may have unsaved changes to the elicitation.";
-            } else if (!(this.get('submitted') || this.get('serializedDataIsEmpty'))) {
+            } else if (!(this.get('submitted') || this.get('serializedDataIsEmpty') || firefox)) {
                 return "You can resume where you left off by visiting this elicitation again at a later time. You won't be able to go backward from this point, but all your previous responses will be preserved if you resume later.";
             }
-        },
+        },        
         print: function () {
             window.print();
         },
