@@ -1,6 +1,155 @@
 (function (EAT, Ember) {
     "use strict;"
  
+ 
+
+    EAT.WidgetResultsViews.AllocationTable = EAT.WidgetResultsView.extend({
+        templateName: "allocation-table-results",
+        classNames: ["widget-results", "allocation-table"],
+        content: undefined, // An EAT.WidgetResultsData
+
+
+/*
+
+    "data": {
+        "a Electricity generation and storage": {
+          "Allocation (%)": 30
+        },
+        "b Transportation": {
+          "Allocation (%)": 20
+        },
+        "c Industrial use": {
+          "Allocation (%)": 20
+        },
+        "d Agriculture": {
+          "Allocation (%)": 10
+        },
+        "e Energy system efficiency": {
+          "Allocation (%)": 20
+        },
+        "metadata": {}
+    },
+
+*/
+
+        dataTableAndFriends: function () {
+            var dataTable = new google.visualization.DataTable();
+            dataTable.addColumn({
+                type: 'string'
+            });
+
+            var seriesNames = new Ember.Set();
+            var seriesNameToColNum = {};
+
+            //var expertNum = 0;
+            this.get('content.perExpertData').mapProperty('data').forEach(function (data) {
+                console.log("allocation-table-results-chart for data row:", data);
+                var expertNum = dataTable.addRow();
+
+                // set X position to expertNum
+                dataTable.setCell(expertNum, 0, expertNum.toString());
+
+                for (var seriesNameA in data) {
+                    if (seriesNameA != 'metadata' && data.hasOwnProperty(seriesNameA)) {
+                        for (var seriesNameB in data[seriesNameA]) {
+                            if (data[seriesNameA].hasOwnProperty(seriesNameB)) {
+                                console.log("a=", seriesNameA, ", b=", seriesNameB);
+                                var value = data[seriesNameA][seriesNameB];
+
+                                var seriesName = seriesNameA + ", " + seriesNameB;
+                                var colNum = null;
+                                if (!seriesNames.contains(seriesName)) {
+                                    console.log("new name " + seriesName + ": adding");
+                                    seriesNames.add(seriesName);
+                                    colNum = dataTable.addColumn({
+                                        type: 'number',
+                                        label: seriesName
+                                        /*role: role,
+                                        pattern: '@@##',*/
+                                    });
+                                    seriesNameToColNum[seriesName] = colNum;
+                                } else {
+                                    colNum = seriesNameToColNum[seriesName];
+                                }
+
+                                dataTable.setCell(expertNum, colNum, value);
+                            }
+                        }
+                    }
+                }
+            });
+
+            console.log("Returning allocation-table results data table");
+
+            return {
+                dataTable: dataTable,
+                seriesNameToColNum: seriesNameToColNum,
+                seriesNames: seriesNames
+            }
+        }.property('content.perExpertData'),
+
+
+      
+        didInsertElement: function () {
+            this._super();
+
+            var chartDiv = this.$("div.google-chart-holder");
+            var self = this;
+
+            google.load("visualization", "1", {
+                packages: ["corechart"],
+                callback: function () {
+
+                    var chart = new google.visualization.LineChart(chartDiv.get(0));
+
+                    var options = {
+                        lineWidth: 0,
+                        pointSize: 5,
+                        //focusTarget: 'datum',
+                        backgroundColor: '#707580',
+                        titlePosition: 'none',
+                        vAxis: {
+                            viewWindowMode: 'pretty',
+                            textStyle: { color: 'white' },
+                            gridlines: { color: '#888' },
+                            baselineColor: '#707580'
+                        },
+                        //tooltip: { trigger: 'selection' },
+                        hAxis: {
+                            format: '#',
+                            viewWindowMode: 'pretty',
+                            textStyle: { color: 'white' },
+                            gridlines: { color: '#888' },
+                            baselineColor: '#707580'
+                        },
+                        theme: 'maximized'
+                    };
+
+                    var dataTableAndFriends = self.get('dataTableAndFriends');
+                    window.dataTableAndFriends = dataTableAndFriends;
+
+                    // Now assign each series to a color...
+                    var seriesColors = ['#19b5eb', 'rgb(217,76,116)', 'rgb(123,105,209)', 'rgb(235,136,35)', 'rgb(76,166,73)', 'rgb(64,133,198)', 'rgb(228,81,39)', 'rgb(90,86,196)', 'rgb(168,206,56)', 'rgb(255,205,5)', 'rgb(16,147,128)', 'rgb(154,61,168)'];
+                    var seriesOptions = {};
+                    dataTableAndFriends.seriesNames.forEach(function (seriesName) {
+                        var seriesColor = seriesColors.shift(); // snag a color for this series...
+                        var colNum = dataTableAndFriends.seriesNameToColNum[seriesName];
+                        seriesOptions[colNum] = { color: seriesColor };
+                    });
+
+                    options['series'] = seriesOptions;
+
+                    chart.draw(dataTableAndFriends.dataTable, options);
+                    debug.googleChart = chart;
+                    debug.googleChartDataTable = dataTableAndFriends.dataTable;
+                    self.set('googleAvailable', true);
+
+                }
+            });
+        }
+    });
+
+ 
     $.widget("nz.dragdistance", $.ui.mouse, {
         options: {
             drag: null,
@@ -283,6 +432,7 @@
     EAT.Widget.register('allocation-table', {
         prettyName: "Allocation Table",
         templateName: 'allocation-table',
+        widgetResults: EAT.WidgetResultsViews.AllocationTable,        
         dataModel: AllocationTableDataModel,
         definitionSchema: {
             model: EAT.WidgetDefinition.extend({
