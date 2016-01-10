@@ -79,9 +79,7 @@ router.get(baseURL, function (req, res) {
 var elicitationRoutes = require('./server/routes/elicitation')(db, connectAssetsHelpers);
 router.use('/', elicitationRoutes);
 
-
 app.use(baseURL, router);
-app.use("/elicitation", router);
 
 if (app.get('env') === 'development') {
   app.use(errorHandler());
