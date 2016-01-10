@@ -194,8 +194,8 @@ module.exports = function (db, assetHelpers) {
             membership.HasCompletedTask = true;
             elicitation.lastCompleted = now;
             membership.LastParticipated = now;
-
-            return addLogEntry("Elicitation Complete", "ElicitationID: " + elicitationID)
+            
+            return addLogEntry(req, "Elicitation Complete", "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
             .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
             .then( () => membership.save({transaction: t}) )                
             .then( () => assignment.save({transaction: t}) )
@@ -258,25 +258,22 @@ module.exports = function (db, assetHelpers) {
           */
         }
       })
+      .catch(function (e) {
+        console.error("Exception in Elicitation.SaveData: ", e);
+        
+        res.status(500);
+        res.send("Uhoh! There was a problem saving data to our server :-(");
+        return addLogEntry(req, "Elicitation.SaveData+ ERROR", "ElicitationID: " + elicitationID + "\nException:\n" + e + "\n\nData was: " + json, m.person.ID, m.elicitation.Discussion_ID)
+        .then(function () {
+          throw e;        
+        });
+      });    
     })
     .then(function () {
       console.log("SaveData Success!");
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(true));      
-    })
-    .catch(function (e) {
-      console.warn("FIXME: to implement exception logging and handling in savedata");
-      /* FIXME TO IMPLEMENT
-            } catch (Exception ex) {
-                var exString = ex.ToString();
-                Trace.TraceError("ElicitationController.SaveData: error \n" + exString);
-
-                this.addLogEntry("Elicitation.SaveData ERROR", Text: "ElicitationID: " + id + "\nException:\n" + exString + "\n");
-                db.SaveChanges();
-                throw ex;
-            }
-      */
-    });   
+    });
   });
 
   function addLogEntry(req, eventType, text, personID, discussionID) {
