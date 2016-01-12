@@ -308,6 +308,7 @@ module.exports = function (db, assetHelpers) {
   }
 
   function setupViewModel(models, logName, startEditing, embedded) {
+    console.log("setupViewModel(), embedded=", embedded);
     return elicitationViewModel(db, models, logName, startEditing, embedded)
     .then(viewModel => {
       viewModel.helpers = {
