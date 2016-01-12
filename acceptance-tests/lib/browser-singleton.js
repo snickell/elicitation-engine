@@ -8,9 +8,9 @@ var assert = require('assert');
 var host = "127.0.0.1";
 var port = 4444;
 
-var REMOTE_URL = "http://www.nearzero.org/elicitation/57/acceptance-testing?login=1105b6b8b4b36b";
-var LOCAL_URL = "http://localhost:51227/elicitation/57/acceptance-testing?login=1105b6b8b4b36b";
-var LOCAL_URL_VIRTUALBOX = "http://10.0.2.2:8888/elicitation/57/acceptance-testing?login=1105b6b8b4b36b";
+var REMOTE_URL = "http://www.nearzero.org/elicitation/run/57/acceptance-testing?login=1105b6b8b4b36b";
+var LOCAL_URL = "http://localhost:3000/elicitation/run/57/acceptance-testing?login=1105b6b8b4b36b";
+var LOCAL_URL_VIRTUALBOX = "http://10.0.2.2:8888/elicitation/run/57/acceptance-testing?login=1105b6b8b4b36b";
 
 if (CONNECT_TO_VIRTUALBOX) {
     // 1: Start SPI PortForward: 8888 localhost 51227
