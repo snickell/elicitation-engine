@@ -1,4 +1,13 @@
-﻿1) Install required node packages: 
+﻿USE NPM TEST TO RUN TESTS:
+To run the tests, from the project root do "npm test", which runs ../run-tests.sh
+
+You can also run a specific test manually (after starting selenium):
+nodeunit acceptance-tests/tests/agree-disagree.js
+
+
+
+MANUAL INSTRUCTIONS
+1) Install required node packages: 
 	npm install wd assert q
 	npm install -g nodeunit selenium-standalone
 
