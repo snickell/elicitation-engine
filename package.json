@@ -27,9 +27,12 @@
     "tedious": "^1.12.3"
   },
   "noAnalyze": true,
-  "license": "LicenseRef-LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">= 4.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+	"scripts": {
+		"test": "./run-tests.sh"
+	}
 }
