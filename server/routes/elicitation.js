@@ -17,9 +17,12 @@ module.exports = function (db, assetHelpers) {
 
   router.get('/run/:id/:humanreadable?', function (req, res) {
     var resumePriorSessionData = req.query.resumePriorSessionData !== "false";
-        
+    var embedded = req.query.embedded === "true";
+    
     elicit(req, res, "Elicitation.View+", {
       modifyViewModel: function (viewModel, models) {
+        viewModel.settings.embedded = embedded;
+        
         models.assignment.LastBrowserUserAgent = req.headers['user-agent'];
         models.assignment.LastAccessed = Date.now();
         
