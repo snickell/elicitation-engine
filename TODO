@@ -1,3 +1,10 @@
+=====SWITCH TO GORILLA MILESTONE=====
+
+- run integration test suite a few dozen times
+
+===================================
+
+
 - Configuration DB table on Azure side (key value pair with key name as unique key? single row table?)
 - Support Auth URL and discussion URL prefix params
 
