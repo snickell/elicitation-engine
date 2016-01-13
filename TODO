@@ -1,6 +1,9 @@
 =====SWITCH TO GORILLA MILESTONE=====
 
-- run integration test suite a few dozen times
+- Try visiting a URL without permission, and make a sane response rather than timing out forever in auth.js, e.g. try (incognito) http://www.nearzero.org/elicitation/run/119/demo?login=guesttoken 
+
+- Elicitation authoring page: drop down triangle ('navigation' menu) isn't visible due to quirks with jquery-ui
+
 
 ===================================
 
