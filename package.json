@@ -39,6 +39,7 @@
     "wd": "^0.4.0"
   },
   "scripts": {
-    "test": "./run-tests.sh"
+    "test": "./run-tests.sh",
+		"log": "azure site log tail elicitation-gorilla"
   }
 }
