@@ -378,11 +378,13 @@ module.exports = function (db, assetHelpers) {
           } else {
             return db.isAdmin(m.person.ID).then(function (isAdmin) {
               if (isAdmin) {
-                var adminVirtualMembership = new db.models.DiscussionMembership();
-                adminVirtualMembership.Virtual = true;
-                adminVirtualMembership.Moderator = true;
-                adminVirtualMembership.ReadOnly = true;
-                return adminVirtualMembership;
+                // Creating a virtual db.models.DiscussionMembership for admins, who should
+                // be given access to any elicitation
+                return {
+                  Virtual: true,
+                  Moderator: true,
+                  ReadOnly: true
+                }
               } else {
                 throw "Not a member of this discussion, access to elicitation not permitted";
               }
