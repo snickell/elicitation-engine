@@ -1,28 +1,11 @@
 var Url = require('./url-helper');
 
-function addLogEntry(db, logName, text) {
-  // FIXME
-  console.error("FIXME: addLogEntry(", logName, text, ")");
-}
-
-function dbSaveChanges(db, cb) {
-  // FIXME
-  console.error("FIXME: dbSaveChanges()");
-  cb();
-}
-
 module.exports = function elicitationViewModel(db, m, logName, startEditing, embedded) {
   var person = m.person;
   var membership = m.membership;
   var elicitation = m.elicitation;
   var elicitationDefinition = m.elicitationDefinition;
   var discussion = m.discussion;
-
-  if (elicitation != null) {
-      addLogEntry(db, logName, "ElicitationID: " + elicitation.ID + ", ElicitationName: " + elicitation.ElicitationName);
-  } else {
-      addLogEntry(db, logName, "Elicitation Not Found!");
-  }
 
   if (membership != null)
       membership.LastAccessed = new Date();
