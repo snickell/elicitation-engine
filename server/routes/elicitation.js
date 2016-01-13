@@ -23,6 +23,10 @@ module.exports = function (db, assetHelpers) {
       modifyViewModel: function (viewModel, models) {
         viewModel.settings.embedded = embedded;
         
+        if (models.assignment == null) {
+          throw "Cannot run this elicitation, it has not been assigned to you";
+        }
+        
         models.assignment.LastBrowserUserAgent = req.headers['user-agent'];
         models.assignment.LastAccessed = Date.now();
         
