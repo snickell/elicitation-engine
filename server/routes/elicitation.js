@@ -151,13 +151,6 @@ module.exports = function (db, assetHelpers) {
   * which will have completed=false, and the final data submit, which will have completed=true */
   router.post('/savedata/:id/:humanreadable?', function (req, res) {
 
-    /* FIXME: todo
-            Trace.TraceInformation("ElicitationController.SaveData on id: " + id + " from personID: " + person.ID);
-
-            this.addLogEntry("Elicitation.SaveData", Text: "ElicitationID: " + id);
-            db.SaveChanges();
-    */
-
     // URL / Query params:
     var elicitationID = parseInt(req.params.id);
     var elicitation_definition_id = parseInt(req.body.elicitation_definition_id);    
@@ -173,7 +166,7 @@ module.exports = function (db, assetHelpers) {
       var elicitation = m.elicitation;
       var assignment = m.assignment;
       var membership = m.membership;
-
+      
       return db.transaction(function (t) {
 
         membership.LastAccessed = now;            
@@ -367,17 +360,42 @@ module.exports = function (db, assetHelpers) {
     .then(personID =>
       Promise.props({
         elicitation: db.getElicitation(elicitationID).then(throwIfNull),
-        assignment: db.getElicitationAssignment(elicitationID, personID).then(throwIfNull),
+        assignment: db.getElicitationAssignment(elicitationID, personID), // assignment can be null for admins/mods
         person: db.models.Person.findById(personID).then(throwIfNull)
       })
     )
     .then((m) =>
       m.elicitation.Discussion_ID
       ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-        .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) ).then(throwIfNull)
+        .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
+        .then(function (membership) {
+          if (membership != null) {
+            return membership;
+          } else {
+            return db.isAdmin(m.person.ID).then(function (isAdmin) {
+              if (isAdmin) {
+                var adminVirtualMembership = new db.models.DiscussionMembership();
+                adminVirtualMembership.Virtual = true;
+                adminVirtualMembership.Moderator = true;
+                adminVirtualMembership.ReadOnly = true;
+                return adminVirtualMembership;
+              } else {
+                throw "Not a member of this discussion, access to elicitation not permitted";
+              }
+            });
+          }
+        })
         .then( membership => extend(m, { membership: membership }) )
       : m
     )
+    .then(function (m) {
+      // Discussion moderators or site admins can access even if they aren't assigned
+      if (m.assignment != null || m.membership && (m.membership.Moderator || m.membership.Moderator)) {
+        return m;
+      } else {
+        throw "This elicitation has not been assigned to you";
+      }
+    })    
     .then((m) =>
       options.includeElicitationDefinition
       ? loadElicitationDefinition(m)
