@@ -133,6 +133,16 @@ NZDB.prototype.transaction = function (t) {
   return this.sql.transaction(t);
 }
 
+NZDB.prototype.isAdmin = function (personID) {
+  return this.sql.query(
+    "SELECT u.UserId FROM webpages_UsersInRoles u INNER JOIN webpages_Roles r ON u.RoleId = r.roleid WHERE u.UserId = :user_id AND RoleName = 'Administrator'",
+    { replacements: { user_id: personID }, type: Sequelize.QueryTypes.SELECT }
+  )
+  .then( 
+    results => results.length > 0
+  );
+}
+
 NZDB.prototype.getElicitation = function (elicitationID) {
   return this.models.Task.findOne({
     where: {
