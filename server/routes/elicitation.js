@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var baseURL = require('../base-url')();
+
+
 var Handlebars = require('handlebars');
 
 var elicitationViewModel = require('../elicitation/view-model');
@@ -317,7 +320,8 @@ module.exports = function (db, assetHelpers) {
         css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
         js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
         assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
-        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); }
+        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); },
+        publicPath: function(filename) { return new Handlebars.SafeString(baseURL + "/public/" + filename)}
       };
       viewModel.layout = false;
       return viewModel;
