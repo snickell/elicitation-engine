@@ -61,7 +61,7 @@ app.use(connectAssets({
   helperContext: connectAssetsHelpers
 }));
 
-router.use(express.static('public'));
+router.use('/public', express.static('public'));
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
 router.get('/', function (req, res) {  
@@ -81,8 +81,11 @@ router.use('/', elicitationRoutes);
 
 app.use(baseURL, router);
 
+// FIXME: maybe should only do this in dev? think its ok for now...
+app.use(errorHandler({ dumpExceptions: true, showStack: true }));
+
+
 if (app.get('env') === 'development') {
-  app.use(errorHandler());
   
   // Convenience authenticator for dev mode
   app.get('/authenticate-access-to-elicitation/:id', function (req, res) {

@@ -15,11 +15,11 @@ var extend = require('extend');
 
 module.exports = function (db, assetHelpers) {
 
-  router.get('/run/:id/:humanreadable?', function (req, res) {
+  router.get('/run/:id/:humanreadable?', function (req, res, next) {
     var resumePriorSessionData = req.query.resumePriorSessionData !== "false";
     var embedded = req.query.embedded === "true";
     
-    elicit(req, res, "Elicitation.View+", {
+    elicit(req, res, next, "Elicitation.View+", {
       modifyViewModel: function (viewModel, models) {
         viewModel.settings.embedded = embedded;
         
@@ -49,10 +49,10 @@ module.exports = function (db, assetHelpers) {
     })
   });
   
-  router.get('/edit/:id/:humanreadable?', function (req, res) {
+  router.get('/edit/:id/:humanreadable?', function (req, res, next) {
     var revision = parseInt(req.query.revision);
     
-    elicit(req, res, "Elicitation.Edit+", { 
+    elicit(req, res, next, "Elicitation.Edit+", { 
       startEditing: true,
       modifyViewModel: function (viewModel, models) {
         if (revision) {
@@ -71,8 +71,8 @@ module.exports = function (db, assetHelpers) {
     });
   });
   
-  router.get('/review/:reviewtoken/:humanreadable?', function (req, res) {
-    elicit(req, res, "Elicitation.Edit+", {
+  router.get('/review/:reviewtoken/:humanreadable?', function (req, res, next) {
+    elicit(req, res, next, "Elicitation.Edit+", {
       loadModels: function (req, res, logName) {
         var reviewToken = req.params.reviewtoken;
         return loadReviewModels(reviewToken);
@@ -88,7 +88,7 @@ module.exports = function (db, assetHelpers) {
     });
   });
   
-  router.post('/savedefinition/:id/:humanreadable?', function (req, res) {
+  router.post('/savedefinition/:id/:humanreadable?', function (req, res, next) {
     var now = Date.now();
         
     // URL / Query params:
@@ -148,12 +148,14 @@ module.exports = function (db, assetHelpers) {
       console.log("SaveDefinition succeeded!");
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(true));
-    });
+    }).catch(function (e) {
+      next(e);
+    })
   });
 
   /* Accepts JSON data submissions from Expert participants, including page-by-page 'backup' submissions,
   * which will have completed=false, and the final data submit, which will have completed=true */
-  router.post('/savedata/:id/:humanreadable?', function (req, res) {
+  router.post('/savedata/:id/:humanreadable?', function (req, res, next) {
 
     // URL / Query params:
     var elicitationID = parseInt(req.params.id);
@@ -265,7 +267,7 @@ module.exports = function (db, assetHelpers) {
         res.send("Uhoh! There was a problem saving data to our server :-(");
         return addLogEntry(req, "Elicitation.SaveData+ ERROR", "ElicitationID: " + elicitationID + "\nException:\n" + e + "\n\nData was: " + json, m.person.ID, m.elicitation.Discussion_ID)
         .then(function () {
-          throw e;        
+          next(e);
         });
       });    
     })
@@ -414,7 +416,7 @@ module.exports = function (db, assetHelpers) {
     );
   }  
 
-  function elicit(req, res, logName, options) {
+  function elicit(req, res, next, logName, options) {
     var o = extend({
       startEditing: false,
       embedded: false,
@@ -440,7 +442,10 @@ module.exports = function (db, assetHelpers) {
     )
     .catch(authenticateAccessTo.RedirectToLoginError, 
       redirect => res.redirect(redirect.url)
-    );
+    )
+    .catch(function (e) {
+      next(e);
+    });
     
   } 
   
