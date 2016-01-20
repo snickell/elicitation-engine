@@ -1,7 +1,5 @@
-var baseURL = require('../base-url')();
-
 module.exports = {
-    Action: function(method, controller, params) {
+    Action: function(baseURL, method, controller, params) {
       method = method.toLowerCase();
       
       if (controller === "Elicitation") {

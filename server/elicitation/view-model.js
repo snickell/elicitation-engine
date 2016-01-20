@@ -1,4 +1,5 @@
 var Url = require('./url-helper');
+var baseURL = require('../base-url')();
 
 module.exports = function elicitationViewModel(db, m, logName, startEditing, embedded) {
   var person = m.person;
@@ -50,7 +51,7 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
 
       settings: {
           /* elicitation.settings */
-          imageURL: Url.Action("Index", "ImageInElicitation", { ElicitationID: elicitation.ID }),
+          imageURL: Url.Action(baseURL, "Index", "ImageInElicitation", { ElicitationID: elicitation.ID }),
 
           widgetGalleryThumbnailsURL: Url.Content("/app/widgets/thumbnails"),
           elicitationDefinitionID: elicitationDefinition.ID,
@@ -67,20 +68,20 @@ module.exports = function elicitationViewModel(db, m, logName, startEditing, emb
           embedded: embedded,
 
           /* elicitation.loggedInPerson */
-          saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action("SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName, login: person.access_token }) : Url.Action("SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName })) : null,
+          saveDataURL: person != null ? (!person.DisallowLoginViaAccessToken() ? Url.Action(baseURL, "SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName, login: person.access_token }) : Url.Action(baseURL, "SaveData", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName })) : null,
           email: person != null ? person.email : null,
 
           /* elicitation.discussionURL */
-          discussionURL: discussion != null ? Url.Action("Index", "Discussion", { DiscussionName: discussionName }, null) : null,
+          discussionURL: discussion != null ? Url.Action(baseURL, "Index", "Discussion", { DiscussionName: discussionName }, null) : null,
 
           /* elicitation.adminURLs */
           /* elicitation.allowEditing */
-          reviewAdminURL: allowEditing ? Url.Action("Review", "Elicitation", { ReviewToken: elicitation.ReviewToken }) : null,
-          assignedToAdminURL: allowEditing ? Url.Action("AssignedTo", "Task", { id: elicitation.ID, DiscussionName: discussionName }) : null,
-          dataAdminURL: allowEditing ? Url.Action("Data", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
-          changeHistoryAdminURL: allowEditing ? Url.Action("ChangeHistory", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
-          saveDefinitionURL: allowEditing ? Url.Action("SaveDefinition", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName }) : null,
-          uploadImageURL: allowEditing ? Url.Action("CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          reviewAdminURL: allowEditing ? Url.Action(baseURL, "Review", "Elicitation", { ReviewToken: elicitation.ReviewToken }) : null,
+          assignedToAdminURL: allowEditing ? Url.Action(baseURL, "AssignedTo", "Task", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          dataAdminURL: allowEditing ? Url.Action(baseURL, "Data", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          changeHistoryAdminURL: allowEditing ? Url.Action(baseURL, "ChangeHistory", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          saveDefinitionURL: allowEditing ? Url.Action(baseURL, "SaveDefinition", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName }) : null,
+          uploadImageURL: allowEditing ? Url.Action(baseURL, "CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           
           personID: personID,
 
