@@ -3,6 +3,8 @@ var router = express.Router();
 
 var Handlebars = require('handlebars');
 
+var baseURL = require('../base-url')();
+
 var elicitationViewModel = require('../elicitation/view-model');
 var includeStatic = require('../elicitation/static-includes');
 var authenticateAccessTo = require('../elicitation/auth');
@@ -315,7 +317,7 @@ module.exports = function (db, assetHelpers) {
   }
 
   function setupViewModel(models, logName, startEditing, embedded) {
-    return elicitationViewModel(db, models, logName, startEditing, embedded)
+    return elicitationViewModel(baseURL, db, models, logName, startEditing, embedded)
     .then(viewModel => {
       viewModel.helpers = {
         includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },

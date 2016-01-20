@@ -1,7 +1,6 @@
 var Url = require('./url-helper');
-var baseURL = require('../base-url')();
 
-module.exports = function elicitationViewModel(db, m, logName, startEditing, embedded) {
+module.exports = function elicitationViewModel(baseURL, db, m, logName, startEditing, embedded) {
   var person = m.person;
   var membership = m.membership;
   var elicitation = m.elicitation;
