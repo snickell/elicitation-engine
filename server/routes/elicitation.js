@@ -311,7 +311,7 @@ module.exports = function (db, assetHelpers) {
   function setupViewModel(baseURL, models, logName, startEditing, embedded) {
     return elicitationViewModel(baseURL, db, models, logName, startEditing, embedded)
     .then(viewModel => {
-      viewModel.helpers = handlebarsHelpers(baseURL, assetHelpers);
+      viewModel.helpers = handlebarsHelpers(assetHelpers);
       viewModel.layout = false;
       return viewModel;
     });

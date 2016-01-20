@@ -12,9 +12,18 @@ Promise.longStackTraces();
 module.exports = function (db, assetHelpers) {
 
   router.get('/', function (req, res, next) {
-    res.render('admin', {
-      helpers: handlebarsHelpers(req.baseUrl, assetHelpers)
-    });
+
+    return db.models.Task.findAll({
+      where: {
+        Discriminator: 'Elicitation' 
+      },
+      order: [['Modified', 'DESC']]
+    }).then((elicitations) =>
+      res.render('admin', {
+        elicitations: elicitations,
+        helpers: handlebarsHelpers(assetHelpers)
+      })
+    );
   });
   
   return router;

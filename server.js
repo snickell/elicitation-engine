@@ -62,6 +62,7 @@ app.use(connectAssets({
   servePath: baseURL + "/assets",
   helperContext: connectAssetsHelpers
 }));
+connectAssetsHelpers.baseURL = baseURL;
 
 router.use('/public', express.static('public'));
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
@@ -78,10 +79,18 @@ router.get(baseURL, function (req, res) {
   });
 });
 
-if (getConfig("STANDALONE") === true) {
-  console.log("ELICITATION_STANDALONE=true: enabling admin controller");
+if (getConfig("STANDALONE") || app.get('env') === 'development') {
+  console.log("ELICITATION_STANDALONE || env=development: enabling standalone features");
   var adminRoutes = require('./server/routes/admin')(db, connectAssetsHelpers);
   router.use('/admin', adminRoutes);
+  
+  // Convenience authenticator for dev mode
+  app.get('/authenticate-access-to-elicitation/:id', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ 
+      personID: 2
+    }));
+  });
 }
 
 var elicitationRoutes = require('./server/routes/elicitation')(db, connectAssetsHelpers);
@@ -94,13 +103,7 @@ app.use(errorHandler({ dumpExceptions: true, showStack: true }));
 
 if (app.get('env') === 'development') {
   
-  // Convenience authenticator for dev mode
-  app.get('/authenticate-access-to-elicitation/:id', function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ 
-      personID: 2
-    }));
-  });
+
 }
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -5,4 +5,12 @@
 </head>
 <body>
 	<h1>Welcome Admin to the Elicitation Gorilla</h1>
+	
+	<ul>
+		{{#each elicitations}}
+			<li><a href="/elicitation/edit/{{ID}}/{{ElicitationName}}">{{ElicitationName}}</a></li>
+		{{else}}
+			<li><p>No elicitations found, sorry!</p></li>
+		{{/each}}
+	</ul>
 </body>
