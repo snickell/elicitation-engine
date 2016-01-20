@@ -1,27 +1,42 @@
 var request = require('request-promise');
 var StatusCodeError = require('request-promise/errors').StatusCodeError;
 
-var authPath = "/authenticate-access-to-elicitation/";
+var getConfig = require('../config').get;
+
+//var authPath = "/authenticate-access-to-elicitation/";
+var authURL = getConfig("AUTH_URL");
 
 var AUTH_COOKIE = ".ASPXAUTH";
 
 function authenticateAccessTo(elicitationID, req, res) {  
   var returnURL = req.originalUrl;
 
+  console.log("returnURL is: ", req.originalUrl);
+
+  var baseURL;
+  if (authURL.slice(0,1) === "/") {
+    // its a path, we'll need to add host info
+
+    var hostname = req.get('host');
   
-  var hostname = req.get('host');
-  
-  console.warn("FIXME: Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");  
-  if (hostname === "elicitation-gorilla.azurewebsites.net") {
-    hostname = "www.nearzero.org";
+    console.warn("FIXME: Hack to handle reverse proxy on nearzero.org hosting of elicitation engine");  
+    if (hostname === "elicitation-gorilla.azurewebsites.net") {
+      hostname = "www.nearzero.org";
+    }
+
+    var host = req.protocol + '://' + hostname;  
+    baseURL = host + authURL;
+  } else {
+    baseURL = authURL;
   }
   
-  var host = req.protocol + '://' + hostname;  
-  var url = host + authPath + elicitationID 
+   var url = baseURL + elicitationID 
     + "?ReturnURL=" + encodeURIComponent(returnURL) 
     + (req.query.login ? "&login=" + encodeURIComponent(req.query.login) : "");
   
   console.log("auth url is: ", url);
+  if (baseURL.slice(-1) !== "/")
+    console.warn("WARNING: ELICITATION_AUTH_URL should end in a /, this may not work?");
   
   // Pass along the auth cookie, the whole point of this excercise...
   var cookieJar = request.jar();
