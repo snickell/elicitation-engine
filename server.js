@@ -1,5 +1,5 @@
 var baseURL = require('./server/base-url')();
-
+var getConfig = require('./server/config').get;
 /**
 * Module dependencies.
 */
@@ -44,9 +44,10 @@ app.set('view engine', '.hbs');
 app.set('views', viewsDir);
 
 // NZ Database
-var connectionString = process.env['SQLAZURECONNSTR_DefaultConnection'];
 var NZDB = require('./server/nzdb');
-var db = new NZDB(connectionString);
+var sequelizeConfig = getConfig("SEQUELIZE_CONFIG");
+console.log("DB: " + JSON.stringify(sequelizeConfig));
+var db = new NZDB(sequelizeConfig);
 
 
 // Setup basic app routes
@@ -98,5 +99,4 @@ if (app.get('env') === 'development') {
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
-  console.log("ConnectionString is: ", connectionString);
 });

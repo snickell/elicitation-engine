@@ -1,67 +1,28 @@
 var Sequelize = require('sequelize');
 var colors = require('colors');
 
-var ncsBuilder = require('node-connection-string-builder');
 var nzdbModels = require('./nzdb-models');
 
-
-
-console.warn("Monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
-var sqlString = require('sequelize/lib/sql-string');
-var dateToString = sqlString.dateToString;
-sqlString.dateToString = (d, tz, dialect) => dateToString(d, tz, 'mysql');
-
-
-function connectionStringToConfig(connectionString) {
-  var config = {
-    server: undefined,
-    userName: undefined,
-    password: undefined
-    ,options: {
-      debug: {
-        packet: true,
-        data: true,
-        payload: true,
-        token: false,
-        log: true
-      },
-      database: '',
-      encrypt: true // for Azure users
-    }
-  };
-    
-  var builder=new ncsBuilder(connectionString);
-  if (builder.dataSource) {
-    var ds=builder.dataSource.split('\\', 2);
-    config.server=ds[0] || config.server; 
-    var instanceName=ds[1] || config.options.instanceName;
-    if (instanceName)
-      config.options.instanceName=instanceName;
-  }
-  config.userName=builder.userID || config.userName;
-  config.password=builder.password || config.password;
-  config.options.encrypt=builder.encrypt || config.options.encrypt;
-  config.options.database=builder.initialCatalog || config.options.database;  
-  
-  return config;
+function FIXME_monkeyPatchSequelizeForMSSQL() {
+  console.warn("Monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
+  var sqlString = require('sequelize/lib/sql-string');
+  var dateToString = sqlString.dateToString;
+  sqlString.dateToString = (d, tz, dialect) => dateToString(d, tz, 'mysql');  
 }
 
-var NZDB = function (connectionString) {
-  var config = connectionStringToConfig(connectionString)
 
-  this.sql = new Sequelize(config.options.database, config.userName, config.password, {
-    host: config.server,
-    dialect: 'mssql',
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
-    },
-    dialectOptions: config.options,
-    logging: function (s) {
-      console.log(s.green);
-    }
-  });
+var NZDB = function (sequelizeConfig) {
+  var config = sequelizeConfig;
+  config.options = config.options || {};
+  
+  if (config.options.dialect && config.options.dialect === 'mssql') {
+    FIXME_monkeyPatchSequelizeForMSSQL();
+  }
+
+  config.options.logging = function(s) {
+    console.log(s.green);
+  }
+  this.sql = new Sequelize(config.database, config.userName, config.password, config.options);
 
   // this.sql = new Sequelize('seth', 'seth', '', { host: 'localhost', dialect: 'postgres' });
   

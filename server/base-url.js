@@ -1,3 +1,5 @@
+var getConfig = require('./config').get;
+
 module.exports = function () {
-  return "/elicitation";
+  return getConfig("BASE_URL");
 }
