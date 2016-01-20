@@ -9,7 +9,7 @@ module.exports = {
           return baseURL + "/" + method + "/" + params.id; 
         }
       } else if (controller ==="ElicitationAdmin") {
-        return "/elicitation/admin/" + method + "/" + params.id + "/" + params.DiscussionName;
+        return baseURL + "/admin/" + method + "/" + params.id + "/" + params.DiscussionName;
       } else if (controller === "Task") {
         return "/discussion/" + params.DiscussionName + "/task/" + method + "/" + params.id;
       } else if (controller === "Discussion" && method === "index") {
@@ -19,7 +19,7 @@ module.exports = {
         return "http://www.fixme.org/" + controller + "/" + method;
       }
     },
-    Content: function(path) {
-      return path;
+    Content: function(baseURL, path) {
+      return baseURL + path;
     }
 };

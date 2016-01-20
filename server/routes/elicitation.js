@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var baseURL = require('../base-url')();
-
 var Handlebars = require('handlebars');
 
 var elicitationViewModel = require('../elicitation/view-model');
@@ -437,7 +435,7 @@ module.exports = function (db, assetHelpers) {
 
     return o.loadModels(req, res, logName)
     .then( models =>
-      setupViewModel(baseURL, models, logName, o.startEditing, o.embedded)
+      setupViewModel(req.baseUrl, models, logName, o.startEditing, o.embedded)
       .then(viewModel => o.modifyViewModel(viewModel, models))
     )
     .then (viewModel =>

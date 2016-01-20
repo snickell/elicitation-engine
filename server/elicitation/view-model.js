@@ -52,7 +52,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
           /* elicitation.settings */
           imageURL: Url.Action(baseURL, "Index", "ImageInElicitation", { ElicitationID: elicitation.ID }),
 
-          widgetGalleryThumbnailsURL: Url.Content("/app/widgets/thumbnails"),
+          widgetGalleryThumbnailsURL: Url.Content(baseURL, "/app/widgets/thumbnails"),
           elicitationDefinitionID: elicitationDefinition.ID,
 
           allowEditing: allowEditing,
