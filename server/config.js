@@ -1,6 +1,6 @@
 var CONFIG_KEYS = {
     BASE_URL: { default: '/elicitation' },
-    STANDALONE: { default: true, json: true },
+    STANDALONE: { default: false, json: true },
     SEQUELIZE_CONFIG: { json: true },
     AUTH_URL: { default: "/authenticate-access-to-elicitation/" }
 }

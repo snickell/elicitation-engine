@@ -78,6 +78,12 @@ router.get(baseURL, function (req, res) {
   });
 });
 
+if (getConfig("STANDALONE") === true) {
+  console.log("ELICITATION_STANDALONE=true: enabling admin controller");
+  var adminRoutes = require('./server/routes/admin')(db, connectAssetsHelpers);
+  router.use('/admin', adminRoutes);
+}
+
 var elicitationRoutes = require('./server/routes/elicitation')(db, connectAssetsHelpers);
 router.use('/', elicitationRoutes);
 
@@ -85,7 +91,6 @@ app.use(baseURL, router);
 
 // FIXME: maybe should only do this in dev? think its ok for now...
 app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-
 
 if (app.get('env') === 'development') {
   
