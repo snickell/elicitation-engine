@@ -1,5 +1,6 @@
-var baseURL = require('./server/base-url')();
 var getConfig = require('./server/config').get;
+var baseURL = getConfig("BASE_URL");
+
 /**
 * Module dependencies.
 */
