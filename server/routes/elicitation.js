@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var Handlebars = require('handlebars');
-
 var elicitationViewModel = require('../elicitation/view-model');
-var includeStatic = require('../elicitation/static-includes');
+
 var authenticateAccessTo = require('../elicitation/auth');
+var handlebarsHelpers = require('../utils/handlebars-helpers');
 
 var Promise = require('bluebird');
 // FIXME: should only use in dev, not prod
@@ -312,14 +311,7 @@ module.exports = function (db, assetHelpers) {
   function setupViewModel(baseURL, models, logName, startEditing, embedded) {
     return elicitationViewModel(baseURL, db, models, logName, startEditing, embedded)
     .then(viewModel => {
-      viewModel.helpers = {
-        includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
-        css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
-        js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
-        assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
-        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); },
-        publicPath: function(filename) { return new Handlebars.SafeString(baseURL + "/public/" + filename)}
-      };
+      viewModel.helpers = handlebarsHelpers(baseURL, assetHelpers);
       viewModel.layout = false;
       return viewModel;
     });
