@@ -1,3 +1,5 @@
+var config = require('../config');
+
 var express = require('express');
 var router = express.Router();
 
@@ -21,6 +23,7 @@ module.exports = function (db, assetHelpers) {
     }).then((elicitations) =>
       res.render('admin', {
         elicitations: elicitations,
+        usingDefaultAdminPassword: config.haventSetAdminPassword(),
         helpers: handlebarsHelpers(assetHelpers)
       })
     );

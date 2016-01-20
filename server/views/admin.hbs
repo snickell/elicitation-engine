@@ -2,8 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<style>
+	.error-header {
+		background-color: red;
+		font-size: 150%;
+		font-weight: bold;
+		color: white;
+		padding: 10px;
+	}
+	body {
+		padding: 0;
+		margin: 0;
+	}
+	</style>
+	
 </head>
 <body>
+	{{#if usingDefaultAdminPassword}}
+		<div class="error-header">WARNING: you're using the default admin password, please configure ELICITATION_STANDALONE_ADMIN_PASSWORD</div>
+	{{/if}}
+	
 	<h1>Welcome Admin to the Elicitation Gorilla</h1>
 	
 	<ul>

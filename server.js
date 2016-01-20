@@ -1,4 +1,6 @@
 var getConfig = require('./server/config').get;
+var haventSetAdminPassword = require('./server/config').haventSetAdminPassword;
+
 var baseURL = getConfig("BASE_URL");
 
 /**
@@ -81,6 +83,11 @@ router.get(baseURL, function (req, res) {
 
 if (getConfig("STANDALONE") || app.get('env') === 'development') {
   console.log("ELICITATION_STANDALONE || env=development: enabling standalone features");
+  
+  if (haventSetAdminPassword()) {
+    console.error("\nWARNING WARNING WARNING: using default admin password, please set ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n");
+  }
+  
   var adminRoutes = require('./server/routes/admin')(db, connectAssetsHelpers);
   router.use('/admin', adminRoutes);
   

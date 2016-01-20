@@ -1,6 +1,7 @@
 var CONFIG_KEYS = {
     BASE_URL: { default: '/elicitation' },
     STANDALONE: { default: false, json: true },
+    STANDALONE_ADMIN_PASSWORD: { default: "may all your elicitations be true"},
     SEQUELIZE_CONFIG: { json: true },
     AUTH_URL: { default: "/authenticate-access-to-elicitation/" }
 }
@@ -9,7 +10,7 @@ var mssqlConstringToSequelizeConfig = require('./utils/mssql-constring-to-sequel
 
 var ENV_PREFIX="ELICITATION_";
 
-module.exports.get = function (key) {
+function getConfig (key) {
     var value=undefined;
     
     var keyProps = CONFIG_KEYS[key];
@@ -26,3 +27,15 @@ module.exports.get = function (key) {
     
     return value
 }
+
+function isDefault(key) {
+  return getConfig(key) === CONFIG_KEYS[key].default;
+}
+
+function haventSetAdminPassword() {
+  return isDefault("STANDALONE_ADMIN_PASSWORD");
+}
+
+module.exports.get = getConfig;
+module.exports.isDefault = isDefault;
+module.exports.haventSetAdminPassword = haventSetAdminPassword;
