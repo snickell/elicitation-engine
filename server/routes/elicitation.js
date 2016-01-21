@@ -174,7 +174,7 @@ module.exports = function (db, assetHelpers) {
       
       return db.transaction(function (t) {
 
-        membership.LastAccessed = now;            
+        if (membership) membership.LastAccessed = now;            
         assignment.LastAccessed = now;
         assignment.Modified = now;
     
@@ -191,25 +191,29 @@ module.exports = function (db, assetHelpers) {
             assignment.CompletedElicitationData_ID = elicitationData.ID;
             assignment.Completed = true;
         
-            membership.HasParticipated = true;
-            membership.HasCompletedTask = true;
+            if (membership) {
+              membership.HasParticipated = true;
+              membership.HasCompletedTask = true;
+              membership.LastParticipated = now;              
+            }
             elicitation.lastCompleted = now;
-            membership.LastParticipated = now;
             
             return addLogEntry(req, "Elicitation Complete", "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
             .then( () => db.updateNumAssignedAndCompletedFromDB(elicitation, t) )
-            .then( () => membership.save({transaction: t}) )                
+            .then( () => membership ? membership.save({transaction: t}) : Promise.resolve() )
             .then( () => assignment.save({transaction: t}) )
             .then( () => elicitation.save({transaction: t}) )
             .then( () =>
-              db.models.Discussion.update( 
-                { LastActivity: now },
-                { where: { ID: elicitation.Discussion_ID }, transaction: t }
-              )
+              elicitation.Discussion_ID ?
+                db.models.Discussion.update( 
+                  { LastActivity: now },
+                  { where: { ID: elicitation.Discussion_ID }, transaction: t }
+                ) 
+                : Promise.resolve()
             )
           } else {
-            return membership.save({transaction: t})
-            .then( () => assignment.save({transaction: t}) );
+            return assignment.save({transaction: t})
+            .then( () => membership ? membership.save({transaction: t}) : Promise.resolve() );
           }
         });
 
