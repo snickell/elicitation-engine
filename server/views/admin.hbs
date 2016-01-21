@@ -17,6 +17,7 @@
 	}
 	</style>
 	
+	{{js "assets/site.js"}}
 </head>
 <body>
 	{{#if usingDefaultAdminPassword}}
@@ -25,6 +26,8 @@
 	
 	<h1>Welcome Admin to the Elicitation Gorilla</h1>
 	
+	<button id="create">Create Elicitation</button>
+	
 	<ul>
 		{{#each elicitations}}
 			<li><a href="/elicitation/edit/{{ID}}/{{ElicitationName}}">{{ElicitationName}}</a></li>
@@ -32,4 +35,15 @@
 			<li><p>No elicitations found, sorry!</p></li>
 		{{/each}}
 	</ul>
+	
+	<script>
+		$(document).ready(function () {
+			console.log("Ready");
+			$("button#create").click(function () {
+				$.post("admin/create", {
+					ElicitationName: prompt("Name of new elicitation:")
+				});
+			});
+		});
+	</script>
 </body>

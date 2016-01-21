@@ -20,6 +20,7 @@
     "handlebars": "^3.0.3",
     "morgan": "^1.6.1",
     "node-connection-string-builder": "0.0.1",
+    "node-uuid": "^1.4.7",
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
     "request-promise": "^0.4.3",
@@ -40,6 +41,6 @@
   },
   "scripts": {
     "test": "./run-tests.sh",
-		"log": "azure site log tail elicitation-gorilla"
+    "log": "azure site log tail elicitation-gorilla"
   }
 }

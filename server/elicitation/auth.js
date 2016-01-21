@@ -42,7 +42,7 @@ function authenticateAccessTo(elicitationID, req, res) {
   var cookieJar = request.jar();
   if (req.cookies[AUTH_COOKIE]) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
-    cookieJar.setCookie(cookie, url);    
+    cookieJar.setCookie(cookie, url);
   }
   
   return request({

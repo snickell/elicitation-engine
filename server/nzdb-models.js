@@ -578,7 +578,7 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        autoIncrement: true
       },
       Discussion_ID: {
         type: DataTypes.INTEGER,
@@ -630,7 +630,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       ReviewToken: {
         type: DataTypes.UUID,
-        allowNull: false
+        // allowNull: false
       },
       CompletePageMessage: {
         type: DataTypes.TEXT(),
