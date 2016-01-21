@@ -1,0 +1,3 @@
+USEFUL DEV TOOLS:
+npm -g nodemon   # useful for auto-reloading while working
+npm -g sql-cli   # provides 'mssql' command, useful for accessing sql azure directly
