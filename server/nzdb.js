@@ -26,14 +26,25 @@ var NZDB = function (sequelizeConfig) {
 
   // this.sql = new Sequelize('seth', 'seth', '', { host: 'localhost', dialect: 'postgres' });
   
-  this.ready = this.sql.authenticate()
-  .then(function () {
-    console.log("NZDB(): connected  via sequelize");  
-    this.models = nzdbModels(this.sql, Sequelize);
-  }.bind(this))
+  var self = this;
+  function auth() {
+    return self.sql.authenticate()
+    .then(function () {
+      console.log("NZDB(): connected  via sequelize");  
+      self.models = nzdbModels(self.sql, Sequelize);
+      return true;
+    });
+  }
+  
+  this.ready = auth()
   .catch(function (err) { 
-    console.log("NZDB(): couldn't auth with db: ", err);
-    throw err;
+    console.error("NZDB(): couldn't auth with db: ", err);
+    console.warn("Trying to connect one more time....");
+    return auth()
+    .catch(function (err) {
+      console.error("NZDB(): couldn't auth with db: ", err);      
+      throw err;
+    });
   });
 }
 
