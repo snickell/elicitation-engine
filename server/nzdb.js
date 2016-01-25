@@ -1,10 +1,12 @@
+var getConfig = require('./config').get;
+
 var Sequelize = require('sequelize');
 var colors = require('colors');
 
 var nzdbModels = require('./nzdb-models');
 
 function FIXME_monkeyPatchSequelizeForMSSQL() {
-  console.warn("Monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
+  console.warn("NZDB(): monkeypatching ('sequelize/lib/sql-string').dateToString to work with MSSQL datetime columns (see: https://github.com/sequelize/sequelize/issues/3892)");
   var sqlString = require('sequelize/lib/sql-string');
   var dateToString = sqlString.dateToString;
   sqlString.dateToString = (d, tz, dialect) => dateToString(d, tz, 'mysql');  
@@ -12,7 +14,10 @@ function FIXME_monkeyPatchSequelizeForMSSQL() {
 
 
 var NZDB = function (sequelizeConfig) {
-  var config = sequelizeConfig;
+  var config = sequelizeConfig || getConfig("SEQUELIZE_CONFIG");
+  
+  console.log("NZDB(): db is " + JSON.stringify(config, null, '\t'));  
+  
   config.options = config.options || {};
   
   if (config.options.dialect && config.options.dialect === 'mssql') {
@@ -25,6 +30,8 @@ var NZDB = function (sequelizeConfig) {
   this.sql = new Sequelize(config.database, config.userName, config.password, config.options);
 
   // this.sql = new Sequelize('seth', 'seth', '', { host: 'localhost', dialect: 'postgres' });
+  
+  console.log("NZDB(): attempting to connect...");
   
   var self = this;
   function auth() {

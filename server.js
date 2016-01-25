@@ -48,9 +48,7 @@ app.set('views', viewsDir);
 
 // NZ Database
 var NZDB = require('./server/nzdb');
-var sequelizeConfig = getConfig("SEQUELIZE_CONFIG");
-console.log("DB: " + JSON.stringify(sequelizeConfig));
-var db = new NZDB(sequelizeConfig);
+var db = new NZDB();
 
 
 // Setup basic app routes

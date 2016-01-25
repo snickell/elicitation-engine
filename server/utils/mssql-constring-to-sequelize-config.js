@@ -11,7 +11,7 @@ function connectionStringToConfig(connectionString) {
       pool: {
         max: 5,
         min: 0,
-        idle: 10000
+        idle: 20000
       },      
       dialectOptions: {
         debug: {
