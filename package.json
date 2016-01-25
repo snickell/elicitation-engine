@@ -24,8 +24,8 @@
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
     "request-promise": "^0.4.3",
-    "sequelize": "^3.7.1",
-    "tedious": "^1.12.3"
+    "sequelize": "^3.18.0",
+    "tedious": "^1.13.2"
   },
   "noAnalyze": true,
   "license": "SEE LICENSE IN LICENSE",
