@@ -35,12 +35,7 @@ var NZDB = function (sequelizeConfig) {
   
   var self = this;
   function auth() {
-    return self.sql.authenticate()
-    .then(function () {
-      console.log("NZDB(): connected  via sequelize");  
-      self.models = nzdbModels(self.sql, Sequelize);
-      return true;
-    });
+      return self.sql.authenticate();
   }
   
   this.ready = auth()
@@ -49,9 +44,14 @@ var NZDB = function (sequelizeConfig) {
     console.warn("Trying to connect one more time....");
     return auth()
     .catch(function (err) {
-      console.error("NZDB(): couldn't auth with db: ", err);      
-      throw err;
+      console.error("NZDB(): second try, couldn't auth with db: ", err);
+      console.error("NZDB(): allowing connection to continue, but could NOT AUTHENTICATE WITH DB");
     });
+  })
+  .then(function () {
+      console.error("NZDB(): done")
+      self.models = nzdbModels(self.sql, Sequelize);
+      return true;      
   });
 }
 
