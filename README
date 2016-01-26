@@ -1,3 +1,6 @@
 USEFUL DEV TOOLS:
 npm -g nodemon   # useful for auto-reloading while working
 npm -g sql-cli   # provides 'mssql' command, useful for accessing sql azure directly
+
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+(or use azuredeploy.json)
