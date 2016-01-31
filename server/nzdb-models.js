@@ -651,7 +651,14 @@ module.exports = function(sequelize, DataTypes) {
       LastCompleted: {
         type: DataTypes.DATE,
         allowNull: false
-      }
+      },
+      OpenAccessToken: {
+        type: DataTypes.UUID,
+      },
+      EnableOpenAccess: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },      
     }, {
       freezeTableName: true,
       createdAt: false,
