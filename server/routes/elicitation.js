@@ -434,7 +434,9 @@ module.exports = function (db, assetHelpers) {
                   ReadOnly: true
                 }
               } else {
-                throw "Not a member of this discussion, access to elicitation not permitted";
+                return throwIfNull(m.assignment).then(function () {
+                  return null; // return null for membership IF there's an assignment, otherwise, throw error
+                });
               }
             });
           }
