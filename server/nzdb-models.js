@@ -280,7 +280,7 @@ module.exports = function(sequelize, DataTypes) {
       ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        autoIncrement: true        
       },
       affiliation: {
         type: DataTypes.TEXT(),
@@ -333,7 +333,7 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true        
+        autoIncrement: true      
       },
       InternalEvent: {
         type: DataTypes.BOOLEAN,
@@ -658,7 +658,7 @@ module.exports = function(sequelize, DataTypes) {
       EnableOpenAccess: {
         type: DataTypes.BOOLEAN,
         allowNull: false
-      },      
+      }  
     }, {
       freezeTableName: true,
       createdAt: false,

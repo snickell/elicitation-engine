@@ -87,6 +87,55 @@ module.exports = function (db, assetHelpers) {
     });
   });
   
+  function generateAlphanumericPassword() {
+    return (Math.random()*1e32).toString(36).slice(0,14);
+  }
+  
+  function createPersonForOpenAccess(elicitation) {
+    var now = Date.now();
+    var token = generateAlphanumericPassword();
+    return db.models.Person.create({
+      FirstName: "Open",
+      LastName: "Access",
+      affiliation: "-",
+      email: "openaccess" + token + "@nearzero.org",
+      DoNotEmail: true,
+      DoNotEmailActiveOptOut: true,
+      access_token: token
+    })
+    .then(person =>
+      db.models.TaskAssignment.create({
+        Task_ID: elicitation.ID,
+        Person_ID: person.ID,
+        Completed: false,
+        Created: now,
+        Modified: now,
+        Discriminator: 'ElicitationAssignment'
+      })
+      .then(function () {
+        return person;
+      })
+    );
+  }
+  
+  router.get('/access/:openaccesstoken/:humanreadable?', function (req, res, next) {
+    var openAccessToken = req.params.openaccesstoken;
+    
+    db.ready
+    .then(() => db.getElicitationForOpenAccess(openAccessToken))
+    .then(elicitation => 
+      createPersonForOpenAccess(elicitation)
+      .then(function (person) {
+        return addLogEntry(req, "Open Access", "ElicitationID: " + elicitation.ID + ", PersonID: " + person.ID)
+        .then(function () {
+          var url = req.baseUrl + "/run/" + encodeURIComponent(elicitation.ID) + "?login=" + encodeURIComponent(person.access_token);
+          return res.redirect(url);
+        });
+      })
+    )
+    .catch(e => next(e))
+  });
+  
   router.post('/savedefinition/:id/:humanreadable?', function (req, res, next) {
     var now = Date.now();
         

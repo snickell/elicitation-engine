@@ -136,8 +136,20 @@ NZDB.prototype.getElicitationForReview = function (reviewToken) {
       ReviewToken: reviewToken,
       Discriminator: 'Elicitation'
     }
-  })
+  });
 }
+
+NZDB.prototype.getElicitationForOpenAccess = function (openAccessToken) {
+  return this.models.Task.findOne({
+    where: {
+      OpenAccessToken: openAccessToken,
+      EnableOpenAccess: true,
+      Discriminator: 'Elicitation'
+    }
+  });
+}
+
+
 
 NZDB.prototype.getElicitationAssignment = function (elicitationID, personID) {
   return this.models.TaskAssignment.findOne({
