@@ -434,9 +434,7 @@ module.exports = function (db, assetHelpers) {
                   ReadOnly: true
                 }
               } else {
-                return throwIfNull(m.assignment).then(function () {
-                  return null; // return null for membership IF there's an assignment, otherwise, throw error
-                });
+                return null; // no membership found, can happen with open access elicitations
               }
             });
           }
