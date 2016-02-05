@@ -56,6 +56,8 @@ function authenticateAccessTo(elicitationID, req, res) {
     
     console.log("Auth succeeded: ", authResponse);
     console.log("Cookies After Auth: ", cookieJar.getCookies(url));
+    console.log("First: ", cookieJar.getCookies(url)[0]);
+    console.log("2nd: ", cookieJar.getCookies(url)[AUTH_COOKIE]).
     
     var personID = parseInt(authResponse.personID)
     if (personID > 0) {
