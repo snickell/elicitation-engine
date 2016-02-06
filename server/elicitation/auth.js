@@ -44,8 +44,6 @@ function authenticateAccessTo(elicitationID, req, res) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
     console.log("AUTH COOKIE EXISTS");
     cookieJar.setCookie(cookie, url);
-  } else {
-    console.log("AUTH COOKIE DOES NOT EXIST");
   }
     
   return request({
@@ -55,9 +53,6 @@ function authenticateAccessTo(elicitationID, req, res) {
   })
   .then(function (body) {
     var authResponse = JSON.parse(body);
-    
-    console.log("Auth succeeded: ", authResponse);
-    console.log("Cookies After Auth: ", cookieJar.getCookies(url));
     
     // Pass the auth cookies back to the client
     res.setHeader("Set-Cookie", cookieJar.getCookies(url));
