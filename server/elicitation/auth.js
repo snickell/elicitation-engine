@@ -42,8 +42,10 @@ function authenticateAccessTo(elicitationID, req, res) {
   var cookieJar = request.jar();
   if (req.cookies[AUTH_COOKIE]) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
-    console.log("Setting cookie BEFORE auth");
+    console.log("AUTH COOKIE EXISTS");
     cookieJar.setCookie(cookie, url);
+  } else {
+    console.log("AUTH COOKIE DOES NOT EXIST");
   }
     
   return request({
@@ -56,8 +58,9 @@ function authenticateAccessTo(elicitationID, req, res) {
     
     console.log("Auth succeeded: ", authResponse);
     console.log("Cookies After Auth: ", cookieJar.getCookies(url));
-    console.log("First: ", cookieJar.getCookies(url)[0]);
-    console.log("2nd: ", cookieJar.getCookies(url)[AUTH_COOKIE]);
+    
+    // Pass the auth cookies back to the client
+    res.setHeader("Set-Cookie", cookieJar.getCookies(url));
     
     var personID = parseInt(authResponse.personID)
     if (personID > 0) {
