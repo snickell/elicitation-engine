@@ -42,7 +42,6 @@ function authenticateAccessTo(elicitationID, req, res) {
   var cookieJar = request.jar();
   if (req.cookies[AUTH_COOKIE]) {
     var cookie = request.cookie(AUTH_COOKIE + '=' + req.cookies[AUTH_COOKIE]);
-    console.log("AUTH COOKIE EXISTS");
     cookieJar.setCookie(cookie, url);
   }
     
