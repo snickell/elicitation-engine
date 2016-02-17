@@ -1,8 +1,9 @@
 ﻿(function (window, G_vmlCanvasManager) {
     "use strict";
 
+    var allPeriods = new RegExp('[.]', 'g');
     function escapeForEmberProperty(prop) {
-        return prop.replace('.', '');
+        return prop.replace(allPeriods, '');
     }
 
     function outerXML(xmlNode) {
