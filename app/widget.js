@@ -361,6 +361,7 @@
         }.property('_id')
     });
 
+    var allArrows = new RegExp("→", 'g');
     var WidgetVariable = EAT.WidgetDefinition.extend({
         widget: undefined, // bind
         elicitationBinding: 'widget.elicitation',
@@ -382,7 +383,7 @@
                 // recusive series of get() calls, NOT using Ember's auto-recurse. The reason is that we
                 // may (conceivably) have property names that include a period (oops), for example, the
                 // series names in a time-trend are directly stored as-is.
-                property = property.replace("→", ".");
+                property = property.replace(allArrows, ".");
 
                 return Ember.get(widgetData, property);
             } catch (e) {

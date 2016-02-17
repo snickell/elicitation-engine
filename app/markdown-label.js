@@ -4,6 +4,8 @@
     // WARNING: NOT STATELESS, NOT THREAD-SAFE, NOT GOOD: see containsAVariableSubstution
     function CreateMarkdownConverter(elicitation) {
         var markdownConverter = new Markdown.getSanitizingConverter();
+        var singleQuotes = new RegExp("[']", 'g');
+        
         markdownConverter.hooks.chain("postConversion", function (text) {
             var definitions = elicitation.get("phraseDefinitions");
             var text = text.replace(/\[\[([^\[\]]*)\]\]/gi, function (match, p1) {
@@ -15,7 +17,7 @@
 
             var variableSubstitutions = Ember.A();
             var text = text.replace(/\{\{([^\{\}]*)\}\}/gi, function (match, p1) {
-                p1 = p1.replace("'", ""); // delete single quotes, for great justice
+                p1 = p1.replace(singleQuotes, ""); // delete single quotes, for great justice
                 variableSubstitutions.push(p1);
                 return "<span class='substituted-variable' variable='" + p1 + "'></span>";
             });
