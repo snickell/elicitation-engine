@@ -487,6 +487,7 @@
                 });
 
                 var rowPropertyName = ElicitationUtils.escapeForEmberProperty(row.get('definition.label'));
+                console.log("DEBUG: rowPropertyName=", rowPropertyName);
                 data.set(rowPropertyName, colValues);
             });
 
