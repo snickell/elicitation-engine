@@ -687,7 +687,7 @@
                 minModelY: minPointY - offsetY,
                 maxModelY: maxPointY + (offsetY * 2)
             });
-        }.observes('allPoints', 'aPointIsBeingDragged').on('init'),
+        }.observes('allPoints', 'aPointIsBeingDragged', 'definition.timeAxisLogBase', 'definition.valueAxisLogBase').on('init'),
         allPoints: function () {
             return this.get('series').reduce(function (list, series) {
                 return list.concat(series.get('points'));
@@ -735,17 +735,42 @@
         coordsChanged: undefined,
         pointsChanged: undefined,
 
-        fromPixelX: function (pixelX) {
-            return ((pixelX - this.get('minPixelX')) / this.get('pixelRangeX')) * this.get('modelRangeX') + this.get('minModelX');
+        scale: function (x, base) {
+            if (base > 1) {
+                var sign = x >= 0 ? 1 : -1;
+                return sign * Math.log(Math.abs(x)) / Math.log(base);
+            } else {
+                return x;
+            }            
         },
+
+        fromPixel: function (pixelVal, pixelOffset, pixelRange, modelRange, minModel, logBase) {
+            console.warn ("FIX SCALING CODE FOR POINT DRAGGING HERE");
+            
+            return Math.pow(logBase, ((pixelVal - pixelOffset) / pixelRange) * modelRange + minModel)
+        },
+
+        fromPixelX: function (pixelX) {
+            //return Math.pow(this.get('baseX'), ((pixelX - this.get('minPixelX')) / this.get('pixelRangeX')) * this.get('modelRangeX') + this.get('minModelX'));
+            return this.fromPixel(pixelX, this.get('minPixelX'), this.get('pixelRangeX'), this.get('modelRangeX'), this.get('minModelX'), parseFloat(this.get('definition.timeAxisLogBase')));
+        },
+        
+        toPixel: function (modelVal, maxModel, minModel, pixelRange, offsetPixel, logBase) {
+            var modelRange = this.scale(maxModel, logBase) - this.scale(minModel, logBase);
+            var modelPercent = (this.scale(modelVal, logBase) - this.scale(minModel, logBase)) / modelRange;
+            
+            return Math.round(modelPercent * pixelRange + offsetPixel);
+        },
+        
         toPixelX: function (modelX) {
-            return Math.round(((modelX - this.get('minModelX')) / this.get('modelRangeX')) * this.get('pixelRangeX') + this.get('minPixelX'));
+            return this.toPixel(modelX, this.get('maxModelX'), this.get('minModelX'), this.get('pixelRangeX'), this.get('minPixelX'), parseFloat(this.get('definition.timeAxisLogBase')));
         },
         fromPixelY: function (pixelY) {
-            return ((pixelY - this.get('maxPixelY')) / this.get('pixelRangeY')) * this.get('modelRangeY') + this.get('minModelY');
+            return this.fromPixel(pixelY, this.get('maxPixelY'), this.get('pixelRangeY'), this.get('modelRangeY'), this.get('minModelY'), parseFloat(this.get('definition.valueAxisLogBase')));            
+            //return ((pixelY - this.get('maxPixelY')) / this.get('pixelRangeY')) * this.get('modelRangeY') + this.get('minModelY');
         },
         toPixelY: function (modelY) {
-            return Math.round(((modelY - this.get('minModelY')) / this.get('modelRangeY')) * this.get('pixelRangeY') + this.get('maxPixelY'));
+            return this.toPixel(modelY, this.get('maxModelY'), this.get('minModelY'), this.get('pixelRangeY'), this.get('maxPixelY'), parseFloat(this.get('definition.valueAxisLogBase')));
         }
     });
 
@@ -813,6 +838,18 @@
             valueAxisMaxLowerRange: {
                 accessor: EAT.WidgetDefinition.Attr("value-axis-max-lower-range"),
                 prettyName: "Max Lower",
+                type: "String",
+                category: "Y-Axis Range"
+            },
+            valueAxisLogBase: {
+                accessor: EAT.WidgetDefinition.Attr("value-axis-log-base"),
+                prettyName: "Y-Axis Log Base",
+                type: "String",
+                category: "Y-Axis Range"
+            },            
+            timeAxisLogBase: {
+                accessor: EAT.WidgetDefinition.Attr("time-axis-log-base"),
+                prettyName: "X-Axis Log Base",
                 type: "String",
                 category: "Y-Axis Range"
             },
