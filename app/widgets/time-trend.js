@@ -735,26 +735,29 @@
         coordsChanged: undefined,
         pointsChanged: undefined,
 
-        scale: function (x, base) {
-            if (base > 1) {
+        scale: function (x, logBase) {
+            // adjust model value by log scale, if relevant on this axis
+            if (logBase > 1) {
                 var sign = x >= 0 ? 1 : -1;
-                return sign * Math.log(Math.abs(x)) / Math.log(base);
+                return sign * Math.log(Math.abs(x)) / Math.log(logBase);
             } else {
                 return x;
             }            
         },
 
-        fromPixel: function (pixelVal, pixelOffset, pixelRange, modelRange, minModel, logBase) {
-            console.warn ("FIX SCALING CODE FOR POINT DRAGGING HERE");
-            
-            return Math.pow(logBase, ((pixelVal - pixelOffset) / pixelRange) * modelRange + minModel)
+        fromPixel: function (pixelVal, pixelOffset, pixelRange, minModel, maxModel, logBase) {            
+            var pixelPercent = (pixelVal - pixelOffset) / pixelRange;
+            var scaledMinModel = this.scale(minModel, logBase);
+            var scaledRange = this.scale(maxModel, logBase) - scaledMinModel;
+            return Math.pow(logBase, pixelPercent * scaledRange + scaledMinModel);
         },
 
         fromPixelX: function (pixelX) {
-            //return Math.pow(this.get('baseX'), ((pixelX - this.get('minPixelX')) / this.get('pixelRangeX')) * this.get('modelRangeX') + this.get('minModelX'));
-            return this.fromPixel(pixelX, this.get('minPixelX'), this.get('pixelRangeX'), this.get('modelRangeX'), this.get('minModelX'), parseFloat(this.get('definition.timeAxisLogBase')));
+            return this.fromPixel(pixelX, this.get('minPixelX'), this.get('pixelRangeX'), this.get('minModelX'), this.get('maxModelX'), parseFloat(this.get('definition.timeAxisLogBase')));
         },
-        
+        fromPixelY: function (pixelY) {
+            return this.fromPixel(pixelY, this.get('maxPixelY'), this.get('pixelRangeY'), this.get('minModelY'), this.get('maxModelY'), parseFloat(this.get('definition.valueAxisLogBase')));
+        },        
         toPixel: function (modelVal, maxModel, minModel, pixelRange, offsetPixel, logBase) {
             var modelRange = this.scale(maxModel, logBase) - this.scale(minModel, logBase);
             var modelPercent = (this.scale(modelVal, logBase) - this.scale(minModel, logBase)) / modelRange;
@@ -764,10 +767,6 @@
         
         toPixelX: function (modelX) {
             return this.toPixel(modelX, this.get('maxModelX'), this.get('minModelX'), this.get('pixelRangeX'), this.get('minPixelX'), parseFloat(this.get('definition.timeAxisLogBase')));
-        },
-        fromPixelY: function (pixelY) {
-            return this.fromPixel(pixelY, this.get('maxPixelY'), this.get('pixelRangeY'), this.get('modelRangeY'), this.get('minModelY'), parseFloat(this.get('definition.valueAxisLogBase')));            
-            //return ((pixelY - this.get('maxPixelY')) / this.get('pixelRangeY')) * this.get('modelRangeY') + this.get('minModelY');
         },
         toPixelY: function (modelY) {
             return this.toPixel(modelY, this.get('maxModelY'), this.get('minModelY'), this.get('pixelRangeY'), this.get('maxPixelY'), parseFloat(this.get('definition.valueAxisLogBase')));
