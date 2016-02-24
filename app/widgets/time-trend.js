@@ -749,7 +749,12 @@
             var pixelPercent = (pixelVal - pixelOffset) / pixelRange;
             var scaledMinModel = this.scale(minModel, logBase);
             var scaledRange = this.scale(maxModel, logBase) - scaledMinModel;
-            return Math.pow(logBase, pixelPercent * scaledRange + scaledMinModel);
+            var unscaledResult = pixelPercent * scaledRange + scaledMinModel;
+            if (logBase > 1) {
+                return Math.pow(logBase, unscaledResult);
+            } else {
+                return unscaledResult;
+            }
         },
 
         fromPixelX: function (pixelX) {
