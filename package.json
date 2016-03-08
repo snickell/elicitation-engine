@@ -1,5 +1,5 @@
 {
-  "name": "pythia",
+  "name": "elicitation-engine",
   "version": "0.0.1",
   "author": "Seth Nickell <snickell@gmail.com>",
   "description": "",
@@ -28,7 +28,7 @@
     "tedious": "^1.13.2"
   },
   "noAnalyze": true,
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "GPL-3.0",
   "engines": {
     "node": ">= 5.4.0"
   },
