@@ -2,7 +2,7 @@ The NearZero elicitation engine is a **web app for creating and hosting scientif
 
 ![Screenshot of Elicitation Authoring Interface](https://nearzero.github.io/elicitation-engine/images/screenshot.png)
 
-- Easy to setup, deploy, and use
+- Easy to setup, author and launch surveys targeted toward scientists and other experts
 - Includes a visual+web-based authoring interface which makes it easy for collaborators to design the survey
 - Includes more than a dozen widgets designed to help you frame scientific queries
 - Pop-down definitions allow concise on-screen questions with progressive disclosure of detail as needed
