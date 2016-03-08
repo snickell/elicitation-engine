@@ -1,4 +1,4 @@
-The NearZero elicitation engine is a web app for creating and hosting scientific surveys.
+The NearZero elicitation engine is a **web app for creating and hosting scientific surveys**.
 
 - Easy to setup, deploy, and use
 - Includes a visual+web-based authoring interface which makes it easy for collaborators to design the survey
