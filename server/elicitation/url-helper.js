@@ -15,7 +15,7 @@ module.exports = {
       } else if (controller === "Discussion" && method === "index") {
         return "/discussion/" + params.DiscussionName;
       } else if (controller === "ImageInElicitation" && method === "index") {
-        return "/elicitation/image";
+        return "/elicitation/image/?work=please";
       } else {
         console.error("FIXME Url.Action(", method, controller, params, ")");
         return "http://www.fixme.org/" + controller + "/" + method;
