@@ -284,7 +284,11 @@
         variableScope: function () {
             var scope = {};
             this.get('variables').forEach(function (variable) {
+              try {
                 scope[variable.get('name')] = variable.get('value');
+              } catch (e) {
+                console.error("\tvariableScope(): error getting a variable", e);
+              }
             });
             return scope;
         }.property('variables', 'variables.@each.name', 'variables.@each.value'),
