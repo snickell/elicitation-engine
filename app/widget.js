@@ -385,7 +385,7 @@
                 // series names in a time-trend are directly stored as-is.
                 property = property.replace(allArrows, ".");
 
-                return Ember.get(widgetData, property);
+                return widgetData ? Ember.get(widgetData, property) : undefined;
             } catch (e) {
                 console.log("Error getting widget value: ", e);
                 return undefined;
