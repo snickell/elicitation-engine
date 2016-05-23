@@ -40,16 +40,22 @@
         variableSubstitutions: [],
         setupVariableSubstitutionObservers: function () {
             var self = this;
+            
+            // We have to get(elicitation.variableScope) at least once
+            // or the observers below won't hook in and fire when it changes
+            self.get("elicitation.variableScope");                
+            
             var variableSubstitutions = this.get('variableSubstitutions');
             variableSubstitutions.forEach(function (variable) {
                 var variablePath = 'elicitation.variableScope.' + variable;
-                self.addObserver(variablePath, function () {
+                var updateVariable = function () {
                     Ember.run.once(function () {
                         var value = self.get(variablePath);
                         var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
                         subtitutedVariable.html(value);
                     });
-                });
+                };
+                self.addObserver(variablePath, updateVariable);
             });
         }.observes('variableSubstitutions.@each'),
         html: function () {
