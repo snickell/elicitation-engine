@@ -52,7 +52,7 @@
                     Ember.run.once(function () {
                         var value = self.get(variablePath);
                         var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
-                        subtitutedVariable.html(value);
+                        subtitutedVariable.html(String(value));
                     });
                 };
                 self.addObserver(variablePath, updateVariable);
