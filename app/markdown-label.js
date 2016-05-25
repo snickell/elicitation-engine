@@ -46,17 +46,24 @@
             self.get("elicitation.variableScope");                
             
             var variableSubstitutions = this.get('variableSubstitutions');
-            variableSubstitutions.forEach(function (variable) {
-                var variablePath = 'elicitation.variableScope.' + variable;
-                var updateVariable = function () {
+            if (variableSubstitutions) {
+                self.addObserver("elicitation.variableScope", function () {
+                    var variableScope = self.get("elicitation.variableScope");
+                    
                     Ember.run.once(function () {
-                        var value = self.get(variablePath);
-                        var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
-                        subtitutedVariable.html(String(value));
-                    });
-                };
-                self.addObserver(variablePath, updateVariable);
-            });
+                        variableSubstitutions.forEach(function (variable) {
+                            //var variablePath = 'elicitation.variableScope.' + variable;
+                            //var value = self.get(variablePath);
+                            
+                            var value = ElicitationUtils.evalInScope(variable, variableScope);
+                            
+                            var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
+                            subtitutedVariable.html(String(value));
+                        });
+                    });                    
+                });
+                
+            }
         }.observes('variableSubstitutions.@each'),
         html: function () {
             /* Ember.Handlebars.compile(this.get('html')) */
