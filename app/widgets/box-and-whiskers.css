@@ -13,7 +13,7 @@
 }
 
 .widget.box-and-whiskers .ui-resizable-handle, .widget.box-and-whiskers #median {
-    background: black url('../images/widget-box-and-whiskers-horizontal-dragger.png') no-repeat center;
+    background: black url('../../public/images/widget-box-and-whiskers-horizontal-dragger.png') no-repeat center;
 }
 
 .widget.box-and-whiskers #box .ui-resizable-handle {
