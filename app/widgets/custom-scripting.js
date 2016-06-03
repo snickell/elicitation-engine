@@ -22,6 +22,17 @@
             getValueOfVariable: function (variableName) {
                 return elicitation.get('variableScope')[variableName];
             },
+            setCustomVariable: function (variableName, value) {
+                var existingVariable = elicitation.get("variables").findBy("name", variableName);
+                if (existingVariable && existingVariable.get("widget")) {
+                    throw "Sorry, cannot override a variable defined by a widget, setCustomVariable() can only be used with new variable names";
+                }
+                
+                elicitation.get('customScriptingVariables').pushObject(Ember.Object.create({
+                    name: variableName,
+                    value: value
+                }));
+            },
             setWidgetLabel: function (widgetID, label) {
                 this.setWidgetProperty(widgetID, 'definition.label', label);
             },

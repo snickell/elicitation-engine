@@ -63,6 +63,7 @@
             // Now load the serialized elicitation from an XML string
             this.loadFromXML(this.get('elicitationDefinition'));
 
+            this.set('customScriptingVariables', Ember.ArrayController.create());
 
             if (resumeFromPriorSessionData) {
                 this.resumeFromPriorSessionData();
@@ -145,6 +146,7 @@
         saveMessage: null,
         widgetBeingEdited: null,
         markdownConverter: null, // set in ready()
+        customScriptingVariables: undefined,        
         closeWidgetBeingEditedOnEditModeChange: function () {
             this.set('widgetBeingEdited', null);
         }.observes('editMode'),
@@ -279,19 +281,26 @@
                     });
                 });
             }
+            
+            // merge in customScriptingVariables
+            var customScriptingVariables = this.get('customScriptingVariables');
+            customScriptingVariables.forEach(function (variable) {
+                variables.push(variable); 
+            });
+            
             return variables;
-        }.property('widgets.@each.definition.variables.@each'),
+        }.property('widgets.@each.definition.variables.@each', 'customScriptingVariables.@each'),
         variableScope: function () {
             var scope = {};
             this.get('variables').forEach(function (variable) {
               try {
                 scope[variable.get('name')] = variable.get('value');
               } catch (e) {
-                console.error("\tvariableScope(): error getting a variable", e);
+                console.error("\tvariableScope(): error getting a variable", variable, e);
               }
             });
             return scope;
-        }.property('variables', 'variables.@each.name', 'variables.@each.value'),
+        }.property('variables', 'variables.@each', 'variables.@each.name', 'variables.@each.value'),
         submitted: false,
         pendingSubmitDataRequest: null,
         submitData: function (finalSubmission) {
