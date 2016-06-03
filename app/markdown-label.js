@@ -54,8 +54,12 @@
                         variableSubstitutions.forEach(function (variable) {
                             //var variablePath = 'elicitation.variableScope.' + variable;
                             //var value = self.get(variablePath);
-                            
-                            var value = ElicitationUtils.evalInScope(variable, variableScope);
+                            var value = undefined;
+                            try {
+                                value = ElicitationUtils.evalInScope(variable, variableScope);   
+                            } catch (e) {
+                                // catch errors evaluating variable substitutions
+                            }
                             
                             var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
                             subtitutedVariable.html(String(value));
