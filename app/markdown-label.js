@@ -48,9 +48,9 @@
             var variableSubstitutions = this.get('variableSubstitutions');
             if (variableSubstitutions) {
                 self.addObserver("elicitation.variableScope", function () {
-                    var variableScope = self.get("elicitation.variableScope");
-                    
                     Ember.run.once(function () {
+                        var variableScope = self.get("elicitation.variableScope");
+                                            
                         variableSubstitutions.forEach(function (variable) {
                             //var variablePath = 'elicitation.variableScope.' + variable;
                             //var value = self.get(variablePath);
