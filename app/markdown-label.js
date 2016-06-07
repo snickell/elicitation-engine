@@ -61,6 +61,10 @@
                                 // catch errors evaluating variable substitutions
                             }
                             
+                            if (value === undefined || value === null) {
+                                value = variable;
+                            }
+                            
                             var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
                             subtitutedVariable.html(String(value));
                         });
