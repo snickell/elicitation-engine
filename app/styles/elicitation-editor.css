@@ -10,6 +10,11 @@
     margin-top: 2em;
 }
 
+.edit-mode .substituted-variable:before {
+  content: " {{" attr(variable) "}}";
+  font-family: monospace;
+}
+
 .custom-widgets .editor {
     background-color: rgba(255,255,255,0.2);
     border: 1px solid rgba(0,0,0,0.3);

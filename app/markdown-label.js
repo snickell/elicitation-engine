@@ -44,7 +44,6 @@
             // We have to get(elicitation.variableScope) at least once
             // or the observers below won't hook in and fire when it changes
             self.get("elicitation.variableScope");                
-            
             var variableSubstitutions = this.get('variableSubstitutions');
             if (variableSubstitutions) {
                 self.addObserver("elicitation.variableScope", function () {
@@ -59,10 +58,6 @@
                                 value = ElicitationUtils.evalInScope(variable, variableScope);   
                             } catch (e) {
                                 // catch errors evaluating variable substitutions
-                            }
-                            
-                            if (value === undefined || value === null) {
-                                value = variable;
                             }
                             
                             var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
