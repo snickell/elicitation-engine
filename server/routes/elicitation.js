@@ -149,7 +149,7 @@ module.exports = function (db, assetHelpers) {
     
     var SaveAsNewElicitation = req.body.SaveAsNewElicitation == "true";
     var SaveAsNewElicitationname = req.body.SaveAsNewElicitationName;    
-    console.warn("FIXME: elicitation.savedefinition.SaveAsNewElicitation is not implemented");    
+    console.warn("FIXME: elicitation.savedefinition.SaveAsNewElicitation is not implemented");
     if (SaveAsNewElicitation) {
       throw "SaveAsNewElicitation is not implemented";
       /* FIXME: TO IMPLEMENT:
@@ -160,6 +160,8 @@ module.exports = function (db, assetHelpers) {
                 db.SaveChanges();
             }
       */
+      // After implementing server side:
+      // To re-enable feature in client remove display=none in eat.hbs on "Save a Copy As" <li> item
     }
     
     dbHelper.authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res)

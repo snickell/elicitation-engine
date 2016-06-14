@@ -78,7 +78,7 @@
                 <div class="header">
                     Authoring Elicitation
                     {{#view ElicitationUtils.DropDownMenuView downArrowButton="true" placeholder="Qualify your answer"}}
-                        <li>
+                        <li style="display: none"><!-- disabled until nodejs rewrite bits support saveAs in elicitation.js -->
                             <a href="#" {{action "saveChangesAs" target="elicitation"}}>
                                 <span class="ui-icon ui-icon-disk"></span>
                                 Save a Copy As...
