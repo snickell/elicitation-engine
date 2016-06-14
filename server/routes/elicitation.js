@@ -162,11 +162,11 @@ module.exports = function (db, assetHelpers) {
       */
     }
     
-    console.warn("FIXME: validate moderator");
-    
-    dbHelper.authAndLoad(db, "Elicitation.SaveDefinition+", elicitationID, req, res)
-    .then( m =>
-      db.transaction(function (t) {
+    dbHelper.authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res)
+    .then(function (m) {
+      if (!m.isModOrAdmin) throw "Access denied, not a moderator or admin";
+      
+      return db.transaction(function (t) {
         return db.models.ElicitationDefinition.create({
           Definition: definitionText,
           ChangeSummary: changeSummary,
@@ -194,8 +194,8 @@ module.exports = function (db, assetHelpers) {
           }
           db.SaveChanges();
         */
-      })
-    ).then(function () {
+      });
+    }).then(function () {
       console.log("SaveDefinition succeeded!");
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(true));
@@ -381,7 +381,7 @@ module.exports = function (db, assetHelpers) {
       next(e);
     });
     
-  } 
+  }
   
   return router;
 }

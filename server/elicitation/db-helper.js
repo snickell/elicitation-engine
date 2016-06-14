@@ -86,17 +86,25 @@ module.exports = function (db) {
       ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
         .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
         .then(function (membership) {
-          if (membership == null && m.isAdmin) {
-            // Creating a virtual db.models.DiscussionMembership for admins, who should
-            // be given access to any elicitation
-            membership = {
-              Virtual: true,
-              Moderator: true,
-              ReadOnly: true
-            };
-          };
+          if (m.isAdmin) {
+            if (membership != null) {
+              // admins are always moderators
+              membership.Moderator = true;
+            } else {
+              // Creating a virtual db.models.DiscussionMembership for admins, who should
+              // be given access to any elicitation
+              membership = {
+                Virtual: true,
+                Moderator: true,
+                ReadOnly: true
+              };              
+            }
+          }
           
-          return extend(m, { membership: membership });
+          return extend(m, { 
+            membership: membership, 
+            isModOrAdmin: m.isAdmin || membership.Moderator 
+          });
         })
       : m
     )

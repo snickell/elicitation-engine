@@ -6,13 +6,12 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
   var elicitation = m.elicitation;
   var elicitationDefinition = m.elicitationDefinition;
   var discussion = m.discussion;
-  var isAdmin = m.isAdmin;
-  var isModerator = (membership != null) && membership.Moderator;
-
+  var allowEditing = m.isModOrAdmin;
+  
   if (membership != null)
       membership.LastAccessed = new Date();
 
-  var allowEditing = isAdmin || isModerator;
+
   var notTheLatestRevision =  false;
   var reviewMode = false;
   
