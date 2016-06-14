@@ -164,10 +164,8 @@ module.exports = function (db, assetHelpers) {
       // To re-enable feature in client remove display=none in eat.hbs on "Save a Copy As" <li> item
     }
     
-    dbHelper.authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res)
+    dbHelper.authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res, { requireModOrAdmin: true })
     .then(function (m) {
-      if (!m.isModOrAdmin) throw "Access denied, not a moderator or admin";
-      
       return db.transaction(function (t) {
         return db.models.ElicitationDefinition.create({
           Definition: definitionText,
@@ -363,7 +361,8 @@ module.exports = function (db, assetHelpers) {
 
         return dbHelper.authAndLoad(logName, elicitationID, req, res, { 
           includeElicitationDefinition: true,
-          includeDiscussion: true
+          includeDiscussion: true,
+          requireModOrAdmin: o.startEditing
         });        
       }
     }, options);

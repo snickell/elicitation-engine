@@ -66,6 +66,7 @@ module.exports = function (db) {
       {
         includeElicitationDefinition: false,
         includeDiscussion: false,
+        requireModOrAdmin: false
       }, options
     );
 
@@ -101,13 +102,17 @@ module.exports = function (db) {
             }
           }
           
-          return extend(m, { 
-            membership: membership, 
-            isModOrAdmin: m.isAdmin || membership.Moderator 
-          });
+          return extend(m, { membership: membership });
         })
       : m
     )
+    .then(function (m) {
+      var isModOrAdmin = m.isAdmin || (m.membership && m.membership.Moderator);
+      if (options.requireModOrAdmin && !isModOrAdmin) {
+        throw "You don't have moderator or admin privileges on this elicitation";
+      }
+      return extend(m, { isModOrAdmin: isModOrAdmin });
+    })
     .then(function (m) {
       // Discussion moderators or site admins can access even if they aren't assigned
       if (m.assignment != null || m.membership && (m.membership.Moderator || m.membership.Moderator)) {
