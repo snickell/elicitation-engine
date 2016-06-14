@@ -13,7 +13,9 @@ Promise.longStackTraces();
 var extend = require('extend');
 
 module.exports = function (db, assetHelpers) {
-
+  var dbHelper = require('../elicitation/db-helper')(db);
+  var addLogEntry = dbHelper.addLogEntry;
+  
   router.get('/run/:id/:humanreadable?', function (req, res, next) {
     var resumePriorSessionData = req.query.resumePriorSessionData !== "false";
     var embedded = req.query.embedded === "true";
@@ -74,7 +76,7 @@ module.exports = function (db, assetHelpers) {
     elicit(req, res, next, "Elicitation.Edit+", {
       loadModels: function (req, res, logName) {
         var reviewToken = req.params.reviewtoken;
-        return loadReviewModels(reviewToken);
+        return dbHelper.loadReviewModels(reviewToken);
       },
       modifyViewModel: function (viewModel) {
 
@@ -162,7 +164,7 @@ module.exports = function (db, assetHelpers) {
     
     console.warn("FIXME: validate moderator");
     
-    authAndLoad("Elicitation.SaveDefinition+", elicitationID, req, res)
+    dbHelper.authAndLoad(db, "Elicitation.SaveDefinition+", elicitationID, req, res)
     .then( m =>
       db.transaction(function (t) {
         return db.models.ElicitationDefinition.create({
@@ -216,7 +218,7 @@ module.exports = function (db, assetHelpers) {
     
     var now = Date.now();
     
-    authAndLoad("Elicitation.SaveData+", elicitationID, req, res)
+    dbHelper.authAndLoad("Elicitation.SaveData+", elicitationID, req, res)
     .then(function (m) {
       var elicitation = m.elicitation;
       var assignment = m.assignment;
@@ -330,29 +332,6 @@ module.exports = function (db, assetHelpers) {
       res.send(JSON.stringify(true));      
     });
   });
-
-  function addLogEntry(req, eventType, text, personID, discussionID) {
-    var requestArgs = JSON.stringify({
-      ua: req.headers['user-agent'],
-      queryArgs: req.query,
-      postArgs: req.body
-    });
-    
-    if (discussionID) {
-      return db.models.LogEntry.create({
-        InternalEvent: false,
-        Person_ID: personID,
-        Discussion_ID: discussionID,
-        PageInstance: null,
-        Date: Date.now(),
-        EventType: eventType,
-        Text: text,
-        RequestArgs: requestArgs
-      });      
-    } else {
-      return Promise.resolve();
-    }
-  }
   
   function throwIfNull(x) {
     if (x === null) {
@@ -371,98 +350,6 @@ module.exports = function (db, assetHelpers) {
     });
   }
 
-  function loadReviewModels(reviewToken) {
-    return db.ready
-    .then( () =>
-      Promise.props({
-        elicitation: db.getElicitationForReview(reviewToken)
-      })
-    )
-    .then(loadElicitationDefinition)
-    .then(loadDiscussion);
-  }
-  
-  function loadElicitationDefinition(m) {
-    return db.models.ElicitationDefinition.findById(m.elicitation.ElicitationDefinition_ID)
-    .then(throwIfNull)    
-    .then( definition => extend(m, {
-      elicitationDefinition: definition
-    }));
-  }
-  
-  function loadDiscussion(m) {
-    return db.models.Discussion.findById(m.elicitation.Discussion_ID)    
-    .then(throwIfNull)    
-    .then( discussion => extend(m, {
-      discussion: discussion
-    }));
-  }
-  
-  function authAndLoad(logEventName, elicitationID, req, res, options) {
-    options = extend(
-      {
-        includeElicitationDefinition: false,
-        includeDiscussion: false,
-      }, options
-    );
-    
-    return db.ready
-    .then( () =>
-      authenticateAccessTo(elicitationID, req, res)
-    )
-    .then(personID =>
-      Promise.props({
-        elicitation: db.getElicitation(elicitationID).then(throwIfNull),
-        assignment: db.getElicitationAssignment(elicitationID, personID), // assignment can be null for admins/mods
-        person: db.models.Person.findById(personID).then(throwIfNull)
-      })
-    )
-    .then((m) =>
-      m.elicitation.Discussion_ID
-      ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
-        .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
-        .then(function (membership) {
-          if (membership != null) {
-            return membership;
-          } else {
-            return db.isAdmin(m.person.ID).then(function (isAdmin) {
-              if (isAdmin) {
-                // Creating a virtual db.models.DiscussionMembership for admins, who should
-                // be given access to any elicitation
-                return {
-                  Virtual: true,
-                  Moderator: true,
-                  ReadOnly: true
-                }
-              } else {
-                return null; // no membership found, can happen with open access elicitations
-              }
-            });
-          }
-        })
-        .then( membership => extend(m, { membership: membership }) )
-      : m
-    )
-    .then(function (m) {
-      // Discussion moderators or site admins can access even if they aren't assigned
-      if (m.assignment != null || m.membership && (m.membership.Moderator || m.membership.Moderator)) {
-        return m;
-      } else {
-        throw "This elicitation has not been assigned to you";
-      }
-    })    
-    .then((m) =>
-      options.includeElicitationDefinition
-      ? loadElicitationDefinition(m)
-      : m
-    )
-    .then((m) =>
-      options.includeDiscussion && m.elicitation.Discussion_ID
-      ? loadDiscussion(m)
-      : m
-    );
-  }  
-
   function elicit(req, res, next, logName, options) {
     var o = extend({
       startEditing: false,
@@ -472,7 +359,7 @@ module.exports = function (db, assetHelpers) {
         var elicitationID = parseInt(req.params.id);
         console.log(logName + "(" + elicitationID + ")");
 
-        return authAndLoad(logName, elicitationID, req, res, { 
+        return dbHelper.authAndLoad(logName, elicitationID, req, res, { 
           includeElicitationDefinition: true,
           includeDiscussion: true
         });        
