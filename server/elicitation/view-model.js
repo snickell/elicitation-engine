@@ -6,13 +6,13 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
   var elicitation = m.elicitation;
   var elicitationDefinition = m.elicitationDefinition;
   var discussion = m.discussion;
+  var isAdmin = m.isAdmin;
+  var isModerator = (membership != null) && membership.Moderator;
 
   if (membership != null)
       membership.LastAccessed = new Date();
 
-
-  console.warn("FIXME not implemented: DiscussionMembership.AllowModerator needs to check this.Person.IsAdministrator too!");
-  var allowEditing = membership != null ? membership.Moderator : false;
+  var allowEditing = isAdmin || isModerator;
   var notTheLatestRevision =  false;
   var reviewMode = false;
   

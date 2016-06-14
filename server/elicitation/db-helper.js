@@ -80,30 +80,24 @@ module.exports = function (db) {
         person: db.models.Person.findById(personID).then(throwIfNull)
       })
     )
+    .then((m) => db.isAdmin(m.person.ID).then(isAdmin => extend(m, { isAdmin: isAdmin })))
     .then((m) =>
       m.elicitation.Discussion_ID
       ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
         .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
         .then(function (membership) {
-          if (membership != null) {
-            return membership;
-          } else {
-            return db.isAdmin(m.person.ID).then(function (isAdmin) {
-              if (isAdmin) {
-                // Creating a virtual db.models.DiscussionMembership for admins, who should
-                // be given access to any elicitation
-                return {
-                  Virtual: true,
-                  Moderator: true,
-                  ReadOnly: true
-                }
-              } else {
-                return null; // no membership found, can happen with open access elicitations
-              }
-            });
-          }
+          if (membership == null && m.isAdmin) {
+            // Creating a virtual db.models.DiscussionMembership for admins, who should
+            // be given access to any elicitation
+            membership = {
+              Virtual: true,
+              Moderator: true,
+              ReadOnly: true
+            };
+          };
+          
+          return extend(m, { membership: membership });
         })
-        .then( membership => extend(m, { membership: membership }) )
       : m
     )
     .then(function (m) {
