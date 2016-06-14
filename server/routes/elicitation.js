@@ -384,5 +384,8 @@ module.exports = function (db, assetHelpers) {
     
   }
   
+  var priorData = require('./moderator/prior-data')(db, assetHelpers);
+  router.use('/moderator/prior-data', priorData);  
+  
   return router;
 }

@@ -533,7 +533,12 @@ module.exports = function(sequelize, DataTypes) {
       LastBrowserUserAgent: {
         type: DataTypes.TEXT(),
         allowNull: true
-      }
+      },
+      /*
+      VariablePresets: {
+        type: DataTypes.TEXT(),
+        allowNull: true
+      } */     
     }, {
       freezeTableName: true,
       createdAt: false,
