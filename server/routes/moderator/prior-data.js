@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
+
 var authenticateAccessTo = require('../../elicitation/auth');
+var handlebarsHelpers = require('../../utils/handlebars-helpers');
 
 var busboy = require('connect-busboy');
 var busboyMiddle = busboy();
@@ -30,7 +32,10 @@ module.exports = function (db, assetHelpers) {
           priorDatas: assignments.map(a => ({
               personID: a.Person_ID, 
               priorData: a.PriorData || "no prior data"
-          }))
+          })),
+          layout: "moderator-page",
+          helpers: handlebarsHelpers(assetHelpers),
+          title: "Prior Data"          
         };
         
         return res.render('moderator/prior-data', viewModel);        

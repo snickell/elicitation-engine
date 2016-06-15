@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{{title}}</title>
+    <meta charset="utf-8" />
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt:400,700' rel='stylesheet' type='text/css' />
+    <link rel="SHORTCUT ICON" href="/Content/favicon.ico" /> <!-- FIXME: point at elicitation-engine specific favico -->
+    {{css "assets/moderator-page.css"}}
+    {{js "assets/site.js"}}  
+	</head>
+  
+  
+  <body class="category {{category}}">
+      
+      {{Sections.TopOfPage}}
+
+      <table id="page" cellpadding="0" cellspacing="0">
+  	    <tr valign="top">
+  		    <td>
+  			    <a href="/">
+              
+              <img id="logo" width=183 height=65 src="{{assetPath "images/nz-logo.png"}}"/></a>
+
+  		    </td><td class="sidebar">
+            {{> logged-in-person}}
+  		    </td>
+              </tr><tr valign="top">
+  	            <td>
+                      {{#if Sections.DiscussionHeader}}
+                          <div id="simple-header" class="title-font simple-header-font">
+                            {{Sections.DiscussionHeader}}
+  	                    </div>
+                      {{else if Sections.Header}}
+                          {{Sections.Header}}
+                      {{else}}
+                          <div id="simple-header" class="title-font simple-header-font">
+                              {{title}}
+  	                    </div>
+                      {{/if}}
+  	            </td><td class="sidebar">
+                  {{Sections.Sidebar}}
+  	            </td>
+              </tr><tr valign="top">
+  	            <td>
+
+                  <div id="pagebox">
+                      <div id="page-content">
+{{{body}}}
+                      </div>
+                      <div id="pagebox-footer">
+                        <!--
+                          @if (ViewBag.Discussion != null && (ViewBag.HideDiscussionLink == null || !ViewBag.HideDiscussionLink) ) {
+                              <span id="return-to-discussion">
+                                  @Html.ActionLink("Return to Discussion", "Index", "Discussion", new { ID = ViewBag.Discussion.ID }, null)
+                              </span>
+                          }
+                          -->
+                          {{Sections.FooterLinks}}
+
+                          <div id="action-buttons">
+                            {{Sections.ActionButtions}}
+                          </div>
+                      </div>
+                  </div>
+               
+  	            </td><td>
+  	            </td>
+              </tr>
+              {{#if Sections.BelowPageBox}}
+                  <tr><td id="below-pagebox">{{Sections.BelowPageBox}}</td><td></td></tr>
+              {{/if}}
+      </table>
+
+      <div id="errorLog"></div>
+
+      <div id="templates">
+        {{Sections.Templates}}
+      </div>
+
+      {{Sections.BottomOfPage}}
+    
+	</body>
+</html>

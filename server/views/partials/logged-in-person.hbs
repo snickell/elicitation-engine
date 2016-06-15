@@ -1,0 +1,22 @@
+{{#if LoggedInPerson}}
+    {{#if LoggedInPerson.Virtual}}
+	    <img id="expert-view-tag" width=131 height=36 src="@Url.Content("~/Content/images/public-view-tag.png")"/><br/>
+    {{else}}
+	    <img id="expert-view-tag" width=131 height=36 src="@Url.Content("~/Content/images/expert-view-tag.png")"/><br/>
+    
+	    <div id="header">
+		    Welcome, <span class="dark">{{LoggedInPerson.name}}</span><br/>
+		    <div>
+          <!--
+                @Html.ActionLink("Account", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Settings" }) 
+                //
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display: inline; " })) {
+                    @Html.AntiForgeryToken()
+                        <a href="javascript:document.getElementById('logoutForm').submit()">Sign Out</a>
+                }
+            -->
+            </div>
+
+	    </div>
+  {{/if}}
+{{/if}}

@@ -26,7 +26,8 @@ var viewsDir = __dirname + "/server/views";
 var expressHandlebars = exphbs.create({
   defaultLayout: "main",
   extname: ".hbs",
-  layoutsDir: viewsDir + "/layouts"
+  layoutsDir: viewsDir + "/layouts",
+  partialsDir: viewsDir + "/partials"
 });
 
 var connectAssetsHelpers = {};
