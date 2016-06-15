@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var authenticateAccessTo = require('../../elicitation/auth');
 
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
-
 var busboy = require('connect-busboy');
 var busboyMiddle = busboy();
 var fastCSV = require('fast-csv');
