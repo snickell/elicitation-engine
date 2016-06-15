@@ -72,7 +72,6 @@
                 var priorData = JSON.parse(this.get('priorDataRaw'));
                 for (var key in priorData) {
                     if (priorData.hasOwnProperty(key)) {
-                        console.log("Adding ", key);
                         customScriptingVariables.pushObject(Ember.Object.create({
                             name: key,
                             value: priorData[key]
