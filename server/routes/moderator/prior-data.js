@@ -90,6 +90,7 @@ module.exports = function (db, assetHelpers) {
     })    
   }
 
+
   router.post('/:id', busboyMiddle, function (req, res, next) {
     var elicitationID = parseInt(req.params.id);
         
@@ -100,7 +101,7 @@ module.exports = function (db, assetHelpers) {
           if (fieldname == "csv") {
             var priorDatas = [];
             file
-              .pipe(fastCSV({headers: true}))
+              .pipe(fastCSV({headers: true, trim: true}))
               .on('data', data => priorDatas.push(data))
               .on('end', function () {
                 console.log("rows of the csv: ", priorDatas);
@@ -129,6 +130,20 @@ module.exports = function (db, assetHelpers) {
       next(e);
     });    
   });
+  
+  /* Writing to a string using fastCSV */
+  /*
+      fastCSV.writeToString(
+          [
+              {a: "a1", b: "b1"},
+              {a: "a2", b: "b2"}
+          ],
+          {headers: true},
+          function(err, data){
+              console.log(data); //"a,b\na1,b1\na2,b2\n"
+          }
+      );
+  */
   
   return router;
 }
