@@ -1,15 +1,45 @@
 <form method="post" enctype="multipart/form-data" method="post">
-  <label>Upload prior data csv: <input type="file" name="csv"/></label>
+  
+  <div id="checkboxes" class="editor-field" style="background-color: #eee; padding: 10px; border:1px solid #19b4eb; border-radius: 4px">  
+    <h2><label>Select a prior data CSV file to upload:<br/> <input type="file" name="csv"/></label></h2>
 
-      <div id="action-buttons">
-          <input type="submit" value="Upload Prior Data CSV" />
-      </div>    
+          <input type="submit" style="font-size: 175%; float: right" value="Upload Prior Data CSV" />
+
+  </div>
+
 </form>
-<h2>Current Prior Data</h2>
-<ul>
-  {{#each priorDatas}}
-    <li>personID={{personID}}: {{priorData}}
-  {{else}}
-    <li>No prior data defined yet.</li>
-  {{/each}}
-</ul>
+
+<br/>&nbsp;<br/>
+
+<div style="font-size: 90%">
+  <h2>What is Prior Data?</h2>
+  <p>Prior data lets you preload elicitation variables with per-person data of your choosing. These elicitation variables can then be referenced inside the elicitation using custom scripting, or substituted directly into widget labels using the appropriate markdown variable substitution syntax (see nz wiki for more detail). For example, prior data could be each person's responses to questions from a previous elicitation, and you could prompt them to explain why their changed their answers this year.</p>
+  <h3>CSV Format</h3>
+  <ol>
+    <li>Each row is the data for a particular person</li>
+    <li>Each column is an elicitation variable you can reference from custom scripting, or in widget labels
+    <li>You must include a "header row" (first row) in the CSV file to define your variable names</li>
+    <li>One of the columns/variables must be named "personID", so we know which person you're talking about. personID is an integer, which identifies the person in the NZ system, and can be found in Discussion->Edit Membership->Check "DB IDs" box to show personID.</li>
+    <li>Since the header labels are variable names, they shouldn't have spaces, punctuation, etc.</li>
+    <li>Its easy to export CSV files from a spreadsheet</li>
+  </ol>
+  
+  <h3>Example CSV File:</h3>
+  <pre>
+personID,FavoriteEnergyBar,LowestCostEstimate,TheirName
+1,Cliff Bar,$1.25,Steve Davis
+2,Wunder Bar,$34.80,Seth Nickell
+138,Butterfinger,$199.20,George Lucas
+381,Cliff Bar,$19.25,Karen Fries
+  </pre>
+
+  <h3>Currently Defined Prior Data</h3>
+  <ul>
+    {{#each priorDatas}}
+      <li>personID={{personID}}: {{priorData}}
+    {{else}}
+      <li>No prior data defined yet.</li>
+    {{/each}}
+  </ul>
+  <i>Note: this will all be overwritten if you upload another CSV</i>
+</div>
