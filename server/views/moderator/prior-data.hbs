@@ -1,23 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Prior Data</title>
-</head>
-<body>
-  <form method="post" enctype="multipart/form-data" method="post">
-    <label>Upload prior data csv: <input type="file" name="csv"/></label>
+<form method="post" enctype="multipart/form-data" method="post">
+  <label>Upload prior data csv: <input type="file" name="csv"/></label>
 
-        <div id="action-buttons">
-            <input type="submit" value="Upload Prior Data CSV" />
-        </div>    
-  </form>
-  <h2>Current Prior Data</h2>
-  <ul>
-    {{#each priorDatas}}
-      <li>personID={{personID}}: {{priorData}}
-    {{else}}
-      <li>No prior data defined yet.</li>
-    {{/each}}
-  </ul>
-</body>
+      <div id="action-buttons">
+          <input type="submit" value="Upload Prior Data CSV" />
+      </div>    
+</form>
+<h2>Current Prior Data</h2>
+<ul>
+  {{#each priorDatas}}
+    <li>personID={{personID}}: {{priorData}}
+  {{else}}
+    <li>No prior data defined yet.</li>
+  {{/each}}
+</ul>
