@@ -35,7 +35,7 @@ module.exports = function (db, assetHelpers) {
           })),
           layout: "moderator-page",
           helpers: handlebarsHelpers(assetHelpers),
-          title: "Prior Data"          
+          title: "Prior Data"        
         };
         
         return res.render('moderator/prior-data', viewModel);        
