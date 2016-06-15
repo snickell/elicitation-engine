@@ -5,7 +5,8 @@
         /* BEGIN: initialization properties: These properties should probably be initialized or bound upon creation */
         elicitationDefinition: null, // bind this to a string to load the elicitation definition XML
         priorSessionData: null, // serialized data from a previous session of eliciting
-
+        priorDataRaw: null, // elicitation author defined per-person data, will be bound into variables
+      
         resumedFromPriorSessionData: false,
         resumedStartingOnPageNum: null,
 
@@ -62,9 +63,26 @@
 
             // Now load the serialized elicitation from an XML string
             this.loadFromXML(this.get('elicitationDefinition'));
-
-            this.set('customScriptingVariables', Ember.ArrayController.create());
-
+            
+            var customScriptingVariables = Ember.ArrayController.create();
+            this.set('customScriptingVariables', customScriptingVariables);
+            
+            // parse priorDataRaw into custom scripting variables
+            try {
+                var priorData = JSON.parse(this.get('priorDataRaw'));
+                for (var key in priorData) {
+                    if (priorData.hasOwnProperty(key)) {
+                        console.log("Adding ", key);
+                        customScriptingVariables.pushObject(Ember.Object.create({
+                            name: key,
+                            value: priorData[key]
+                        }));
+                    }
+                }
+            } catch (e) {
+              console.error("Couldn't parse priorData: ", e);
+            };            
+            
             if (resumeFromPriorSessionData) {
                 this.resumeFromPriorSessionData();
             }

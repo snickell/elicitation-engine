@@ -31,13 +31,16 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
 
   var isMobileDevice = false; // FIXME: HttpContext.Request.Browser.IsMobileDevice,
   console.error("FIXME isMobileDevice=false");
+  
+  var priorData = m.assignment ? m.assignment.PriorData : null;
 
   return Promise.resolve({
 
       // @Html.Raw()
       elicitationDefinition: elicitationDefinition.Definition,
       elicitationPriorSessionData: null,
-
+      elicitationPriorData: priorData,
+    
       /* ETC ETC */
       nzCategory: NZCategory.toLowerCase(),
       isMobileDevice: isMobileDevice,

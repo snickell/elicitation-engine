@@ -20,11 +20,22 @@ module.exports = function (db, assetHelpers) {
     
     dbHelper.authAndLoad("priorData", elicitationID, req, res, { requireModOrAdmin: true })
     .then(function (m) {
-      var viewModel = {
-        iAmThe: "Walrus"
-      };
+      return db.models.TaskAssignment.findAll({ 
+        where: {
+            Task_ID: elicitationID,
+            Discriminator: 'ElicitationAssignment'
+        }
+      }).then(function (assignments) {
+        var viewModel = {
+          priorDatas: assignments.map(a => ({
+              personID: a.Person_ID, 
+              priorData: a.PriorData || "no prior data"
+          }))
+        };
+        
+        return res.render('moderator/prior-data', viewModel);        
+      })
       
-      return res.render('moderator/prior-data', viewModel);
     })
     .catch(authenticateAccessTo.RedirectToLoginError, 
       redirect => res.redirect(redirect.url)
@@ -47,9 +58,11 @@ module.exports = function (db, assetHelpers) {
           transaction: t,
         }
       ).then(function () {
-        return Promise.all(
-          priorDatas.map(function (priorData) {
-            console.log("saving preset: ", priorData);
+        console.log("Blanked existing priorDatas");
+        var p = Promise.resolve();
+        priorDatas.forEach(function (priorData) {
+          p = p.then(function () {
+            console.log("saving priordata: ", priorData);            
             return db.models.TaskAssignment.update(
               { PriorData: JSON.stringify(priorData) },
               {
@@ -60,9 +73,12 @@ module.exports = function (db, assetHelpers) {
                 },
                 transaction: t,
               }
-            );
-          })                      
-        );
+            ).catch(function (e) {
+              console.log("Error trying to update one of the priordatas", e);
+            });
+          });          
+        });
+        return p;
       }).then(function () {
         console.log("All rows updated!!!");
       });

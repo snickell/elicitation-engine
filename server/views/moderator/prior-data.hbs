@@ -10,5 +10,12 @@
     <label>Upload prior data csv: <input type="file" name="csv"/></label>
     <input type="submit"/>
   </form>
-  <p>I am the {{iAmThe}}.</p>
+  <h2>Current Prior Data</h2>
+  <ul>
+    {{#each priorDatas}}
+      <li>personID={{personID}}: {{priorData}}
+    {{else}}
+      <li>No prior data defined yet.</li>
+    {{/each}}
+  </ul>
 </body>

@@ -58,6 +58,7 @@
 						$.extend(ELICITATION_SETTINGS, {
 							elicitationDefinition: $("script[type='text/x-elicitation-definition']").html(),
 							priorSessionData: $("script[type='text/x-elicitation-prior-session-data']").html(),
+							priorDataRaw: $("script[type='text/x-elicitation-prior-data']").html(),              
 							switchToEditModeAfterLoading: window.ELICITATION_SETTINGS.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
 						})
 					);
@@ -112,5 +113,8 @@
 		{{#if elicitationPriorSessionData}}
 			<script type="text/x-elicitation-prior-session-data">{{{elicitationPriorSessionData}}}</script>
 		{{/if}}
+		{{#if elicitationPriorData}}
+			<script type="text/x-elicitation-prior-data">{{{elicitationPriorData}}}</script>
+		{{/if}}    
 </body>
 </html>
