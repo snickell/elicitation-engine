@@ -83,7 +83,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
           changeHistoryAdminURL: allowEditing ? Url.Action(baseURL, "ChangeHistory", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           saveDefinitionURL: allowEditing ? Url.Action(baseURL, "SaveDefinition", "Elicitation", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           uploadImageURL: allowEditing ? Url.Action(baseURL, "CreateImageInElicitation", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
-          
+          priorDataURL: allowEditing ? Url.Action(baseURL, "Prior-Data", "ElicitationModerator", { id: elicitation.ID }) : null,
           personID: personID,
 
       }

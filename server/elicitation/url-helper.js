@@ -8,6 +8,8 @@ module.exports = {
         } else {
           return baseURL + "/" + method + "/" + params.id; 
         }
+      } else if (controller ==="ElicitationModerator") {
+        return baseURL + "/moderator/" + method + "/" + params.id;
       } else if (controller ==="ElicitationAdmin") {
         return baseURL + "/admin/" + method + "/" + params.id + "/" + params.DiscussionName;
       } else if (controller === "Task") {
