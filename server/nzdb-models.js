@@ -534,11 +534,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.TEXT(),
         allowNull: true
       },
-      /*
-      VariablePresets: {
+      PriorData: {
         type: DataTypes.TEXT(),
         allowNull: true
-      } */     
+      }
     }, {
       freezeTableName: true,
       createdAt: false,

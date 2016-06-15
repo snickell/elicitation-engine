@@ -38,10 +38,10 @@ module.exports = function (db, assetHelpers) {
   });
 
 
-  function updateVariablePresets(elicitationID, presets) {
+  function updatePriorData(elicitationID, priorDatas) {
     return db.transaction(function (t) {
       return db.models.TaskAssignment.update(
-        { VariablePresets: null },
+        { PriorData: null },
         {
           where: {
             Task_ID: elicitationID,
@@ -51,14 +51,14 @@ module.exports = function (db, assetHelpers) {
         }
       ).then(function () {
         return Promise.all(
-          presets.map(function (preset) {
-            console.log("saving preset: ", preset);
+          priorDatas.map(function (priorData) {
+            console.log("saving preset: ", priorData);
             return db.models.TaskAssignment.update(
-              { VariablePresets: JSON.stringify(preset) },
+              { PriorData: JSON.stringify(priorData) },
               {
                 where: {
                   Task_ID: elicitationID,
-                  Person_ID: preset.personID,
+                  Person_ID: priorData.personID,
                   Discriminator: 'ElicitationAssignment'
                 },
                 transaction: t,
@@ -80,25 +80,26 @@ module.exports = function (db, assetHelpers) {
       req.pipe(req.busboy)
         .on('file', function(fieldname, file, filename, encoding, mimetype) {
           if (fieldname == "csv") {
-            var rows = [];
+            var priorDatas = [];
             file
               .pipe(fastCSV({headers: true}))
-              .on('data', data => rows.push(data))
+              .on('data', data => priorDatas.push(data))
               .on('end', function () {
-                console.log("rows of the csv: ", rows);
+                console.log("rows of the csv: ", priorDatas);
                 
               
                 // FIXME: ok, now we have a bunch of row objects like...
                 // [ { personID: '2', ' boo': ' i am the walrus', ' bam': ' banana' },  { personID: '5', ' boo': ' nada', ' bam': ' niente' } ]
                 // 
 
+                // 0) debug updateVariablePresets
                 // 1) Implement TaskAssignment.VariablePresets in C# and migrate DB
                 // 2) Uncomment server/nzdb-models/TaskAssignment.VariablePresets
                 // 3) set priordata in elicitation-backend-layout.hbs
-                // 4) bind to customScriptingVariables in app           
+                // 4) bind to customScriptingVariables in app 
                               
               
-                updateVariablePresets(elicitationID, rows)
+                updatePriorData(elicitationID, priorDatas)
                 .then(function () {
                   res.redirect("back")
                 });
