@@ -13,6 +13,7 @@
 .edit-mode .substituted-variable:before {
   content: " {{" attr(variable) "}}";
   font-family: monospace;
+  color: #19b4eb;
 }
 
 .custom-widgets .editor {
