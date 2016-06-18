@@ -10,10 +10,11 @@
     margin-top: 2em;
 }
 
-.edit-mode .substituted-variable:before {
-  content: " {{" attr(variable) "}}";
+.edit-mode .substituted-variable:after {
+  content: "{{" attr(variable) "}}";
   font-family: monospace;
   color: #19b4eb;
+  vertical-align: text-bottom;
 }
 
 .custom-widgets .editor {
@@ -301,7 +302,7 @@
 
 
 .phrase-definitions-view:hover .box-body {
-    max-height: 10px;
+    max-height: 0px;
 }
 
 .phrase-definitions-view .box-body.show-body {
