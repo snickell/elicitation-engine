@@ -392,7 +392,11 @@
             }
         }.property('elicitation.serializedData', 'widget.dataKey', 'property'),
         watchValue: function () {
-            console.log("Variable ", this.get('name'), "=", this.get('value'));
+            // FIXME: do we really need to do this fetch? probably was working around an
+            // ember bug, forcing value to compute because deeper observers weren't working
+            // ... might not be relevant anymore? needs testing.
+            var value = this.get('value');
+            //console.log("Variable ", this.get('name'), "=", value);
         }.observes('value')
     });
 
