@@ -67,7 +67,7 @@
                               // preconvert to a string themselves
                               value = value.toPrecision(3);
                             } else {
-                              value = value.toString();
+                              value = String(value);
                             }
                             subtitutedVariable.html(value);
                         });
