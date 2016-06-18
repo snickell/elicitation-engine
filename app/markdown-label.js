@@ -61,7 +61,15 @@
                             }
                             
                             var subtitutedVariable = self.$(".substituted-variable").filter("[variable='" + variable + "']");
-                            subtitutedVariable.html(String(value));
+                            if (typeof value === "number" && (value !== parseInt(value, 10))) {
+                              // its a float, lets truncate it for sanity
+                              // if somebody really wants more preicison, they can
+                              // preconvert to a string themselves
+                              value = value.toPrecision(3);
+                            } else {
+                              value = value.toString();
+                            }
+                            subtitutedVariable.html(value);
                         });
                     });                    
                 });
