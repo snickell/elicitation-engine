@@ -324,10 +324,12 @@
         submitted: false,
         pendingSubmitDataRequest: null,
         submitData: function (finalSubmission) {
-            console.log("Trying to submit data...");
             var data = this.get('serializedData');
+            window.debug.lastSubmitData = data;
+            
+            if (finalSubmission)
+              console.log("submitData(): ", data);
 
-            console.log("Submitting", data);
 
             var email = this.get('email');
             var dataToSubmit = [
@@ -360,7 +362,9 @@
             var url = this.get('saveDataURL');
             if (url == undefined) url = '/';
 
-            console.log("Sending: ", json);
+            if (finalSubmission)
+              console.log(json);
+            window.debug.lastSubmitJSON = json;
 
             var elicitation = this;
             pendingSubmitDataRequest = jQuery.post(url, dataToSubmit, function (data, textStatus, jqXHR) {
@@ -388,7 +392,11 @@
                 window.debug.ErrorThrown = errorThrown;
                 window.debug.ResponseText = jqXHR.responseText;
 
-                console.error("ERROR in submitData: ", debugErrorThrown, "Response Text:\n", debugResponseText);
+                console.error("submitData(): ERROR submitting data");
+                console.warn("window.debug.lastSubmitData = ", window.debug.lastSubmitData);
+                console.warn("window.debug.lastSubmitJSON: ");
+                console.warn(window.debug.lastSubmitJSON);
+                console.error("Error was: ", debug.ErrorThrown, "Response Text:\n", debug.ResponseText);
 
                 elicitation.set('errorSubmittingToServer', true);
 
