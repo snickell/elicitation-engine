@@ -215,7 +215,7 @@
 
             if (Ember.isNone(changeSummary)) return;
 
-            console.log("saveChanges(), saving: ", serialized);
+            // console.log("saveChanges(), saving: ", serialized);
 
             var dataToSubmit = {
                 ElicitationDefinition: serialized,
@@ -257,7 +257,10 @@
 
                 alert("Error saving elicitation, is your internet still connected? Please try to save again.\n\n\t" + jqXHR.responseText);
                 self.set('saveMessage', "Problem saving!");
-                console.log("Error saving elicitation data:", jqXHR.responseText);
+                console.error("elicitation.saveChanges(), window.debug.definition=");
+                window.debug.definition = serialized;                
+                console.warn(window.debug.definition);
+                console.error("Error was:", jqXHR.responseText);
             }).always(function () {
                 self.set('saveInProgress', false);
             });
