@@ -12,6 +12,7 @@
 
         embedded: false,
         allowEditing: false,
+        editorWithoutAssignment: false, // if true, can edit, but can't submit responses
         switchToEditModeAfterLoading: false, // this property is a bad hack, but something goes wrong if we default to editMode: true
         switchToReviewModeAfterLoading: false,
 
@@ -37,6 +38,7 @@
         completePageIncludeLinkToDiscussion: null,
 
         personID: null,
+      
 
         /* END: initialization properties */
 
@@ -365,6 +367,11 @@
             if (finalSubmission)
               console.log(json);
             window.debug.lastSubmitJSON = json;
+            
+            if (this.get('editorWithoutAssignment')) {
+                console.warn("submitData(): moderator/admin without assignment, not submitting. see window.debug.lastSubmitJSON");
+                return;
+            }
 
             var elicitation = this;
             pendingSubmitDataRequest = jQuery.post(url, dataToSubmit, function (data, textStatus, jqXHR) {

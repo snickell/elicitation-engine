@@ -7,6 +7,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
   var elicitationDefinition = m.elicitationDefinition;
   var discussion = m.discussion;
   var allowEditing = m.isModOrAdmin;
+  var assignment = m.assignment;
   
   if (membership != null)
       membership.LastAccessed = new Date();
@@ -32,7 +33,9 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
   var isMobileDevice = false; // FIXME: HttpContext.Request.Browser.IsMobileDevice,
   console.error("FIXME isMobileDevice=false");
   
-  var priorData = m.assignment ? m.assignment.PriorData : null;
+  var editorWithoutAssignment = m.isModOrAdmin && !assignment;
+  
+  var priorData = assignment ? assignment.PriorData : null;
 
   return Promise.resolve({
 
@@ -58,6 +61,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
           elicitationDefinitionID: elicitationDefinition.ID,
 
           allowEditing: allowEditing,
+          editorWithoutAssignment: editorWithoutAssignment,
           switchToEditModeAfterLoading: startEditing,
           switchToReviewModeAfterLoading: reviewMode,
 
