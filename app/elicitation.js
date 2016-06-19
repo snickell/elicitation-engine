@@ -370,7 +370,12 @@
             
             if (this.get('editorWithoutAssignment')) {
                 console.warn("submitData(): moderator/admin without assignment, not submitting. see window.debug.lastSubmitJSON");
-                return;
+                
+                if (finalSubmission) {
+                    alert("As an admin/moderator you can edit this elicitation.\n\nBut you haven't assigned it to yourself, so you can't submit data responses to the server (yet).\n\nIf you want to test data submission, first assign the elicitation to yourself, then try submitting again.");
+                } else {
+                    return; // silently surpress non-final submissions if we don't have an assignment, but we ARE an admin
+                }
             }
 
             var elicitation = this;

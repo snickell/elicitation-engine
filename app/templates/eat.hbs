@@ -240,15 +240,6 @@
 
                 {{view EAT.PagesView}}
 
-                <div id="yo">
-                {{#if elicitation.editorWithoutAssignment}}
-                    <div class="error-submitting-to-server">
-                        <div class="header">As an admin/moderator you can edit this elicitation</div>
-                        If you want to submit data responses (e.g. for testing), first assign this elicitation to yourself.
-                    </div>
-                {{/if}}
-                </div>
-
                 {{#if elicitation.errorSubmittingToServer}}
                     <div class="error-submitting-to-server">
                         <div class="header">
