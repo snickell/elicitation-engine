@@ -502,10 +502,6 @@
         statePathsToSkip: function () {
             return this._super().concat(['data.table.cols', 'data.table.locked', 'data.table.allocated', 'data.totalAllocation', 'data.allocated'])
         },
-        scaleToTotal: function () {
-            var value = this.get('data.totalAllocation');
-            this.set('data.table.allocatedString', value);
-        },
         showRowSums: function () {
             return this.get('data.table.cols.length') > 1;
         }.property('data.table.cols.length'),
@@ -513,6 +509,12 @@
             return this.get('data.table.rows.length') > 1;
         }.property('data.table.rows.length'),
         cellView: CellView,
-        summationCellView: SummationCellView
+        summationCellView: SummationCellView,
+        actions: {
+          scaleToTotal: function () {
+              var value = this.get('data.totalAllocation');
+              this.set('data.table.allocatedString', value);
+          }          
+        }
     });
 })(EAT, Ember);
