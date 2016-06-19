@@ -193,7 +193,7 @@
                 handler(api, unsupported);
             } catch (e) {
                 console.error("Exception in custom script for " + eventName + ":\n", e);
-                console.warn("In custom script: ", handlerBody);
+                console.warn("In custom script:\n", handlerBody);
                 window.customScripting.lastScriptRun.exception = e;
                 console.warn("See window.customScripting.lastScriptRun.exception for details");
             }
