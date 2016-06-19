@@ -39,6 +39,12 @@
 		{{js "assets/shims-for-ie8.js"}}
     <![endif]-->
 
+  <script>
+      // using jQuery 1.11, but Ember.js asserts 1.10
+      ENV = ENV || {};
+      ENV.FORCE_JQUERY = true;
+  </script>
+
 	{{js "assets/site.js"}}
 	{{js "assets/elicitation.js"}}
 	{{js "assets/elicitation-widgets.js"}}
