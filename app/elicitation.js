@@ -392,11 +392,9 @@
                 window.debug.ErrorThrown = errorThrown;
                 window.debug.ResponseText = jqXHR.responseText;
 
-                console.error("submitData(): ERROR submitting data");
                 console.warn("window.debug.lastSubmitData = ", window.debug.lastSubmitData);
-                console.warn("window.debug.lastSubmitJSON: ");
-                console.warn(window.debug.lastSubmitJSON);
-                console.error("Error was: ", debug.ErrorThrown, "Response Text:\n", debug.ResponseText);
+                console.warn("window.debug.lastSubmitJSON = ", window.debug.lastSubmitJSON);
+                console.error("submitData() failed, server responded with an error:\n\n", debug.ErrorThrown, "\n", debug.ResponseText, "\n");
 
                 elicitation.set('errorSubmittingToServer', true);
 

@@ -214,15 +214,25 @@ module.exports = function (db, assetHelpers) {
     var ElicitationCompleted = req.body.completed == 1;
     var json = req.body.json;
     
-    //console.log("Params are: ", JSON.stringify(req.body));
-    
     var now = Date.now();
+    
+    // may want this in error handlers if available, defined in an outer scope
+    var personID = undefined;    
+    var discussionID = undefined;
     
     dbHelper.authAndLoad("Elicitation.SaveData+", elicitationID, req, res)
     .then(function (m) {
       var elicitation = m.elicitation;
       var assignment = m.assignment;
       var membership = m.membership;
+      
+      personID = m && m.person ? m.person.ID : undefined;
+      discussionID = m && m.elicitation ? m.elicitation.Discussion_ID : undefined;
+      
+      if (!assignment) {
+          // mods and admins can access elicitations without an assignment, but cannot savedata
+          throw "no ElicitationAssignment found for personID=" + String(personID);
+      }
       
       return db.transaction(function (t) {
 
@@ -314,23 +324,26 @@ module.exports = function (db, assetHelpers) {
               }
           */
         }
-      })
-      .catch(function (e) {
-        console.error("Exception in Elicitation.SaveData: ", e);
-        
-        res.status(500);
-        res.send("Uhoh! There was a problem saving data to our server :-(");
-        return addLogEntry(req, "Elicitation.SaveData+ ERROR", "ElicitationID: " + elicitationID + "\nException:\n" + e + "\n\nData was: " + json, m.person.ID, m.elicitation.Discussion_ID)
-        .then(function () {
-          next(e);
-        });
-      });    
+      }) 
     })
     .then(function () {
       console.log("SaveData Success!");
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(true));      
-    });
+    })
+    .catch(function (e) {
+      console.error("Elicitation.SaveData(), exception saving data: ", e, ", personID=", personID, ", elicitationID=", elicitationID, ", completed=", ElicitationCompleted, ", json=", json);
+      try {
+          console.log("\trequest params were: ", JSON.stringify(req.body));          
+      } catch (e) {}
+
+      res.status(500);
+      res.send("Elicitation.SaveData(), exception was: " + String(e));
+      return addLogEntry(req, "Elicitation.SaveData+ ERROR", "ElicitationID: " + elicitationID + "\nException:\n" + e + "\n\nData was: " + personID, discussionID)
+      .finally(function () {
+        next(e);
+      });
+    });    
   });
   
   function throwIfNull(x) {
