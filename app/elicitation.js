@@ -400,8 +400,8 @@
 
                 if (finalSubmission) {
                     $("input#next").val("Try to Submit Again").attr("disabled", false);
-                    alert("Uhoh! We couldn't connect to the server to save your response data. Try submitting again?");
-                    elicitation.set('showSerializedData', "URL: " + url + "\n" + "Email: " + email + "\n" + "Date: " + new Date().toString() + "\n" + json);
+                    alert("Uhoh! We couldn't connect to the server to save your response data. Try submitting again?\n\nIf that doesn't work, please follow the instructions at the bottom of the page to submit by email.");
+                    elicitation.set('showSerializedData', "URL: " + url + "\n" + "Email: " + email + "\n" + "Date: " + new Date().toString() + "\nData:\n" + json);
                 }
             });
 

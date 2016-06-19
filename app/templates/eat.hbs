@@ -246,12 +246,13 @@
                             {{#if elicitation.showSerializedData}}
                                 <span class="title">Ugh! Submit failed :-(</span> We really want to record your data, try to submit again?
                             {{else}}
-                                <span class="title">WARNING</span> could not contact the server... is your internet connected?</>
+                                <span class="title">WARNING</span> could not contact the server... is your internet connected?
                             {{/if}}
                         </div>
                         {{#if elicitation.showSerializedData}}
-                            If that doesn't work, email your data (as follows) to <a target="_blank" href="mailto:help@nearzero.org">help@nearzero.org</a>:
+                            If that doesn't work, please submit your response by copy-pasting the following data, and emailing to <b><a target="_blank" href="mailto:help@nearzero.org">help@nearzero.org</a></b>:
                             <div class="copy-paste">{{elicitation.showSerializedData}}</div>
+                            Thank You! Sorry for the hassle.
                         {{/if}}
                     </div>
                 {{/if}}
