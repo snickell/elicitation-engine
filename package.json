@@ -26,13 +26,13 @@
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
     "request-promise": "^0.4.3",
-    "sequelize": "^3.24.8",
+    "sequelize": "^3.18.0",
     "tedious": "^1.13.2"
   },
   "noAnalyze": true,
   "license": "GPL-3.0",
   "engines": {
-    "node": ">=5.4.0"
+    "node": ">=5.4.0 <7.0"
   },
   "devDependencies": {
     "assert": "^1.3.0",
