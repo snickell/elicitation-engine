@@ -18,6 +18,7 @@ var errorHandler = require('errorhandler');
 var exphbs  = require('express-handlebars');
 var connectAssets = require('connect-assets');
 
+var colors = require('colors');
 
 var app = express();
 
@@ -112,7 +113,14 @@ if (app.get('env') === 'development') {
 
 }
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function () {
   console.log("node process.version=", process.version);
   console.log("Express server listening on port " + app.get('port'));
+  
+  if (getConfig("STANDALONE") || app.get('env') === 'development') {
+    console.log();    
+    console.log(colors.rainbow("Try accessing the elicitation server at:"));
+    console.log(colors.green("http://localhost:" + app.get('port') + baseURL + "/admin"));
+    console.log();
+  }
 });
