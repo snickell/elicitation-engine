@@ -687,11 +687,14 @@
                 minModelY: minPointY - offsetY,
                 maxModelY: maxPointY + (offsetY * 2)
             });
-        }.observes('allPoints', 'aPointIsBeingDragged', 'definition.timeAxisLogBase', 'definition.valueAxisLogBase').on('init'),
+        }.observes('minPointX', 'maxPointX', 'minPointY', 'maxPointY', 'aPointIsBeingDragged', 'definition.timeAxisLogBase', 'definition.valueAxisLogBase').on('init'),
         allPoints: function () {
-            return this.get('series').reduce(function (list, series) {
+            var points = this.get('series').reduce(function (list, series) {
                 return list.concat(series.get('points'));
             }, []);
+            
+            // Wrap in an Ember.Array so allPoints.@each observers work
+            return Ember.A(points);
         }.property('pointsChanged', 'series'),
         mostExtremePoint: function (comparison) {
             var mostExtreme = undefined;
@@ -704,16 +707,16 @@
         },
         minPointX: function () {
             return this.mostExtremePoint(function (one, two) { return one.get('x') < two.get('x'); }).get('x');
-        }.property('allPoints'),
+        }.property('allPoints', 'allPoints.@each.x'),
         minPointY: function () {
             return this.mostExtremePoint(function (one, two) { return one.get('y') < two.get('y'); }).get('y');
-        }.property('allPoints'),
+        }.property('allPoints', 'allPoints.@each.y'),
         maxPointX: function () {
             return this.mostExtremePoint(function (one, two) { return one.get('x') > two.get('x'); }).get('x');
-        }.property('allPoints'),
+        }.property('allPoints', 'allPoints.@each.x'),
         maxPointY: function () {
             return this.mostExtremePoint(function (one, two) { return one.get('y') > two.get('y'); }).get('y');
-        }.property('allPoints'),
+        }.property('allPoints', 'allPoints.@each.y'),
 
         pixelRangeX: function () {
             return this.get('maxPixelX') - this.get('minPixelX');
