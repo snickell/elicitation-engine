@@ -42,7 +42,12 @@
                         return this.get('_max');
                     }
                 }.property("_max").volatile(),
-                axisLabel: "Axis Label (kg)"
+                axisLabel: "Axis Label (kg)",
+                label0th: "Minimum",
+                label25th: "25th Percentile",
+                label50th: "Median",
+                label75th: "75th Percentile",
+                label100th: "Maximum",
             }),
             label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
             min: {
@@ -58,10 +63,36 @@
             axisLabel: {
                 accessor: EAT.WidgetDefinition.Attr("axis-label"),
                 prettyName: "Axis Label"
-            }
+            },
+            label_0th: {
+                accessor: EAT.WidgetDefinition.Attr("label-0th"),
+                prettyName: "0th Percentile",
+                category: "Percentile Labels"
+            },
+            label_25th: {
+                accessor: EAT.WidgetDefinition.Attr("label-25th"),
+                prettyName: "25th Percentile",
+                category: "Percentile Labels"       
+            },
+            label_50th: {
+                accessor: EAT.WidgetDefinition.Attr("label-50th"),
+                prettyName: "50th Percentile",
+                category: "Percentile Labels"              
+            },
+            label_75th: {
+                accessor: EAT.WidgetDefinition.Attr("label-75th"),
+                prettyName: "75th Percentile",
+                category: "Percentile Labels"              
+            },
+            label_100th: {
+                accessor: EAT.WidgetDefinition.Attr("label-100th"),
+                prettyName: "100th Percentile",
+                category: "Percentile Labels"              
+            }            
         },
         initWidget: function () {
-            this._super();
+            this._super();            
+            
             if (DEBUG_BOX_AND_WHISKERS) {
                 this.get('data').setProperties({
                     _0th: 5,
@@ -131,6 +162,11 @@
                 this.get('boxAndWhiskers').boxPlotClicked(evt);
             }
         }),
+        updateCurrentQuestionText: function () {
+            var currentQuestion = this.get('currentQuestion');            
+            var labelKey = "label" + currentQuestion.attr("key");
+            this.set('currentQuestionText', this.get("definition").get(labelKey)); //currentQuestion.text());
+        },
         boxPlotClicked: function (evt) {
             this.setCurrentQuestionToMouseX(evt);
             var currentQuestion = this.get('currentQuestion');
@@ -144,8 +180,8 @@
             if (currentQuestion.length == 0) {
                 this.set('doneClicking', true);
             } else {
-                this.set('currentQuestionText', currentQuestion.text());
                 currentQuestion.addClass("current");
+                this.updateCurrentQuestionText();
             }
             this.redraw();
         },
@@ -402,6 +438,8 @@
             setupSlider("#shape-slider", 'shape', 0, 10);
         },
         setupDOM: function () {
+            this.updateCurrentQuestionText();
+                        
             var boxPlot = this.get('boxPlot');
 
             // Need to initialze exCanvas, c.f. "IE Sux"
