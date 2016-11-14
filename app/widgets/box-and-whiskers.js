@@ -43,11 +43,11 @@
                     }
                 }.property("_max").volatile(),
                 axisLabel: "Axis Label (kg)",
-                label0th: "Minimum",
-                label25th: "25th Percentile",
-                label50th: "Median",
-                label75th: "75th Percentile",
-                label100th: "Maximum",
+                label_0th: "Minimum",
+                label_25th: "25th Percentile",
+                label_50th: "Median",
+                label_75th: "75th Percentile",
+                label_100th: "Maximum",
             }),
             label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
             min: {
@@ -165,7 +165,7 @@
         updateCurrentQuestionText: function () {
             var currentQuestion = this.get('currentQuestion');            
             var labelKey = "label" + currentQuestion.attr("key");
-            this.set('currentQuestionText', this.get("definition").get(labelKey)); //currentQuestion.text());
+            this.set('currentQuestionText', this.get("definition").get(labelKey));
         },
         boxPlotClicked: function (evt) {
             this.setCurrentQuestionToMouseX(evt);
