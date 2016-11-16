@@ -585,16 +585,24 @@
 <script type="text/x-handlebars" data-template-name="custom-scripting">
     <div class="widget custom-scripting">
         <b>Custom Script: </b>{{view.definition.label}}
-        <ul>
-            {{#each eventHandler in view.definition.activeEventHandlers}}
-                <li>
-                    <button {{action "testEventHandler" eventHandler.name target="view"}}>Test {{eventHandler.name}}() Script</button>
-                    
-                </li>
-            {{else}}
-                <li>No custom scripts defined.</li>
-            {{/each}}
-        </ul>
+
+
+        <div class="script-editor-box">
+            <h3>
+                BeforeEnteringPage(api, unsupported) 
+                <button {{action "testEventHandler" "beforeEnteringPage" target="view"}}>Run Script</button>
+            </h3>
+            <div><div class="script-editor" id="beforeEnteringPage"></div></div>
+
+
+            <h3>
+                BeforeExitingPage(api, unsupported)
+                <button {{action "testEventHandler" "beforeEnteringPage" target="view"}}>Run Script</button>
+            </h3>
+            <div><div class="script-editor" id="beforeExitingPage"></div></div>
+        </div>
+
+
     </div>
 </script>
 

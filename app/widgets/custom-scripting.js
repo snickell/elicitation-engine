@@ -135,7 +135,7 @@
         definitionSchema: {
             model: EAT.WidgetDefinition.extend({
                 label: "explain what the script does here",
-                beforeEnteringPage: "",
+                beforeEnteringPage: "// see http://wiki.nearzero.org/elicitation-authoring/for-developers\n// for examples and (some) documentation\n\nalert('hello world!');\n",
                 beforeExitingPage: "",
                 activeEventHandlers: function () {
                     return ['beforeEnteringPage', 'beforeExitingPage']
@@ -167,6 +167,52 @@
                 api: bindCustomScriptingAPI(this.get('elicitation')),
             }
         },
+        editors: {
+            beforeEnteringPage: null,
+            beforeExtingPage: null
+        },
+        beforeEnteringPageChanged: function () {
+            if (this.editors.beforeEnteringPage) {
+                var value = this.get("definition.beforeEnteringPage");                
+                if (value != this.editors.beforeEnteringPage.getValue()) {
+                    console.log("Updating editor from property");
+                    this.editors.beforeEnteringPage.setValue(value);
+                }
+            }
+        }.observes("definition.beforeEnteringPage"),
+        beforeExitingPageChanged: function () {
+            if (this.editors.beforeExitingPage) {
+                var value = this.get("definition.beforeExitingPage");                
+                if (value != this.editors.beforeExitingPage.getValue()) {
+                    this.editors.beforeExitingPage.setValue(value);
+                }
+            }
+        }.observes("definition.beforeExitingPage"),
+        setupDOM: function () {
+            if (this.get('elicitation.allowEditing')) {
+                var widget = this;
+            
+                function createEditor(eventName) {
+                    var div = widget.$().find(".script-editor#" + eventName)[0];
+                    var editor = CodeMirror(div, {
+                        lineNumbers: true,
+                        viewportMargin: Infinity,
+                        value: widget.get("definition").get(eventName)
+                    });
+                    editor.on("change", function () {
+                        widget.get("definition").set(eventName, editor.getValue());
+                    });
+                    return editor;
+                }
+            
+                debug.widgie = this;
+            
+                Ember.run.later(this, function () {
+                    this.editors.beforeEnteringPage = createEditor("beforeEnteringPage");
+                    this.editors.beforeExitingPage = createEditor("beforeExitingPage");                
+                }, 500);                
+            }
+        },        
         runEventHandler: function (eventName, page) {
             var handlerBody = this.get('definition').get(eventName);
 

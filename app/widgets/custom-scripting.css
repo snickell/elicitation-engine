@@ -13,3 +13,21 @@
 .widget.custom-scripting ~ .select-qualifications {
     display: none;
 }
+
+.widget.custom-scripting .script-editor {
+  position: relative;
+}
+
+.widget.custom-scripting .CodeMirror {
+  height: auto;
+  border: 1px solid #ddd;
+}
+
+.widget.custom-scripting .CodeMirror-scroll { 
+  max-height: 400px;
+}
+
+.widget.custom-scripting .CodeMirror pre { 
+  padding-left: 7px; 
+  line-height: 1.25; 
+}

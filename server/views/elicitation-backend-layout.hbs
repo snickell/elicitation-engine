@@ -122,5 +122,11 @@
 		{{#if elicitationPriorData}}
 			<script type="text/x-elicitation-prior-data">{{{elicitationPriorData}}}</script>
 		{{/if}}    
+    
+    {{#if settings.allowEditing}}
+      {{css "assets/elicitation-editing.css"}}
+      {{js "assets/elicitation-editing.js"}}
+    {{/if}}
+    
 </body>
 </html>
