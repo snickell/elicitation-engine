@@ -24,7 +24,7 @@
 }
 
 .widget.custom-scripting .CodeMirror-scroll { 
-  max-height: 400px;
+  /*max-height: 400px;*/
 }
 
 .widget.custom-scripting .CodeMirror pre { 
