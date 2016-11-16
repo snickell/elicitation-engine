@@ -210,7 +210,7 @@
                 Ember.run.later(this, function () {
                     this.editors.beforeEnteringPage = createEditor("beforeEnteringPage");
                     this.editors.beforeExitingPage = createEditor("beforeExitingPage");                
-                }, 500);                
+                }, 750);                
             }
         },        
         runEventHandler: function (eventName, page) {
