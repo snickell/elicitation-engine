@@ -71,7 +71,9 @@
             // this should really be pushed into the PageView, but I can't figure
             // out what event hook to use??? there's no "afterRender" hook
             window.setTimeout(function () {
-                $(window).scrollTop(0);
+                if (!this.get('elicitation.showAllPages')) {
+                    $(window).scrollTop(0);
+                }
                 page.redraw();
             }, 50);
         }.observes('currentPage'),

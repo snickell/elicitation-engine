@@ -552,7 +552,7 @@
                 {{/unless}}
             </div>
             <div id="navigation">
-                {{#unless elicitation.showAllPages}}
+                {{#if view.page.isCurrentPage}}
                     {{#unless view.page.firstPageAfterResume}}
                         {{#unless view.page.isFirstPage}}
                             <input href="#" id="back" value="«" type="submit" {{action "gotoPrevPage" target="view" on="click"}}>
@@ -571,7 +571,7 @@
                     <input id="next" type="submit" {{bindAttr disabled="view.nextButtonDisabled"}} {{bindAttr value="view.nextButtonLabel"}} {{action "gotoNextPage" target="view" on="click"}}>
                 {{else}}
 
-                {{/unless}}
+                {{/if}}
             </div>
 
             <div class="counter">

@@ -78,6 +78,10 @@
         isLastPage: function () {
             return this.get('pagesController.numPages') == this.get('pageNum');
         }.property('pageNum', 'pagesController.numPages'),
+        isCurrentPage: function() {
+            var currentPage = this.get("pagesController.currentPage");
+            return currentPage === this;
+        }.property('pagesController.currentPage'),        
         serializeDefinition: function (doc) {
             var serialized = $(doc.createElement("page"));
             serialized.attr('title', this.get('title'));
