@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     "use strict;"
 
     // This is helper code for supporting Acceptance Tests, run in a different process using WebDriver/Selenium2

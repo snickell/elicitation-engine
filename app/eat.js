@@ -1,4 +1,4 @@
-﻿(function (EAT, window, undefined) {
+(function (EAT, window, undefined) {
     "use strict";
 
     EAT.reopen({

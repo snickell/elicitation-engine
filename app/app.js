@@ -1,4 +1,4 @@
-﻿// For cross-iframe communication with the discussion engine
+// For cross-iframe communication with the discussion engine
 try { document.domain = 'nearzero.org' } catch (e) { }
 
 if (window.console == undefined) {

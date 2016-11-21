@@ -1,4 +1,4 @@
-﻿(function (EAT, Ember, G_vmlCanvasManager) {
+(function (EAT, Ember, G_vmlCanvasManager) {
     "use strict";
 
     var DEBUG_BOX_AND_WHISKERS = false;

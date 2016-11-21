@@ -1,4 +1,4 @@
-﻿To add a new widget called my-new-widget:
+To add a new widget called my-new-widget:
 1) Create my-new-widget.js and my-new-widget.css in this folder by copying text-area.js and text-area.css
 2) Search and replace instances of 'text-area' to be 'my-new-widget' in js/css, most importantly the top three lines of my-new-widget.js:
 		// So that this...

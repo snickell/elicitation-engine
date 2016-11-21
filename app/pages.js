@@ -1,4 +1,4 @@
-﻿(function (EAT, ElicitationUtils, window, undefined) {
+(function (EAT, ElicitationUtils, window, undefined) {
     "use strict";
 
     EAT.PagesView = ElicitationUtils.CurrentCollectionView.extend({
@@ -70,8 +70,10 @@
             // FIXME: we use setTimeout to make sure the DOM has re-rendered
             // this should really be pushed into the PageView, but I can't figure
             // out what event hook to use??? there's no "afterRender" hook
+            
+            var self = this;
             window.setTimeout(function () {
-                if (!this.get('elicitation.showAllPages')) {
+                if (!self.get('elicitation.showAllPages')) {
                     $(window).scrollTop(0);
                 }
                 page.redraw();

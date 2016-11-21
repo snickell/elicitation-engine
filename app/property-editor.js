@@ -1,4 +1,4 @@
-﻿(function (EAT, ElicitationUtils, window, undefined) {
+(function (EAT, ElicitationUtils, window, undefined) {
     "use strict";
 
     EAT.PropertyEditorView = Ember.View.extend({

@@ -1,4 +1,4 @@
-﻿(function (EAT, window, undefined) {
+(function (EAT, window, undefined) {
     "use strict";
 
     var DEBUG_MASQUERADE_AS_IE8 = false;

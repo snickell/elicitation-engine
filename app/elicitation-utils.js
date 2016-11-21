@@ -1,4 +1,4 @@
-﻿(function (window, G_vmlCanvasManager) {
+(function (window, G_vmlCanvasManager) {
     "use strict";
 
     var allPeriods = new RegExp('[.]', 'g');
