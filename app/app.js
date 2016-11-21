@@ -1,3 +1,5 @@
+import Ember from 'ember'
+
 // For cross-iframe communication with the discussion engine
 try { document.domain = 'nearzero.org' } catch (e) { }
 

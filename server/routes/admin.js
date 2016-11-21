@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 var express = require('express');
 var router = express.Router();
 
-var Handlebars = require('handlebars');
+//var Handlebars = require('handlebars');
 var authenticateAccessTo = require('../elicitation/auth');
 var handlebarsHelpers = require('../utils/handlebars-helpers');
 

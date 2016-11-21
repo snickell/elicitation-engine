@@ -775,7 +775,9 @@ test();
 
 // Defined out here because 'with' isn't allowed in strict mode
 ElicitationUtils.evalInScope = function (toEval, scope) {
-    with (scope) {
+    /*with (scope) {
         return eval(toEval);
-    }
+    }*/
+        console.error("EliciationUtils.evalInScope from elicitation-utils.js IS BROKEN BY USE-STRICT BABEL");
+        throw "EliciationUtils.evalInScope from elicitation-utils.js IS BROKEN BY USE-STRICT BABEL";
 }
