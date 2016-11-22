@@ -8,13 +8,14 @@ module.exports = {
     vendor: './app/vendor.js'
   },
   output: {
-    path: './dist',
+    path: './public/assets',
     filename: '[name].js'
   },
   resolve: {
     alias: {
       ember: path.join(__dirname, './ember'),
-      app: path.join(__dirname, './app')
+      app: path.join(__dirname, './app'),
+      eat: path.join(__dirname, './app')
     }
   },
   module: {

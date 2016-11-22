@@ -23,3 +23,7 @@ import "./widget"
 import "./register-elicitation-widgets"
 
 import "./widgets"
+
+import ElicitationUtils from './elicitation-utils'
+
+export { ElicitationUtils };

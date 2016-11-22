@@ -54,6 +54,7 @@
   },
   "scripts": {
     "test": "./run-tests.sh",
-    "log": "azure site log tail elicitation-gorilla"
+    "log": "azure site log tail elicitation-gorilla",
+    "watch": "webpack --watch"
   }
 }

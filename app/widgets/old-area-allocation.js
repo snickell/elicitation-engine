@@ -1,3 +1,5 @@
+import Ember from 'ember'
+import EAT from 'eat/eat'
 
 (function (Elicitation, Ember) {
     "use strict;"
@@ -346,4 +348,4 @@
         return [];
     }
     */
-})(Elicitation, Ember);
+})(EAT, Ember);
