@@ -1,7 +1,6 @@
 import Ember from 'ember'
 import EAT from 'eat/eat'
 
-
 EAT.Widget.register('dropdown', {
     prettyName: "Dropdown",
     value: null,
@@ -119,7 +118,7 @@ function storeDataForMultipleChoiceWidget(widget, data) {
 
 
 // THIS WAS RETRIEVED FROM JQUERY-UI.COM AND CUSTOMIZED, LOOK FOR NZ_CUSTOM BELOW
-console.error("WEBPACKCONVERT: extending global $. object (i.e. jQuery) from within widget");
+console.warn("WEBPACKCONVERT: extending global $. object (i.e. jQuery) from within widget");
 (function ($) {
   $.widget("ui.combobox", {
       _create: function () {

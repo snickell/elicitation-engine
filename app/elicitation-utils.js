@@ -778,4 +778,5 @@ test();
 
 ElicitationUtils.evalInScope = evalInScope;
 
+window.ElicitationUtils = ElicitationUtils;
 export default ElicitationUtils;

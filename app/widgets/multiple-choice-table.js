@@ -2,7 +2,7 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-console.error("WEBPACKCONVERT: extending Ember.Control and Ember.RadioButton from within widget");
+console.warn("WEBPACKCONVERT: extending Ember.Control and Ember.RadioButton from within widget");
 (function (EAT, Ember) {
     // We should remove this cruft code from:
     // https://github.com/emberjs/ember.js/pull/1235

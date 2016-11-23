@@ -57,7 +57,7 @@ var Schema = Ember.ArrayController.extend({
 });
 
 
-EAT.Schema.reopenClass({
+Schema.reopenClass({
     createFromHash: function (schemaHash) {
         var initial = {};
         var schema = EAT.Schema.create();

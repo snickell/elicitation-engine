@@ -2,7 +2,7 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-console.error("WEBPACKCONVERT: setting EAT.TabularInputTextField from within widget");
+console.warn("WEBPACKCONVERT: setting EAT.TabularInputTextField from within widget");
 EAT.TabularInputTextField = Ember.TextField.extend({
     widget: undefined,
     row: undefined,

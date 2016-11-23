@@ -4,4 +4,7 @@
 //= require ../libs/jquery.scrollTo.js
 //= require ../libs/jquery-ui-1.11.4.js
 
+//= require ../libs/handlebars.js
+//= require ../libs/ember.js
+
 //= require ../js/nearzero-confidentiality-indicator.js

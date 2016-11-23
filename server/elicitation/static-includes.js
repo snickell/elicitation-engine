@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var staticIncludes = {
   "google-analytics.html": {
-    filename: "app/templates/google-analytics.html",
+    filename: "app/google-analytics.html",
     content: null
   },
   "eat.hbs": {

@@ -3,7 +3,7 @@ import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
 // WEBPACKCONVERT: how to import G_vmlCanvasManager ?
-console.error("WEBPACKCONVERT: not importing G_vmlCanvasManager");
+console.warn("WEBPACKCONVERT: not importing G_vmlCanvasManager");
 
 var DEBUG_BOX_AND_WHISKERS = false;
 var LINE_WIDTH = 7;

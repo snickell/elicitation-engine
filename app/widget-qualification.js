@@ -9,7 +9,7 @@ var WidgetQualification = Ember.Object.extend({
     propertyName: undefined,
     prettyName: undefined,
     xmlAttr: undefined,
-    editorView: EAT.QualificationEditorView,
+    editorView: QualificationEditorView,
     serializedDataBinding: 'content',
     init: function () {
         this._super();
@@ -59,7 +59,7 @@ var QualificationEditorView = Ember.View.extend({
     }
 });
 
-var DropdownQualificationEditorView = EAT.QualificationEditorView.extend({
+var DropdownQualificationEditorView = QualificationEditorView.extend({
     templateName: "dropdown-qualification-editor-view",
     selections: [
         { value: 0, label: "0 - None" },
@@ -69,34 +69,34 @@ var DropdownQualificationEditorView = EAT.QualificationEditorView.extend({
         { value: 4, label: "4 - High" }
     ]
 });
-var TextCommentQualificationEditorView = EAT.QualificationEditorView.extend({
+var TextCommentQualificationEditorView = QualificationEditorView.extend({
     templateName: "text-comment-qualification-editor-view",
     classNames: ["text-comment"]
 });
 
 // This array defines the qualifications that experts (and elicitation authors) can apply to widgets
 var qualifications = Ember.A([
-    EAT.WidgetQualification.extend({
+    WidgetQualification.extend({
         propertyName: "qualifyExpertise",
         prettyName: "Your Expertise",
         xmlAttr: "qualify-expertise",
         serializedDataBinding: "content.value",
         editorView: DropdownQualificationEditorView
     }),
-    EAT.WidgetQualification.extend({
+    WidgetQualification.extend({
         propertyName: "qualifyConfidence",
         prettyName: "Your Confidence",
         xmlAttr: "qualify-confidence",
         serializedDataBinding: "content.value",
         editorView: DropdownQualificationEditorView
     }),
-    EAT.WidgetQualification.extend({
+    WidgetQualification.extend({
         propertyName: "qualifyTextComment",
         prettyName: "Text Comment",
         xmlAttr: "qualify-text-comment",
         editorView: TextCommentQualificationEditorView
     })/*,
-    EAT.WidgetQualification.extend({
+    WidgetQualification.extend({
         propertyName: "qualifyMostExpertParticipants",
         prettyName: "Most Expert Participants",
         xmlAttr: "qualify-most-expert-participants"

@@ -3,7 +3,7 @@ import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
 // WEBPACKCONVERT: how to import G_vmlCanvasManager ?
-console.error("WEBPACKCONVERT: not importing G_vmlCanvasManager");
+console.warn("WEBPACKCONVERT: not importing G_vmlCanvasManager");
 
 var DEBUG_TIME_TREND = false;
 var TIME_TREND_UNDEFINED_POINT_OFFSET = -15;
@@ -20,7 +20,7 @@ perExpertData[].data.Expected[].y
 
 */
 
-console.warning("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
+console.warn("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
 EAT.WidgetResultsViews.TimeTrend = EAT.WidgetResultsView.extend({
     templateName: "time-trend-results",
     classNames: ["widget-results", "time-trend"],

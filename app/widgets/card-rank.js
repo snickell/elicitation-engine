@@ -2,7 +2,7 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-console.warning("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
+console.warn("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
 EAT.WidgetResultsViews.CardRank = EAT.WidgetResultsView.extend({
     templateName: "card-rank-results",
     classNames: ["widget-results", "card-rank"],

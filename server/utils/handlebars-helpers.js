@@ -1,5 +1,9 @@
-var Handlebars = require('handlebars');
 var includeStatic = require('../elicitation/static-includes');
+
+// The easiest way to make sure we have the /same/ version of handlebars
+// as used inside express-handlebars is to create a blank instance, ugh.
+var exphbs = require('express-handlebars');
+var Handlebars = exphbs.create().handlebars;
 
 module.exports = function (assetHelpers) {
   return {

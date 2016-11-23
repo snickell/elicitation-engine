@@ -18,12 +18,12 @@ var PropertyEditorView = Ember.View.extend({
     }
 });
 
-var EnumPropertyEditorView = EAT.PropertyEditorView.extend({
+var EnumPropertyEditorView = PropertyEditorView.extend({
     templateName: 'property-editor-enum',
     classNames: ['property-editor', 'property-editor-enum']
 });
 
-var ImagePropertyEditorView = EAT.PropertyEditorView.extend({
+var ImagePropertyEditorView = PropertyEditorView.extend({
     templateName: 'property-editor-image',
     classNameBindings: [':property-editor', ':property-editor-image', 'uploadInProgress'],
     uploadInProgress: false,
@@ -117,15 +117,15 @@ var ImagePropertyEditorView = EAT.PropertyEditorView.extend({
 });
 
 var PropertyEditors = Ember.Object.create({
-    String: EAT.PropertyEditorView.extend({
+    String: PropertyEditorView.extend({
         templateName: 'property-editor-string',
         classNames: ['property-editor', 'property-editor-string']
     }),
-    Boolean: EAT.PropertyEditorView.extend({
+    Boolean: PropertyEditorView.extend({
         templateName: 'property-editor-boolean',
         classNames: ['property-editor', 'property-editor-boolean']
     }),
-    Formula: EAT.PropertyEditorView.extend({
+    Formula: PropertyEditorView.extend({
         elicitationBinding: 'controller.elicitation',
         templateName: 'property-editor-formula',
         classNames: ['property-editor', 'property-editor-formula'],
@@ -156,11 +156,11 @@ var PropertyEditors = Ember.Object.create({
             this.set('dataKeyToAppend', null);
         }.observes('dataKeyToAppend')
     }),
-    Text: EAT.PropertyEditorView.extend({
+    Text: PropertyEditorView.extend({
         templateName: 'property-editor-text',
         classNames: ['property-editor', 'property-editor-text']
     }),
-    MillionsOfDollars: EAT.PropertyEditorView.extend({
+    MillionsOfDollars: PropertyEditorView.extend({
         templateName: 'property-editor-millions-of-dollars',
         classNames: ['property-editor', 'property-editor-millions-of-dollars']
     }),
@@ -178,7 +178,7 @@ var PropertyEditors = Ember.Object.create({
             accessor: EAT.WidgetDefinition.Attr('choice-type')
         }
     */
-    Color: EAT.PropertyEditorView.extend({
+    Color: PropertyEditorView.extend({
         templateName: 'property-editor-color',
         classNames: ['property-editor', 'property-editor-color'],
         didInsertElement: function () {
@@ -192,7 +192,7 @@ var PropertyEditors = Ember.Object.create({
             });
         }
     }),
-    HasMany: EAT.PropertyEditorView.extend({
+    HasMany: PropertyEditorView.extend({
         templateName: 'property-editor-hasmany',
         classNames: ['property-editor', 'property-editor-hasmany'],
         childrenBinding: 'value',
@@ -227,7 +227,7 @@ var PropertyEditors = Ember.Object.create({
     })
 });
 
-EAT.PropertyEditorView = PropertyEditorView;
+PropertyEditorView = PropertyEditorView;
 EAT.PropertyEditors = PropertyEditors;
 
 export { PropertyEditorView, PropertyEditors };

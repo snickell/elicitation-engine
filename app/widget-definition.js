@@ -162,6 +162,6 @@ var WidgetDefinitionEditorCategoryView = Ember.View.extend({
 
 EAT.WidgetDefinition = WidgetDefinition;
 EAT.WidgetDefinitionEditorView = WidgetDefinitionEditorView;
-EAT.WidgetDefinitionEditorCategoryView = WidgetDefinitionCategoryView;
+EAT.WidgetDefinitionEditorCategoryView = WidgetDefinitionEditorCategoryView;
 
 export { WidgetDefinition, WidgetDefinitionEditorView, WidgetDefinitionEditorCategoryView };

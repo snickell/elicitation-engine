@@ -3,7 +3,7 @@ import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
 
-console.warning("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
+console.warn("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
 EAT.WidgetResultsViews.AllocationTable = EAT.WidgetResultsView.extend({
     templateName: "allocation-table-results",
     classNames: ["widget-results", "allocation-table"],

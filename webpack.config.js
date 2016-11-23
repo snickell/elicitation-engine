@@ -3,6 +3,8 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
+  debug: true,
+  devtool: 'eval-source-map',
   entry: {
     app: './app/index.js',
     vendor: './app/vendor.js'
@@ -13,10 +15,11 @@ module.exports = {
   },
   resolve: {
     alias: {
-      ember: path.join(__dirname, './ember'),
+      ember: path.join(__dirname, './ember'),     
       app: path.join(__dirname, './app'),
       eat: path.join(__dirname, './app')
-    }
+    },
+    modulesDirectories: ["web_modules", "node_modules"]    
   },
   module: {
     loaders: [
@@ -28,6 +31,7 @@ module.exports = {
           presets: ['es2015-without-strict']
         }
       },
+      /*
       {
         test: /\.hbs$/,
         include: /app\/templates/,
@@ -36,7 +40,7 @@ module.exports = {
       {
         test: /app\/app\.js/,
         loader: 'ember-webpack-loaders/inject-templates-loader!ember-webpack-loaders/inject-modules-loader'
-      },
+      },*/
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader')

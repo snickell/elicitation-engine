@@ -168,4 +168,6 @@ EAT.StoreDataResult = Ember.Object.extend({
     data: null
 });
 
+window.EAT = EAT;
+
 export default EAT;
