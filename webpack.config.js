@@ -15,7 +15,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      ember: path.join(__dirname, './ember'),     
+      ember: path.join(__dirname, './app/webpack-shims/ember'),
       app: path.join(__dirname, './app'),
       eat: path.join(__dirname, './app')
     },
