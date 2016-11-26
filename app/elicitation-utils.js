@@ -1,7 +1,5 @@
 import Ember from 'ember'
 
-import evalInScope from './eval-in-scope'
-
 var allPeriods = new RegExp('[.]', 'g');
 function escapeForEmberProperty(prop) {
     return prop.replace(allPeriods, '');
@@ -776,7 +774,9 @@ test();
 })(ElicitationUtils, Ember);
 // End ConditionalBinding
 
-ElicitationUtils.evalInScope = evalInScope;
+// This is defined in a non-webpacked file eval-in-scope.js
+// because it can't be used within strict mode
+ElicitationUtils.evalInScope = eat_evalInScope;
 
 window.ElicitationUtils = ElicitationUtils;
 export default ElicitationUtils;
