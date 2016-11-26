@@ -179,12 +179,4 @@ function CreateVanillaMarkdownConverter() {
     return markdownConverter;
 }
 
-
-
-// EXPORTS
-import EAT from './eat'
-EAT.MarkdownLabel = MarkdownLabel;
-EAT.CreateMarkdownConverter = CreateMarkdownConverter;
-EAT.VanillaMarkdownLabel = VanillaMarkdownLabel;
-
 export { MarkdownLabel, CreateMarkdownConverter, VanillaMarkdownLabel };

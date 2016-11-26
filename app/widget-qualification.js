@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 
@@ -102,9 +101,5 @@ var qualifications = Ember.A([
         xmlAttr: "qualify-most-expert-participants"
     })*/
 ]);
-
-EAT.WidgetQualification = WidgetQualification;
-EAT.QualificationEditorView = QualificationEditorView;
-EAT.qualifications = qualifications;
 
 export { WidgetQualification, QualificationEditorView, qualifications };

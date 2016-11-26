@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 
@@ -82,5 +81,8 @@ var TestClass = Ember.Object.extend({
 });
 
 var Test = TestClass.create();
+
+import EAT from './eat'
 EAT.Test = Test;
-export { Test };
+
+export default Test;

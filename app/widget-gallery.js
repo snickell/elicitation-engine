@@ -1,7 +1,7 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
+import WidgetRegistry from './widget-registry'
 
 var WidgetGalleryView = Ember.View.extend({
     addToPage: undefined, // page that will be added to!
@@ -22,10 +22,10 @@ var WidgetGalleryView = Ember.View.extend({
     widgets: function () {
         var widgetGalleryThumbnailsURL = this.get('elicitation.widgetGalleryThumbnailsURL');
         var widgetNames = Ember.A();
-        for (var widgetName in EAT.Widgets) {
+        for (var widgetName in WidgetRegistry) {
             widgetNames.pushObject(Ember.Object.extend({
                 widgetName: widgetName,
-                prettyName: EAT.Widgets[widgetName].prettyName,
+                prettyName: WidgetRegistry[widgetName].prettyName,
                 thumbnailURL: function () {
                     return widgetGalleryThumbnailsURL + '/' + this.get('widgetName') + ".png";
                 }.property('widgetName')
@@ -37,7 +37,5 @@ var WidgetGalleryView = Ember.View.extend({
         return widgetNames;
     }.property()
 });
-
-EAT.WidgetGalleryView = WidgetGalleryView;
 
 export { WidgetGalleryView };

@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 
@@ -175,7 +174,7 @@ var PropertyEditors = Ember.Object.create({
                 { value: "checkbox", label: "Check Box" },
                 { value: "text", label: "Text Entry" }
             ],
-            accessor: EAT.WidgetDefinition.Attr('choice-type')
+            accessor: WidgetDefinition.Attr('choice-type')
         }
     */
     Color: PropertyEditorView.extend({
@@ -226,8 +225,5 @@ var PropertyEditors = Ember.Object.create({
         }
     })
 });
-
-PropertyEditorView = PropertyEditorView;
-EAT.PropertyEditors = PropertyEditors;
 
 export { PropertyEditorView, PropertyEditors };

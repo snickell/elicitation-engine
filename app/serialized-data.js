@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 var SerializedData = Ember.Object.extend();
@@ -19,8 +18,5 @@ var RootSerializedData = SerializedData.extend({
         }
     }
 });
-
-EAT.SerializedData = SerializedData;
-EAT.RootSerializedData = RootSerializedData;
 
 export { SerializedData, RootSerializedData }

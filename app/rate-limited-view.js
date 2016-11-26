@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 
 var DEBUG_MASQUERADE_AS_IE8 = false;
 var OLD_IE_DEADLINE = 5000; // ms
@@ -123,7 +122,5 @@ if (isIE7or8()) {
     console.log("Not on IE7/8, just using straight-up Ember.View");
     RateLimitedViewMixin = Ember.Mixin.create({});
 }
-
-EAT.RateLimitedViewMixin = RateLimitedViewMixin;
 
 export { RateLimitedViewMixin };

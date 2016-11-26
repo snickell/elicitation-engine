@@ -3,7 +3,7 @@ import ElicitationUtils from './elicitation-utils'
 
 import RootSerializedData from './serialized-data'
 import CreateMarkdownConverter from './markdown-label'
-import PhraseDefinitionsController from './phrase-definitions'
+import PhraseDefinitionsController from './phrase-definition'
 import PagesController from './pages'
 
 var PageFooterController = Ember.Object.extend({
@@ -577,6 +577,4 @@ var Elicitation = Ember.Object.extend({
     pagesController: null
 });
 
-import EAT from './eat'
-EAT.Elicitation = Elicitation;
 export default Elicitation;

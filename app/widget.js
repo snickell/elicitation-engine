@@ -408,6 +408,4 @@ var WidgetVariable = WidgetDefinition.extend({
     }.observes('value')
 });
 
-import EAT from './eat'
-EAT.Widget = Widget;
 export default Widget;

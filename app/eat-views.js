@@ -199,16 +199,4 @@ var CloseEmbeddedView = Ember.View.extend({
     }
 });
 
-
-import EAT from './eat'
-
-EAT.CloseEmbeddedView = CloseEmbeddedView;
-EAT.PostSubmitView = PostSubmitView;
-EAT.EditControlsView = EditControlsView;
-EAT.EditSidebarView = EditSidebarView;
-EAT.CustomWidgetsView = CustomWidgetsView;
-EAT.PageFooterView = PageFooterView;
-EAT.EditableWidgetView = EditableWidgetView;
-EAT.WidgetViewWrapper = WidgetViewWrapper;
-
-export { CloseEmbeddedView, PostSubmitView, EditControlsView, EditSidebarView, CustomWidgetsView, PageFooterView, EditableWidgetView, WidgetViewWrapper }
+export { CloseEmbeddedView, PostSubmitView, EditControlsView, EditSidebarView, CustomWidgetsView, PageFooterView, EditableWidgetView, WidgetViewWrapper };

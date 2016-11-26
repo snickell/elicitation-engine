@@ -1,3 +1,5 @@
+// NB: as most EAT.* members are defined in eat.js, its better to import EAT from 'eat/eat'
+
 import Ember from 'ember'
 
 // For cross-iframe communication with the discussion engine
@@ -127,9 +129,6 @@ var EAT = Ember.Object.extend({
         return app;  
     }
 }).create();
-
-
-// NB: as most EAT.* members are defined in eat.js, its better to import EAT from 'eat'
 
 // EXPORTS:
 export default EAT;

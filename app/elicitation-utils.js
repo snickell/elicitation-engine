@@ -192,6 +192,15 @@ function recreateCanvasElement(elem) {
     return canvas;
 }
 
+function makeDataKeyFromText (title) {
+    if (title) {
+        return title.toLowerCase().replace(/ /g, "_").replace(/[^_a-z0-9]/g, "");
+    } else {
+        console.log("WARNING: blank data key text was specified");
+        return null;
+    }
+}
+
 
 var ElicitationUtils = {
     innerXML: innerXML,
@@ -206,7 +215,8 @@ var ElicitationUtils = {
     removeXMLInvalidCharacters: removeXMLInvalidCharacters,
     shuffleArray: shuffleArray,
     recreateCanvasElement: recreateCanvasElement,
-    escapeForEmberProperty: escapeForEmberProperty
+    escapeForEmberProperty: escapeForEmberProperty,
+    makeDataKeyFromText: makeDataKeyFromText
 };
 
 

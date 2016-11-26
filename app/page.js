@@ -1,8 +1,9 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 import StoreDataResult from './store-data-result'
+import WidgetRegistry from './widget-registry'
+import SerialiazedData from './serialized-data'
 
 var Page = Ember.Object.extend({
     pagesController: undefined, // define this in when creating
@@ -21,8 +22,8 @@ var Page = Ember.Object.extend({
         if (serializedDefinition) {
             serializedDefinition.children().each(function () {
                 var widgetName = this.nodeName.toLowerCase();
-                if (widgetName in EAT.Widgets) {
-                    var widgetClass = EAT.Widgets[widgetName];
+                if (widgetName in WidgetRegistry) {
+                    var widgetClass = WidgetRegistry[widgetName];
                     widgets.pushObject(widgetClass.create({
                         serializedDefinition: $(this),
                         elicitation: page.get('elicitation')
@@ -38,7 +39,7 @@ var Page = Ember.Object.extend({
     createNewWidget: function (widgetNameToAdd) {
         if (Ember.isNone(widgetNameToAdd)) return;
 
-        var widgetClass = EAT.Widgets[widgetNameToAdd];
+        var widgetClass = WidgetRegistry[widgetNameToAdd];
         var widget = widgetClass.create({
             elicitation: this.get('elicitation')
         });
@@ -104,7 +105,7 @@ var Page = Ember.Object.extend({
     },
     dataKeyBinding: 'title',
     serializedData: function () {
-        var data = EAT.SerializedData.create();
+        var data = SerializedData.create();
         var validationErrors = [];
 
         var pageTitle = this.get('title');
@@ -136,7 +137,7 @@ var Page = Ember.Object.extend({
         // Not really valid if we're always setting metadata...
         // if (!savedSomeData) return null;
 
-        return EAT.StoreDataResult.create({
+        return StoreDataResult.create({
             data: data,
             errors: validationErrors
         });
@@ -211,10 +212,10 @@ var AddWidgetToPage = Ember.View.extend({
     },
     widgetNames: function () {
         var widgetNames = Ember.A();
-        for (var widgetName in EAT.Widgets) {
+        for (var widgetName in WidgetRegistry) {
             widgetNames.pushObject(Ember.Object.create({
                 widgetName: widgetName,
-                prettyName: EAT.Widgets[widgetName].prettyName
+                prettyName: WidgetRegistry[widgetName].prettyName
             }));
         }
         widgetNames = widgetNames.sort(function (a, b) {
@@ -321,8 +322,4 @@ var PageView = Ember.View.extend({
     addWidgetToPageView: AddWidgetToPage
 });
 
-EAT.Page = Page;
-EAT.PageView = PageView;
-
 export { Page, PageView };
-export default Page;

@@ -4,14 +4,6 @@ import WidgetRegistry from './widget-registry'
 import definitionDOMElements from './definition-dom-elements'
 
 EAT.reopen({
-    makeDataKeyFromText: function (title) {
-        if (title) {
-            return title.toLowerCase().replace(/ /g, "_").replace(/[^_a-z0-9]/g, "");
-        } else {
-            console.log("WARNING: blank data key text was specified");
-            return null;
-        }
-    },
     Widgets: WidgetRegistry,
     isMobileDevice: function () {
         return window.isMobileDevice;

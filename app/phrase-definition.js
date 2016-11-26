@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 
@@ -62,7 +61,7 @@ var PhraseDefinitionsController = Ember.ArrayController.extend({
     getDefinitionOrCreate: function (phrase) {
         var definition = this.getDefinition(phrase);
         if (Ember.isNone(definition)) {
-            var definition = EAT.PhraseDefinition.create({
+            var definition = PhraseDefinition.create({
                 phrase: phrase
             });
             this.pushObject(definition);
@@ -87,11 +86,6 @@ var PhraseDefinitionsController = Ember.ArrayController.extend({
         });
     }
 });
-
-EAT.PhraseDefinition = PhraseDefinition;
-EAT.PhraseDefinitionView = PhraseDefinitionView;
-EAT.PhraseDefinitionsView = PhraseDefinitionsView;
-EAT.PhraseDefinitionsController = PhraseDefinitionsController;
 
 export { PhraseDefinition, PhraseDefinitionView, PhraseDefinitionsView, PhraseDefinitionsController };
 

@@ -1,12 +1,12 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
+import { Page, PageView } from './page'
 
 var PagesView = ElicitationUtils.CurrentCollectionView.extend({
     elicitationBinding: 'controller.elicitation',
     classNames: ['pages'],
-    itemViewClass: EAT.PageView,
+    itemViewClass: PageView,
     contentBinding: 'elicitation.pagesController',
     currentContentBinding: 'elicitation.pagesController.currentPage',
     showAllContentBinding: 'elicitation.showAllPages'
@@ -188,7 +188,7 @@ var PagesController = Ember.ArrayController.extend({
 
         pagesXML.each(function () {
             self.pushObject(
-                EAT.Page.create({
+                Page.create({
                     serializedDefinition: $(this),
                     title: $(this).attr("title"),
                     pagesController: self
@@ -202,7 +202,7 @@ var PagesController = Ember.ArrayController.extend({
         }
     },
     addNewPage: function (index) {
-        var newPage = EAT.Page.create({
+        var newPage = Page.create({
             pagesController: this
         });
         if (Ember.isNone(index)) {
@@ -234,9 +234,5 @@ var PagesController = Ember.ArrayController.extend({
         });
     }
 });
-
-
-EAT.PagesView = PagesView;
-EAT.PagesController = PagesController;
 
 export { PagesView, PagesController };

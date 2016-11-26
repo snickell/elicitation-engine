@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 var WidgetData = Ember.Object.extend({
@@ -181,8 +180,5 @@ var WidgetDataExplorer = Ember.View.extend({
     },
     templateName: "widget-data-explorer"
 });
-
-EAT.WidgetData = WidgetData;
-EAT.WidgetDataExplorer = WidgetDataExplorer;
 
 export { WidgetData, WidgetDataExplorer }

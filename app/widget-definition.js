@@ -1,7 +1,8 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
+import definitionDOMElements from './definition-dom-elements'
+import Schema from './schema'
 
 var WidgetDefinition = Ember.Object.extend({
     schema: null,
@@ -53,14 +54,14 @@ var WidgetDefinition = Ember.Object.extend({
         if (!dataKeyText) {
             console.log("WARNING: this widget has no dataKey() attribute, nor a dataKeyText() attribute defined to make a dataKey from. Data loss will probably occur");
         }
-        return EAT.makeDataKeyFromText(dataKeyText);
+        return ElicitationUtils.makeDataKeyFromText(dataKeyText);
     }.property('dataKeyText')
 });
 
 WidgetDefinition.reopenClass({
     HasManyArray: Ember.ArrayController.extend(),
     ChildNode: function (tagName) {
-        EAT.definitionDOMElements.addObject(tagName);
+        definitionDOMElements.addObject(tagName);
 
         tagName = tagName.toLowerCase();
         return {
@@ -105,11 +106,11 @@ WidgetDefinition.reopenClass({
         }
     },
     HasMany: function (tagName, schemaHash, hasManyModel) {
-        EAT.definitionDOMElements.addObject(tagName);
+        definitionDOMElements.addObject(tagName);
         tagName = tagName.toLowerCase();
-        var schema = EAT.Schema.createFromHash(schemaHash);
+        var schema = Schema.createFromHash(schemaHash);
 
-        if (Ember.isNone(hasManyModel)) hasManyModel = EAT.WidgetDefinition.HasManyArray;
+        if (Ember.isNone(hasManyModel)) hasManyModel = WidgetDefinition.HasManyArray;
 
         return {
             getDefault: function () {
@@ -159,9 +160,5 @@ var WidgetDefinitionEditorCategoryView = Ember.View.extend({
         }
     }
 });
-
-EAT.WidgetDefinition = WidgetDefinition;
-EAT.WidgetDefinitionEditorView = WidgetDefinitionEditorView;
-EAT.WidgetDefinitionEditorCategoryView = WidgetDefinitionEditorCategoryView;
 
 export { WidgetDefinition, WidgetDefinitionEditorView, WidgetDefinitionEditorCategoryView };

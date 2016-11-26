@@ -66,7 +66,7 @@ EAT.Widget.register('tabular-input', {
     }.observes('definition.columns.length'),
     serializeData: function (data, errors) {
         var columnNames = this.get('definition.columns').map(function (column) {
-            return EAT.makeDataKeyFromText(column.get('label'));
+            return ElicitationUtils.makeDataKeyFromText(column.get('label'));
         });
 
         this.get('data.rows').forEach(function (row, rowNum) {

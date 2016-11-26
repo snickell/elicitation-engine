@@ -101,8 +101,4 @@ var SchemaProperty = Ember.Object.extend({
     visible: true
 });
 
-import EAT from './eat'
-EAT.Schema = Schema;
-EAT.SchemaProperty = SchemaProperty;
-
 export { Schema, SchemaProperty }
