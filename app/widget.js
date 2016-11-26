@@ -1,6 +1,14 @@
 import Ember from 'ember'
-import EAT from './eat'
+
 import ElicitationUtils from './elicitation-utils'
+import WidgetDefinition from './widget-definition'
+import WidgetData from './widget-data'
+import { Schema, SchemaProperty } from './schema'
+import SerializedData from './serialized-data'
+import qualifications from './widget-qualification'
+import StoreDataResult from './store-data-result'
+import WidgetRegistry from './widget-registry'
+import definitionDOMElements from './definition-dom-elements'
 
 var Widget = Ember.View.extend({
     stateGetPropertyNames: function (maxDepth, includeUndefinedProperties) {
@@ -120,7 +128,7 @@ var Widget = Ember.View.extend({
     data: null,
     qualifications: function () {
         var widget = this;
-        return EAT.qualifications.map(function (qualification) {
+        return qualifications.map(function (qualification) {
             return qualification.create({
                 widget: widget
             });
@@ -133,59 +141,59 @@ var Widget = Ember.View.extend({
         return this.get('qualificationsToShow').length > 0;
     }.property('qualificationsToShow'),
     layoutName: "widget-layout",
-    dataModel: EAT.WidgetData,
+    dataModel: WidgetData,
     fixmeWatchVariables: function () {
         this.get('elicitation').notifyPropertyChange('variables');
     }.observes('definition.variables.@each'),
     addExtraPropertiesToSchema: function (schema) {
         // Now add schema properties common to ALL widgets
-        schema.addProperty("visibleWhens", EAT.SchemaProperty.create({
+        schema.addProperty("visibleWhens", SchemaProperty.create({
             type: "HasMany",
             category: "Variables",
             prettyName: 'Visible-When',
-            accessor: EAT.WidgetDefinition.HasMany('visible-when', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('visible-when', {
+                model: WidgetDefinition.extend({
                     condition: "SomeVariableName > 30.5",
                     formulaResult: undefined
                 }),
-                condition: { accessor: EAT.WidgetDefinition.Attr("condition"), type: "Formula" }
+                condition: { accessor: WidgetDefinition.Attr("condition"), type: "Formula" }
             })
         }));
 
-        schema.addProperty("variables", EAT.SchemaProperty.create({
+        schema.addProperty("variables", SchemaProperty.create({
             type: "HasMany",
             category: "Variables",
             prettyName: 'Variable',
-            accessor: EAT.WidgetDefinition.HasMany('variable', {
+            accessor: WidgetDefinition.HasMany('variable', {
                 model: WidgetVariable.extend({ widget: this }),
-                name: { accessor: EAT.WidgetDefinition.Attr("name"), type: "String" },
-                property: { accessor: EAT.WidgetDefinition.Contents(), type: "String" }
+                name: { accessor: WidgetDefinition.Attr("name"), type: "String" },
+                property: { accessor: WidgetDefinition.Contents(), type: "String" }
             })
         }));
 
-        schema.addProperty("id", EAT.SchemaProperty.create({
+        schema.addProperty("id", SchemaProperty.create({
             type: "String",
             prettyName: 'id',
             visible: false,
-            accessor: EAT.WidgetDefinition.Attr("id")
+            accessor: WidgetDefinition.Attr("id")
         }));
 
         schema.addProperty(
             "hideOptionalQualifications",
-            EAT.SchemaProperty.create({
+            SchemaProperty.create({
                 type: "Boolean",
                 category: "Default Qualifications",
                 prettyName: "Hide Qualify Your Answer",
-                accessor: EAT.WidgetDefinition.Attr("hideOptionalQualifications")
+                accessor: WidgetDefinition.Attr("hideOptionalQualifications")
             })
         );
 
         schema.addProperty(
             "responseIsOptional",
-            EAT.SchemaProperty.create({
+            SchemaProperty.create({
                 type: "Boolean",
                 prettyName: "Response is Optional",
-                accessor: EAT.WidgetDefinition.Attr("responseIsOptional")
+                accessor: WidgetDefinition.Attr("responseIsOptional")
             })
         );
 
@@ -193,11 +201,11 @@ var Widget = Ember.View.extend({
         this.get('qualifications').forEach(function (qualification) {
             schema.addProperty(
                 qualification.propertyName,
-                EAT.SchemaProperty.create({
+                SchemaProperty.create({
                     type: "Boolean",
                     category: "Default Qualifications",
                     prettyName: qualification.prettyName,
-                    accessor: EAT.WidgetDefinition.Attr(qualification.xmlAttr)
+                    accessor: WidgetDefinition.Attr(qualification.xmlAttr)
                 })
             );
         });
@@ -211,7 +219,7 @@ var Widget = Ember.View.extend({
         // Initialize the Widget.definition object from the Widget.definitionSchema
         var schemaHash = this.get('definitionSchema');
         Ember.assert("Widget must have a definitionSchema set", !Ember.isNone(schemaHash));
-        var schema = EAT.Schema.createFromHash(schemaHash);
+        var schema = Schema.createFromHash(schemaHash);
 
         // FIXME: ideally, rather than using a MIXIN, we would require all widgets to inherit
         // their definitionModel(s) from the RootWidgetDefinition class
@@ -263,7 +271,7 @@ var Widget = Ember.View.extend({
         return this.getDefinitionTag();
     }.property(),
     definitionEditorViewClass: function () {
-        return EAT.WidgetDefinitionEditorView;
+        return WidgetDefinitionEditorView;
     }.property(),
     definitionEditorView: function () {
         return this.get('definitionEditorViewClass').create({
@@ -282,7 +290,7 @@ var Widget = Ember.View.extend({
         return serialized;
     },
     serializedMetadata: function () {
-        var metadata = EAT.SerializedData.create();
+        var metadata = SerializedData.create();
 
         this.get('qualificationsToShow').forEach(function (qualification) {
             var propertyName = qualification.get('propertyName');
@@ -294,7 +302,7 @@ var Widget = Ember.View.extend({
     }.property().volatile(),
     responseIsOptional: Ember.computed.alias('definition.responseIsOptional'),
     serializedData: function () {
-        var data = EAT.SerializedData.create();
+        var data = SerializedData.create();
         var errors = [];
 
         if (!Ember.isNone(this.serializeData)) {
@@ -310,7 +318,7 @@ var Widget = Ember.View.extend({
             errors = [];
         }
 
-        return EAT.StoreDataResult.create({
+        return StoreDataResult.create({
             data: data,
             errors: errors
         });
@@ -339,8 +347,8 @@ Widget.reopenClass({
             widgetResults: def.widgetResults
         });
 
-        EAT.definitionDOMElements.addObject(definitionTag);
-        EAT.Widgets[definitionTag] = newWidget;
+        definitionDOMElements.addObject(definitionTag);
+        WidgetRegistry[definitionTag] = newWidget;
         return newWidget;
     }
 });
@@ -362,7 +370,7 @@ var RootWidgetDefinition = Ember.Mixin.create({
 });
 
 var allArrows = new RegExp("→", 'g');
-var WidgetVariable = EAT.WidgetDefinition.extend({
+var WidgetVariable = WidgetDefinition.extend({
     widget: undefined, // bind
     elicitationBinding: 'widget.elicitation',
     name: "SomeVariableName",
@@ -400,5 +408,6 @@ var WidgetVariable = EAT.WidgetDefinition.extend({
     }.observes('value')
 });
 
+import EAT from './eat'
 EAT.Widget = Widget;
 export default Widget;

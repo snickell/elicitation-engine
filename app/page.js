@@ -2,6 +2,7 @@ import Ember from 'ember'
 import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
+import StoreDataResult from './store-data-result'
 
 var Page = Ember.Object.extend({
     pagesController: undefined, // define this in when creating

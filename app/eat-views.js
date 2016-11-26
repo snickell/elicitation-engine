@@ -1,7 +1,6 @@
 import Ember from 'ember'
-import EAT from './eat'
 
-EAT.EditableWidgetView = Ember.View.extend({
+var EditableWidgetView = Ember.View.extend({
     content: null,
     elicitationBinding: 'controller.elicitation',
     widgetBinding: 'content',
@@ -74,7 +73,7 @@ EAT.EditableWidgetView = Ember.View.extend({
     }.observes('beingEdited')
 });
 
-EAT.WidgetViewWrapper = Ember.ContainerView.extend({
+var WidgetViewWrapper = Ember.ContainerView.extend({
     currentView: null,
     contentBinding: 'currentView',
     classNames: ['widget-view-wrapper'],
@@ -90,12 +89,12 @@ EAT.WidgetViewWrapper = Ember.ContainerView.extend({
     }
 });
 
-EAT.PageFooterView = Ember.View.extend({
+var PageFooterView = Ember.View.extend({
     templateName: 'page-footer',
     classNames: ['page-footer']
 });
 
-EAT.CustomWidgetsView = Ember.View.extend({
+var CustomWidgetsView = Ember.View.extend({
     templateName: 'custom-widgets',
     classNames: ['custom-widgets'],
     actions: {
@@ -106,7 +105,7 @@ EAT.CustomWidgetsView = Ember.View.extend({
     }
 });
 
-EAT.EditSidebarView = Ember.View.extend({
+var EditSidebarView = Ember.View.extend({
     elicitation: Ember.computed.alias('controller.elicitation'),
     templateName: 'edit-sidebar',
     classNames: ['edit-sidebar', 'slim-scrollbars'],
@@ -144,7 +143,7 @@ EAT.EditSidebarView = Ember.View.extend({
     }.observes('elicitation.widgetBeingEdited')
 });
 
-EAT.EditControlsView = Ember.View.extend({
+var EditControlsView = Ember.View.extend({
     elicitationBinding: 'controller.elicitation', // bind at creation,
     classNames: ["edit-controls"],
     templateName: 'edit-controls',
@@ -177,7 +176,7 @@ EAT.EditControlsView = Ember.View.extend({
 });
 
 
-EAT.PostSubmitView = Ember.View.extend({
+var PostSubmitView = Ember.View.extend({
     templateName: "post-submit",
     classNames: ['post-submit'],
     actions: {
@@ -187,7 +186,7 @@ EAT.PostSubmitView = Ember.View.extend({
     }
 });
 
-EAT.CloseEmbeddedView = Ember.View.extend({
+var CloseEmbeddedView = Ember.View.extend({
     actions: {
         closeEmbeddedViewConfirm: function () {
             if (confirm("Close this elicitation before submitting?\n\nYour responses will NOT be saved.")) {
@@ -199,3 +198,17 @@ EAT.CloseEmbeddedView = Ember.View.extend({
         }
     }
 });
+
+
+import EAT from './eat'
+
+EAT.CloseEmbeddedView = CloseEmbeddedView;
+EAT.PostSubmitView = PostSubmitView;
+EAT.EditControlsView = EditControlsView;
+EAT.EditSidebarView = EditSidebarView;
+EAT.CustomWidgetsView = CustomWidgetsView;
+EAT.PageFooterView = PageFooterView;
+EAT.EditableWidgetView = EditableWidgetView;
+EAT.WidgetViewWrapper = WidgetViewWrapper;
+
+export { CloseEmbeddedView, PostSubmitView, EditControlsView, EditSidebarView, CustomWidgetsView, PageFooterView, EditableWidgetView, WidgetViewWrapper }

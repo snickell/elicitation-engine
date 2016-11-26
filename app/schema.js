@@ -1,13 +1,14 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
+import WidgetDefinition from './widget-definition'
+import PropertyEditors from './property-editor'
 
 var Schema = Ember.ArrayController.extend({
     init: function () {
         this.set('content', Ember.A(this.get('content')));
     },
     propertiesBinding: 'content',
-    definitionModel: EAT.WidgetDefinition,
+    definitionModel: WidgetDefinition,
     createDefinition: function (parent, serializedDefinition) {
         var definition = this.get('definitionModel').create({
             schema: this,
@@ -60,18 +61,18 @@ var Schema = Ember.ArrayController.extend({
 Schema.reopenClass({
     createFromHash: function (schemaHash) {
         var initial = {};
-        var schema = EAT.Schema.create();
+        var schema = Schema.create();
 
         for (var propName in schemaHash) {
             if (propName == "model") continue;
-            var newProperty = EAT.SchemaProperty.create(schemaHash[propName]);
+            var newProperty = SchemaProperty.create(schemaHash[propName]);
             schema.addProperty(propName, newProperty);
         }
 
         if (schemaHash.model) {
             schema.set('definitionModel', schemaHash.model);
         } else {
-            schema.set('definitionModel', EAT.WidgetDefinition);
+            schema.set('definitionModel', WidgetDefinition);
         }
 
         return schema;
@@ -85,7 +86,7 @@ var SchemaProperty = Ember.Object.extend({
     type: "String",
     emphasizeWhenEmpty: false, // for HasMany SchemaProperties, set to true to freak out if empty
     editorView: function () {
-        return EAT.PropertyEditors.get(this.get('type'));
+        return PropertyEditors.get(this.get('type'));
     }.property(),
     prettyName: function () {
         var name = this.get('name');
@@ -100,6 +101,7 @@ var SchemaProperty = Ember.Object.extend({
     visible: true
 });
 
+import EAT from './eat'
 EAT.Schema = Schema;
 EAT.SchemaProperty = SchemaProperty;
 

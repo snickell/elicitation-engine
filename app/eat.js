@@ -1,5 +1,7 @@
 import Ember from 'ember'
 import EAT from './app'
+import WidgetRegistry from './widget-registry'
+import definitionDOMElements from './definition-dom-elements'
 
 EAT.reopen({
     makeDataKeyFromText: function (title) {
@@ -10,7 +12,7 @@ EAT.reopen({
             return null;
         }
     },
-    Widgets: {},
+    Widgets: WidgetRegistry,
     isMobileDevice: function () {
         return window.isMobileDevice;
     }.property(),
@@ -32,92 +34,12 @@ EAT.reopen({
             return false;
         }
     }.property(),
-    definitionDOMElements: Ember.Set.create(),
+    definitionDOMElements: definitionDOMElements,
     WidgetResultsViews: Ember.Object.create()
 });
 
-EAT.PageFooterController = Ember.Object.extend({
-    label: "",
-    serializeDefinition: function (doc) {
-        var serialized = $(doc.createElement("page-footer"));
-        serialized.text(this.get('label'));
-        return serialized;
-    },
-    loadFromXML: function (pageFooterXML) {
-        this.set('label', $(pageFooterXML).text());
-    }
-});
-
-EAT.CustomWidgetsController = Ember.Object.extend({
-    javascript: "",
-    css: "",
-    serializeDefinition: function (doc) {
-        var customWidget = doc.createElement("custom-widget");
-        var javascript = doc.createElement("javascript");
-        var css = doc.createElement("css");
-        $(javascript).text(this.get("javascript"));
-        $(css).text(this.get("css"));
-        customWidget.appendChild(javascript);
-        customWidget.appendChild(css);
-        return customWidget;
-    },
-    loadFromXML: function (customWidgetXMLs) {
-        var javascript = "";
-        var css = "";
-
-        customWidgetXMLs.find("javascript").each(function () {
-            javascript += $(this).text();
-        });
-
-        customWidgetXMLs.find("css").each(function () {
-            css += $(this).text();
-        });
-
-        this.set('javascript', javascript);
-        this.set('css', css);
-
-        this.injectCSSAndJavascript();
-    },
-    injectCSSAndJavascript: function () {
-
-        try {
-            // Run javascript
-            window.eval(this.get('javascript'));
-
-            // Update CSS
-            $("style#custom-widget").remove();
-            $("<style></style>")
-                .attr("id", "custom-widget")
-                .text(this.get('css'))
-                .appendTo($("body"));
-
-        } catch (e) {
-            console.log("Error loading custom widget javascript or CSS: ", e);
-            alert("Error loading custom widget javascript / css, see console for details.");
-        }
-    }
-});
-
-EAT.SerializedData = Ember.Object.extend();
-EAT.RootSerializedData = EAT.SerializedData.extend({
-    getDataForWidget: function (widget) {
-        var key = widget.get('dataKey');
-        return this.getDataForWidgetID(key);
-    },
-    getDataForWidgetID: function (key) {
-        for (var pageKey in this) {
-            if (this.hasOwnProperty(pageKey)) {
-                var page = this[pageKey];
-                if (Ember.isNone(page)) continue;
-                var data = page[key];
-                if (!Ember.isNone(data)) return data.data;
-            }
-        }
-    }
-});
-
 // We need to know about any DOM elements for working around IE8 html parser issues
-EAT.definitionDOMElements
+definitionDOMElements
     .addObject("elicitation-definition")
     .addObject("elicitation")
     .addObject("page")
@@ -157,16 +79,6 @@ EAT.WidgetResultsData = Ember.Object.extend({
         return this.get('_id');
     }.property('_id')
 */
-
-EAT.StoreDataResult = Ember.Object.extend({
-    init: function () {
-        this.set('errors', Ember.A(this.get('errors')));
-    },
-    dataKey: null,
-    dataKeyText: null,
-    errors: null,
-    data: null
-});
 
 window.EAT = EAT;
 

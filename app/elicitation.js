@@ -1,7 +1,72 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
+import RootSerializedData from './serialized-data'
+import CreateMarkdownConverter from './markdown-label'
+import PhraseDefinitionsController from './phrase-definitions'
+import PagesController from './pages'
+
+var PageFooterController = Ember.Object.extend({
+    label: "",
+    serializeDefinition: function (doc) {
+        var serialized = $(doc.createElement("page-footer"));
+        serialized.text(this.get('label'));
+        return serialized;
+    },
+    loadFromXML: function (pageFooterXML) {
+        this.set('label', $(pageFooterXML).text());
+    }
+});
+
+var CustomWidgetsController = Ember.Object.extend({
+    javascript: "",
+    css: "",
+    serializeDefinition: function (doc) {
+        var customWidget = doc.createElement("custom-widget");
+        var javascript = doc.createElement("javascript");
+        var css = doc.createElement("css");
+        $(javascript).text(this.get("javascript"));
+        $(css).text(this.get("css"));
+        customWidget.appendChild(javascript);
+        customWidget.appendChild(css);
+        return customWidget;
+    },
+    loadFromXML: function (customWidgetXMLs) {
+        var javascript = "";
+        var css = "";
+
+        customWidgetXMLs.find("javascript").each(function () {
+            javascript += $(this).text();
+        });
+
+        customWidgetXMLs.find("css").each(function () {
+            css += $(this).text();
+        });
+
+        this.set('javascript', javascript);
+        this.set('css', css);
+
+        this.injectCSSAndJavascript();
+    },
+    injectCSSAndJavascript: function () {
+
+        try {
+            // Run javascript
+            window.eval(this.get('javascript'));
+
+            // Update CSS
+            $("style#custom-widget").remove();
+            $("<style></style>")
+                .attr("id", "custom-widget")
+                .text(this.get('css'))
+                .appendTo($("body"));
+
+        } catch (e) {
+            console.log("Error loading custom widget javascript or CSS: ", e);
+            alert("Error loading custom widget javascript / css, see console for details.");
+        }
+    }
+});
 
 var Elicitation = Ember.Object.extend({
     /* BEGIN: initialization properties: These properties should probably be initialized or bound upon creation */
@@ -58,12 +123,12 @@ var Elicitation = Ember.Object.extend({
         } catch (e) { }
 
         // First setup the various controllers and objects
-        this.set('pageFooter', EAT.PageFooterController.create());
-        this.set('customWidgets', EAT.CustomWidgetsController.create());
-        this.set('phraseDefinitions', EAT.PhraseDefinitionsController.create());
-        this.set('pagesController', EAT.PagesController.create({ elicitation: this }));
-        this.set('serializedData', EAT.RootSerializedData.create(priorSessionData));
-        this.set('markdownConverter', EAT.CreateMarkdownConverter(this));
+        this.set('pageFooter', PageFooterController.create());
+        this.set('customWidgets', CustomWidgetsController.create());
+        this.set('phraseDefinitions', PhraseDefinitionsController.create());
+        this.set('pagesController', PagesController.create({ elicitation: this }));
+        this.set('serializedData', RootSerializedData.create(priorSessionData));
+        this.set('markdownConverter', CreateMarkdownConverter(this));
 
         // Now load the serialized elicitation from an XML string
         this.loadFromXML(this.get('elicitationDefinition'));
@@ -512,5 +577,6 @@ var Elicitation = Ember.Object.extend({
     pagesController: null
 });
 
+import EAT from './eat'
 EAT.Elicitation = Elicitation;
 export default Elicitation;

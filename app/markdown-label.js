@@ -1,5 +1,4 @@
 import Ember from 'ember'
-import EAT from './eat'
 import ElicitationUtils from './elicitation-utils'
 
 // WARNING: NOT STATELESS, NOT THREAD-SAFE, NOT GOOD: see containsAVariableSubstution
@@ -183,6 +182,7 @@ function CreateVanillaMarkdownConverter() {
 
 
 // EXPORTS
+import EAT from './eat'
 EAT.MarkdownLabel = MarkdownLabel;
 EAT.CreateMarkdownConverter = CreateMarkdownConverter;
 EAT.VanillaMarkdownLabel = VanillaMarkdownLabel;

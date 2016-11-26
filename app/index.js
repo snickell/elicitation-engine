@@ -9,6 +9,7 @@ import "./pages"
 import "./widget-gallery"
 
 import "./eat"
+import "./serialized-data"
 import "./eat-views"
 import "./elicitation"
 
