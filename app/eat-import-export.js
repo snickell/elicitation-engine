@@ -28,6 +28,10 @@ EAT.WidgetGalleryView = WidgetGalleryView;
 
 import "./eat";
 
+import { WidgetResultsView, WidgetResultsData } from './widget-results';
+EAT.WidgetResultsView = WidgetResultsView;
+EAT.WidgetResutlsData = WidgetResultsData;
+
 import { SerializedData, RootSerializedData } from "./serialized-data";
 EAT.SerializedData = SerializedData;
 EAT.RootSerializedData = RootSerializedData;

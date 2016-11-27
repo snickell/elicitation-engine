@@ -2,12 +2,15 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-import { WidgetResultViewRegistry } from 'eat/widget-registry'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
+import { WidgetResultsViewRegistry, WidgetResultsView, WidgetResultsData } from 'eat/widget-results';
 
-WidgetResultViewRegistry.CardRank = EAT.WidgetResultsView.extend({
+WidgetResultViewRegistry.CardRank = WidgetResultsView.extend({
     templateName: "card-rank-results",
     classNames: ["widget-results", "card-rank"],
-    content: undefined, // An EAT.WidgetResultsData
+    content: undefined, // An WidgetResultsData
     cardTallies: function () {
         var allExpertData = this.get('content.perExpertData');
 
@@ -130,7 +133,7 @@ EAT.CardRankContainer = Ember.View.extend({
     }
 })
 
-var CardModel = EAT.WidgetDefinition.extend({
+var CardModel = WidgetDefinition.extend({
     label: "untitled card",
 
     // FIXME: dataKeyBinding: 'label', was producing underscored results, it was icky
@@ -170,7 +173,7 @@ var ContainerModel = Ember.ArrayController.extend({
     _stateSkipKeys: [ 'cards' ]
 });
 
-var CardRankModel = EAT.WidgetDefinition.extend({
+var CardRankModel = WidgetDefinition.extend({
     radioButtonsAreOptional: false,
     topLabel: "Biggest Item",
     bottomLabel: "Smallest Item",
@@ -265,49 +268,49 @@ var CardRankModel = EAT.WidgetDefinition.extend({
     }.observes('numContainers', 'numCardsToAccept', 'acceptMoreThanNumCards')
 });
 
-EAT.Widget.register('card-rank', {
+Widget.register('card-rank', {
     prettyName: "Card Rank",
     templateName: 'card-rank',
-    widgetResults: EAT.WidgetResultsViews.CardRank,
+    widgetResults: WidgetResultsViews.CardRank,
     definitionSchema: {
         model: CardRankModel,
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         cards: {
             type: "HasMany",
             prettyName: 'Card',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('card', {
+            accessor: WidgetDefinition.HasMany('card', {
                 model: CardModel,
-                label: { accessor: EAT.WidgetDefinition.Contents() },
-                definition: { accessor: EAT.WidgetDefinition.Attr("definition"), prettyName: "Definition" }
+                label: { accessor: WidgetDefinition.Contents() },
+                definition: { accessor: WidgetDefinition.Attr("definition"), prettyName: "Definition" }
             })
         },
         randomizeCardOrder: {
             type: "Boolean",
             prettyName: 'Randomize Card Order',
-            accessor: EAT.WidgetDefinition.Attr('randomize-card-order'),
+            accessor: WidgetDefinition.Attr('randomize-card-order'),
             helpText: 'Shuffle the cards for each person viewing the elicitation'
         },
-        topLabel: { accessor: EAT.WidgetDefinition.Attr("top-label"), prettyName: "Top Label" },
-        bottomLabel: { accessor: EAT.WidgetDefinition.Attr("bottom-label"), prettyName: "Bottom Label" },
+        topLabel: { accessor: WidgetDefinition.Attr("top-label"), prettyName: "Top Label" },
+        bottomLabel: { accessor: WidgetDefinition.Attr("bottom-label"), prettyName: "Bottom Label" },
         allowWriteInCards: {
-            accessor: EAT.WidgetDefinition.Attr("allow-writeins"),
+            accessor: WidgetDefinition.Attr("allow-writeins"),
             prettyName: "Allow Write-In Cards",
             helpText: "Allow experts to add their own cards to the set being ranked.",
             type: "Boolean"
         },
         numCardsToAccept: {
-            accessor: EAT.WidgetDefinition.Attr("num-containers"),
+            accessor: WidgetDefinition.Attr("num-containers"),
             prettyName: "Number of Rankings Requested",
             helpText: "Number of cards experts are asked to rank. If this is blank, the number of required cards will equal the number of defined cards."
         },
         acceptMoreThanNumCards: {
-            accessor: EAT.WidgetDefinition.Attr("allow-more-than-num-containers"),
+            accessor: WidgetDefinition.Attr("allow-more-than-num-containers"),
             prettyName: "Allow optional rankings beyond requested",
             type: "Boolean"
         },
         allowEqualRanking: {
-            accessor: EAT.WidgetDefinition.Attr("allow-equal-ranking"),
+            accessor: WidgetDefinition.Attr("allow-equal-ranking"),
             prettyName: "Allow Equal Ranking of Cards",
             helpText: "Allow experts to rank multiple cards as equal (i.e. allow more than one card in each drop target).",
             type: "Boolean"
@@ -315,16 +318,16 @@ EAT.Widget.register('card-rank', {
         radioButtons: {
             type: "HasMany",
             prettyName: 'Radio Button',
-            accessor: EAT.WidgetDefinition.HasMany('radio-button', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('radio-button', {
+                model: WidgetDefinition.extend({
                     label: "Decrease"
                 }),
-                label: { accessor: EAT.WidgetDefinition.Contents() }
+                label: { accessor: WidgetDefinition.Contents() }
             })
         },
-        radioButtonLabel: { accessor: EAT.WidgetDefinition.ChildNode("radio-button-label"), prettyName: "Header for Radio Buttons", type: "Text" },
+        radioButtonLabel: { accessor: WidgetDefinition.ChildNode("radio-button-label"), prettyName: "Header for Radio Buttons", type: "Text" },
         radioButtonsAreOptional: {
-            accessor: EAT.WidgetDefinition.Attr("radio-buttons-are-optional"),
+            accessor: WidgetDefinition.Attr("radio-buttons-are-optional"),
             prettyName: "Radio Buttons Are Optional",
             helpText: "Don't harrass experts if they don't fill in a radio buttonn",
             type: "Boolean"

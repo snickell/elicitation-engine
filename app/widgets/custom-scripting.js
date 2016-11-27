@@ -1,7 +1,6 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
-
-
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
 
 function bindRunEventHandler(eventName) {
     return function (page) {
@@ -129,11 +128,11 @@ function bindCustomScriptingAPI(elicitation) {
     return api;
 }
 
-EAT.Widget.register('custom-scripting', {
+Widget.register('custom-scripting', {
     prettyName: "Custom Scripting",
     templateName: 'custom-scripting',
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             label: "explain what the script does here",
             beforeEnteringPage: "// see http://wiki.nearzero.org/elicitation-authoring/for-developers\n// for examples and (some) documentation\n\nalert('hello world!');\n",
             beforeExitingPage: "",
@@ -150,9 +149,9 @@ EAT.Widget.register('custom-scripting', {
                     });
             }.property('beforeEnteringPage', 'beforeExitingPage')
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text", prettyName: "Description of code" },
-        beforeEnteringPage: { accessor: EAT.WidgetDefinition.ChildNode("beforeEnteringPage"), type: "Text", prettyName: "BeforeEnteringPage(api, unsupported) {", helpText: "The JavaScript in BeforeEnteringPage is executed before the page in which this widget resides is switched to. You can use the 'Preview' button to test your custom script in actual usage, or just click the test button to manually execute your script.\n\nYour code has access to an 'api' variable, which is an object with functions you can use for scripting the elicitation. You can explore this API by opening your javascript console and exploring customScripting.api . You can also directly access the raw elicitation to do anything you want by using unsupported.elicitation in your script, but in general this is not recommended." },
-        beforeExitingPage: { accessor: EAT.WidgetDefinition.ChildNode("beforeExitingPage"), type: "Text", prettyName: "BeforeExitingPage(api, unsupported) {", helpText: "See help for BeforeEnteringPage for details on using the custom scripting feature" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text", prettyName: "Description of code" },
+        beforeEnteringPage: { accessor: WidgetDefinition.ChildNode("beforeEnteringPage"), type: "Text", prettyName: "BeforeEnteringPage(api, unsupported) {", helpText: "The JavaScript in BeforeEnteringPage is executed before the page in which this widget resides is switched to. You can use the 'Preview' button to test your custom script in actual usage, or just click the test button to manually execute your script.\n\nYour code has access to an 'api' variable, which is an object with functions you can use for scripting the elicitation. You can explore this API by opening your javascript console and exploring customScripting.api . You can also directly access the raw elicitation to do anything you want by using unsupported.elicitation in your script, but in general this is not recommended." },
+        beforeExitingPage: { accessor: WidgetDefinition.ChildNode("beforeExitingPage"), type: "Text", prettyName: "BeforeExitingPage(api, unsupported) {", helpText: "See help for BeforeEnteringPage for details on using the custom scripting feature" },
     },
     beforeEnteringPage: bindRunEventHandler("beforeEnteringPage"),
     beforeExitingPage: bindRunEventHandler("beforeExitingPage"),

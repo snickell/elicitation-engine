@@ -1,12 +1,15 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
+
 import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
 
 var DEBUG_BOX_AND_WHISKERS = false;
 var LINE_WIDTH = 7;
 var PERCENTILES = ['_0th', '_25th', '_50th', '_75th', '_100th'];
 
-EAT.Widget.register('box-and-whiskers', {
+Widget.register('box-and-whiskers', {
     prettyName: "Box n' Whiskers",
     value: null,
     shape: 0,
@@ -15,7 +18,7 @@ EAT.Widget.register('box-and-whiskers', {
     doneWithWhiskers: false,
     doneClicking: false,
     templateName: 'box-and-whiskers',
-    dataModel: EAT.WidgetData.extend({
+    dataModel: WidgetData.extend({
         _0th: undefined,
         _25th: undefined,
         _50th: undefined,
@@ -26,7 +29,7 @@ EAT.Widget.register('box-and-whiskers', {
         }.property('_50th')
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             _min: 0.1,
             _max: 4.0,
             min: function (key, value) {
@@ -50,43 +53,43 @@ EAT.Widget.register('box-and-whiskers', {
             label_75th: "75th Percentile",
             label_100th: "Maximum",
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         min: {
-            accessor: EAT.WidgetDefinition.Attr("min"),
+            accessor: WidgetDefinition.Attr("min"),
             prettyName: "Starting Min",
             helpText: "The initial minimum value of the box-plot axis. Note that users can select smaller values by manually dragging the whiskers."
         },
         max: {
-            accessor: EAT.WidgetDefinition.Attr("max"),
+            accessor: WidgetDefinition.Attr("max"),
             prettyName: "Starting Max",
             helpText: "The initial maximum value of the box-plot axis. Note that users can select larger values by manually dragging the whiskers."
         },
         axisLabel: {
-            accessor: EAT.WidgetDefinition.Attr("axis-label"),
+            accessor: WidgetDefinition.Attr("axis-label"),
             prettyName: "Axis Label"
         },
         label_0th: {
-            accessor: EAT.WidgetDefinition.Attr("label-0th"),
+            accessor: WidgetDefinition.Attr("label-0th"),
             prettyName: "0th Percentile",
             category: "Percentile Labels"
         },
         label_25th: {
-            accessor: EAT.WidgetDefinition.Attr("label-25th"),
+            accessor: WidgetDefinition.Attr("label-25th"),
             prettyName: "25th Percentile",
             category: "Percentile Labels"       
         },
         label_50th: {
-            accessor: EAT.WidgetDefinition.Attr("label-50th"),
+            accessor: WidgetDefinition.Attr("label-50th"),
             prettyName: "50th Percentile",
             category: "Percentile Labels"              
         },
         label_75th: {
-            accessor: EAT.WidgetDefinition.Attr("label-75th"),
+            accessor: WidgetDefinition.Attr("label-75th"),
             prettyName: "75th Percentile",
             category: "Percentile Labels"              
         },
         label_100th: {
-            accessor: EAT.WidgetDefinition.Attr("label-100th"),
+            accessor: WidgetDefinition.Attr("label-100th"),
             prettyName: "100th Percentile",
             category: "Percentile Labels"              
         }            

@@ -1,8 +1,11 @@
 import Ember from 'ember'
 import EAT from 'eat/eat'
-import ElicitationUtils from 'eat/elicitation-utils'
 
-import { WidgetResultViewRegistry } from 'eat/widget-registry'
+import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
+import { WidgetResultsViewRegistry, WidgetResultsView, WidgetResultsData } from 'eat/widget-results';
 
 var DEBUG_TIME_TREND = false;
 var TIME_TREND_UNDEFINED_POINT_OFFSET = -15;
@@ -19,7 +22,7 @@ perExpertData[].data.Expected[].y
 
 */
 
-WidgetResultViewRegistry.TimeTrend = EAT.WidgetResultsView.extend({
+WidgetResultsViewRegistry.TimeTrend = WidgetResultsView.extend({
     templateName: "time-trend-results",
     classNames: ["widget-results", "time-trend"],
     content: undefined, // An EAT.WidgetResultsData
@@ -347,7 +350,7 @@ EAT.TimeTrendSeriesView = Ember.View.extend({
     titleBinding: "series.name"
 });
 
-var SeriesModel = EAT.WidgetDefinition.extend({
+var SeriesModel = WidgetDefinition.extend({
     onInit: function () {
         this.set('points', Ember.A(this.get('points')));
     }.on('init'),
@@ -381,7 +384,7 @@ var SeriesModel = EAT.WidgetDefinition.extend({
 });
 
 var PointModelKeyProperties = ['year', 'label', 'value', 'fixedValue', 'series'];
-var PointModel = EAT.WidgetDefinition.extend(Ember.Copyable, {
+var PointModel = WidgetDefinition.extend(Ember.Copyable, {
     copy: function () {
         return PointModel.create(this.getProperties(PointModelKeyProperties));
     },
@@ -788,28 +791,28 @@ var pointsDef = {
     type: "HasMany",
     prettyName: 'Point',
     emphasizeWhenEmpty: true,
-    accessor: EAT.WidgetDefinition.HasMany('point', {
+    accessor: WidgetDefinition.HasMany('point', {
         model: PointModel,
-        year: { accessor: EAT.WidgetDefinition.Attr("year"), prettyName: "Year (X)" },
-        value: { accessor: EAT.WidgetDefinition.Attr("value"), prettyName: "Default Value (Y)", helpText: "Leave blank to start with an undefined y-value (recommended)" },
+        year: { accessor: WidgetDefinition.Attr("year"), prettyName: "Year (X)" },
+        value: { accessor: WidgetDefinition.Attr("value"), prettyName: "Default Value (Y)", helpText: "Leave blank to start with an undefined y-value (recommended)" },
         fixedValue: {
-            accessor: EAT.WidgetDefinition.Attr("fixed-value"),
+            accessor: WidgetDefinition.Attr("fixed-value"),
             type: "Boolean",
             prettyName: "Value isn't user adjustable",
             helpText: "The point is fixed at authoring time and experts cannot move it, e.g. use for historical or reference points."
         },
-        label: { accessor: EAT.WidgetDefinition.Attr("label"), prettyName: "Label the point", helpText: "Add an annotation to the point" }
+        label: { accessor: WidgetDefinition.Attr("label"), prettyName: "Label the point", helpText: "Add an annotation to the point" }
     })
 };
 
-EAT.Widget.register('time-trend', {
+Widget.register('time-trend', {
     prettyName: "Time Trend",
     templateName: 'time-trend',
-    widgetResults: EAT.WidgetResultsViews.TimeTrend,
-    dataModel: EAT.WidgetData.extend({
+    widgetResults: WidgetResultsViews.TimeTrend,
+    dataModel: WidgetData.extend({
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             pointsChanged: undefined, // used to signal when any aspect of a point changes, since we make a copy in frame.series
             informWhenPointsChange: function () {
                 this.notifyPropertyChange('pointsChanged');
@@ -817,48 +820,48 @@ EAT.Widget.register('time-trend', {
             valueAxisLabel: "Weight in Kg",
             seriesLabel: "Expected"
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         requestRange: {
-            accessor: EAT.WidgetDefinition.Attr("request-range"),
+            accessor: WidgetDefinition.Attr("request-range"),
             prettyName: "Also request Min and Max series",
             type: "Boolean"
         },
         valueAxisLabel: {
-            accessor: EAT.WidgetDefinition.Attr("value-axis-label"),
+            accessor: WidgetDefinition.Attr("value-axis-label"),
             prettyName: "Value (Y) Axis Label",
             type: "String"
         },
         timeAxisLabel: {
-            accessor: EAT.WidgetDefinition.Attr("time-axis-label"),
+            accessor: WidgetDefinition.Attr("time-axis-label"),
             prettyName: "Time (X) Axis Label",
             type: "String"
         },
         seriesLabel: {
-            accessor: EAT.WidgetDefinition.Attr("series-label"),
+            accessor: WidgetDefinition.Attr("series-label"),
             prettyName: "Series Label",
             type: "String"
         },
         points: pointsDef,
         valueAxisMinUpperRange: {
-            accessor: EAT.WidgetDefinition.Attr("value-axis-min-upper-range"),
+            accessor: WidgetDefinition.Attr("value-axis-min-upper-range"),
             prettyName: "Min Upper",
             type: "String",
             category: "Y-Axis Range"
         },
         valueAxisMaxLowerRange: {
-            accessor: EAT.WidgetDefinition.Attr("value-axis-max-lower-range"),
+            accessor: WidgetDefinition.Attr("value-axis-max-lower-range"),
             prettyName: "Max Lower",
             type: "String",
             category: "Y-Axis Range"
         },
         valueAxisLogBase: {
-            accessor: EAT.WidgetDefinition.Attr("value-axis-log-base"),
+            accessor: WidgetDefinition.Attr("value-axis-log-base"),
             prettyName: "Y-Axis Log Base",
             type: "String",
             category: "Y-Axis Range"
         },            
         timeAxisLogBase: {
-            accessor: EAT.WidgetDefinition.Attr("time-axis-log-base"),
+            accessor: WidgetDefinition.Attr("time-axis-log-base"),
             prettyName: "X-Axis Log Base",
             type: "String",
             category: "Y-Axis Range"
@@ -866,18 +869,18 @@ EAT.Widget.register('time-trend', {
         series: {
             type: "HasMany",
             prettyName: 'Series',
-            accessor: EAT.WidgetDefinition.HasMany('series', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('series', {
+                model: WidgetDefinition.extend({
                     label: "A Series",
                     pointsChanged: undefined, // used to signal when any aspect of a point changes, since we make a copy in frame.series
                     informWhenPointsChange: function () {
                         this.notifyPropertyChange('pointsChanged');
                     }.observes('points.@each.year', 'points.@each.value', 'points.@each.fixedValue', 'points.@each.label')
                 }),
-                label: { accessor: EAT.WidgetDefinition.Attr("label"), prettyName: "Series Label" },
+                label: { accessor: WidgetDefinition.Attr("label"), prettyName: "Series Label" },
                 points: pointsDef,
                 requestRange: {
-                    accessor: EAT.WidgetDefinition.Attr("request-range"),
+                    accessor: WidgetDefinition.Attr("request-range"),
                     prettyName: "Also request Min and Max series",
                     type: "Boolean"
                 }

@@ -1,40 +1,41 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
+import Ember from 'ember';
 
+import { Widget } from 'eat/widget';
+import { WidgetDefinition } from 'eat/widget-definition';
 
-EAT.Widget.register('image-in-elicitation', {
+Widget.register('image-in-elicitation', {
     prettyName: "Image",
     templateName: 'image',
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             label: ""
         }),
         image: {
-            accessor: EAT.WidgetDefinition.Attr('image-in-elicitation-id'),
+            accessor: WidgetDefinition.Attr('image-in-elicitation-id'),
             prettyName: "Upload an Image",
             type: "Image"
         },
         label: {
-            accessor: EAT.WidgetDefinition.ChildNode('label'),
+            accessor: WidgetDefinition.ChildNode('label'),
             prettyName: "Caption",
             type: "Text"
         },
         alignCenter: {
-            accessor: EAT.WidgetDefinition.Attr('align-center'),
+            accessor: WidgetDefinition.Attr('align-center'),
             prettyName: "Align Center",
             type: "Boolean"
         },
         linkToURL: {
-            accessor: EAT.WidgetDefinition.Attr('href'),
+            accessor: WidgetDefinition.Attr('href'),
             prettyName: "Link to URL"
         },
         thumbnail: {
-            accessor: EAT.WidgetDefinition.Attr('is-thumbnail'),
+            accessor: WidgetDefinition.Attr('is-thumbnail'),
             prettyName: "Thumbnail",
             type: "Boolean"
         },
         imageURL: {
-            accessor: EAT.WidgetDefinition.Attr('src'),
+            accessor: WidgetDefinition.Attr('src'),
             prettyName: "Manual Image URL (instead of upload)"
         }
     },

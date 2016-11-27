@@ -1,6 +1,4 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
-
+/*
 (function (Elicitation, Ember) {
     "use strict;"
 
@@ -70,7 +68,6 @@ import EAT from 'eat/eat'
             if (Ember.isNone(dom)) return undefined;
             return dom.find(".widget.area");
         },
-        /*definitionEditorViewClass: AreaAllocationDefinitionEditorView,*/
         heightChanged: function () {
             var height = this.get('definition.height');
             var widget = this.getDOM();
@@ -277,7 +274,7 @@ import EAT from 'eat/eat'
             });
         }
     });
-
+*/
     /*
     
     

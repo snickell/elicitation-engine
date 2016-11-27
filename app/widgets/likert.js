@@ -1,11 +1,12 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
+import Ember from 'ember';
+import { Widget } from 'eat/widget';
+import { WidgetDefinition } from 'eat/widget-definition';
 
 // FIXME: We use this global to create radio "groups"...
 // is there a better way?
 var globalLikertNum = 0;
 
-EAT.Widget.register('likert', {
+Widget.register('likert', {
     likertNum: null,
     prettyName: "Likert Scale",
     initWidget: function () {
@@ -14,7 +15,7 @@ EAT.Widget.register('likert', {
     },
     templateName: 'likert',
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             label: "Authoring elicitations makes me feel mushy inside.",
             stronglyNegativeLabel: "Strongly Disagree",
             negativeLabel: "Disagree",
@@ -22,25 +23,25 @@ EAT.Widget.register('likert', {
             positiveLabel: "Agree",
             stronglyPositiveLabel: "Strongly Agree"
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         stronglyNegativeLabel: {
-            accessor: EAT.WidgetDefinition.Attr("strongly-negative-label"),
+            accessor: WidgetDefinition.Attr("strongly-negative-label"),
             prettyName: "Strongly Negative Label"
         },
         negativeLabel: {
-            accessor: EAT.WidgetDefinition.Attr("negative-label"),
+            accessor: WidgetDefinition.Attr("negative-label"),
             prettyName: "Negative Label"
         },
         neutralLabel: {
-            accessor: EAT.WidgetDefinition.Attr("neutral-label"),
+            accessor: WidgetDefinition.Attr("neutral-label"),
             prettyName: "Neutral Label"
         },
         positiveLabel: {
-            accessor: EAT.WidgetDefinition.Attr("positive-label"),
+            accessor: WidgetDefinition.Attr("positive-label"),
             prettyName: "Positive Label"
         },
         stronglyPositiveLabel: {
-            accessor: EAT.WidgetDefinition.Attr("strongly-positive-label"),
+            accessor: WidgetDefinition.Attr("strongly-positive-label"),
             prettyName: "Strongly Positive Label"
         }
     },

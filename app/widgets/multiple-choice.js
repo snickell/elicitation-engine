@@ -1,34 +1,36 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
 
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
 
 var globalMultipleChoiceNum = 0;
 
-EAT.Widget.register('multiple-choice', {
+Widget.register('multiple-choice', {
     prettyName: "Multiple Choice",
     value: null, // FIXME: remove this?
     templateName: 'multiple-choice',
-    dataModel: EAT.WidgetData.extend({
+    dataModel: WidgetData.extend({
         writein: ""
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             writein: false
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
-        writein: { accessor: EAT.WidgetDefinition.Attr("writein"), type: "Boolean", prettyName: "Append a write-in choice" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
+        writein: { accessor: WidgetDefinition.Attr("writein"), type: "Boolean", prettyName: "Append a write-in choice" },
         choices: {
             type: "HasMany",
             prettyName: 'Choice',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('choice', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('choice', {
+                model: WidgetDefinition.extend({
                     label: "One choice amongst many",
                     htmlID: function () {
                         return this.get('dataKey');
                     }.property('dataKey')
                 }),
-                label: { accessor: EAT.WidgetDefinition.Contents() }
+                label: { accessor: WidgetDefinition.Contents() }
             })
         }
     },

@@ -1,44 +1,46 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
-import ElicitationUtils from 'eat/elicitation-utils'
 
-EAT.Widget.register('text-box', {
+import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+
+Widget.register('text-box', {
     prettyName: "Number Box",
     templateName: 'text-box',
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             askForUncertaintyRange: true,
             label: "How many jellybeans are in the jar?",
             uncertaintyRangeLabel: "Indicate an uncertainty range for your estimate:",
             uncertaintyRangeWidth: 1.0
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
-        askForUncertaintyRange: { accessor: EAT.WidgetDefinition.Attr("ask-for-uncertainty-range"), type: "Boolean", prettyName: "Ask for an uncertainty range" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
+        askForUncertaintyRange: { accessor: WidgetDefinition.Attr("ask-for-uncertainty-range"), type: "Boolean", prettyName: "Ask for an uncertainty range" },
         uncertaintyRangeWidth: { 
-            accessor: EAT.WidgetDefinition.Attr("uncertainty-range-width"),
+            accessor: WidgetDefinition.Attr("uncertainty-range-width"),
             prettyName: "Width of Uncertainty Range", 
             helpText: "The uncertainty range width determines the upper and lower bounds of the uncertainty range slider. Say the user enters 5 and you have set the uncertainty range width to 2: then the lower bound of the slider will be 5-2=3, and the upper bound will be 5+2=7."
         },
         uncertaintyRangeLabel: { 
-            accessor: EAT.WidgetDefinition.ChildNode("uncertainty-range-label"), 
+            accessor: WidgetDefinition.ChildNode("uncertainty-range-label"), 
             prettyName: "Label for Uncertainty Range",
             type: "Text", 
             visibility: "askForUncertaintyRange" 
         },
         min: { 
-            accessor: EAT.WidgetDefinition.Attr("min"),
+            accessor: WidgetDefinition.Attr("min"),
             prettyName: "Min Value Allowed",
             helpText: "Smallest value allowed. If blank, no min."
         },
         max: {
-            accessor: EAT.WidgetDefinition.Attr("max"),
+            accessor: WidgetDefinition.Attr("max"),
             prettyName: "Max Value Allowed",
             helpText: "Largest value allowed. If blank, no max."
         },
-        unitSuffix: { accessor: EAT.WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the number, e.g. the 'kg' in 50kg" },
-        unitPrefix: { accessor: EAT.WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the number, e.g. the '$' in $50m" },
-        validation: { accessor: EAT.WidgetDefinition.Attr("validation"), category: "Validation" },
-        validationMessage: { accessor: EAT.WidgetDefinition.Attr("validationMessage"), prettyName: "Validation Message", category: "Validation" }
+        unitSuffix: { accessor: WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the number, e.g. the 'kg' in 50kg" },
+        unitPrefix: { accessor: WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the number, e.g. the '$' in $50m" },
+        validation: { accessor: WidgetDefinition.Attr("validation"), category: "Validation" },
+        validationMessage: { accessor: WidgetDefinition.Attr("validationMessage"), prettyName: "Validation Message", category: "Validation" }
     },
     setupDOM: function () {
         if (this.get('definition.askForUncertaintyRange')) {

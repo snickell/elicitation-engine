@@ -1,8 +1,11 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
-import ElicitationUtils from 'eat/elicitation-utils'
+import Ember from 'ember';
 
-import {RadioButtonGroup} from 'eat/ember-radio-button'
+import ElicitationUtils from 'eat/elicitation-utils';
+
+import { Widget } from 'eat/widget';
+import { WidgetDefinition } from 'eat/widget-definition';
+import { WidgetData } from 'eat/widget-data';
+import {RadioButtonGroup} from 'eat/ember-radio-button';
 
 var globalMultipleChoiceTableNum = 0;
 
@@ -41,10 +44,10 @@ var TableModel = Ember.Object.extend({
     }.property('rows.@each', 'dataModel.definition.randomizeRowOrder')
 });
 
-var DataModel = EAT.WidgetData.extend({
+var DataModel = WidgetData.extend({
     init: function () {
         this._super();
-        this.set('table', EAT.WidgetData.CreateTable({
+        this.set('table', WidgetData.CreateTable({
             dataModel: this,
             rowDefinitionsBinding: 'dataModel.definition.rows',
             colDefinitionsBinding: 'dataModel.definition.choices',
@@ -72,17 +75,17 @@ function makeCustomDropdownChoicesSchema(choiceNum) {
     return {
         type: "HasMany",
         prettyName: 'Custom Dropdown #' + choiceNum + ' Choice',
-        accessor: EAT.WidgetDefinition.HasMany('custom-dropdown-choice-' + choiceNum, {
-            model: EAT.WidgetDefinition.extend({
+        accessor: WidgetDefinition.HasMany('custom-dropdown-choice-' + choiceNum, {
+            model: WidgetDefinition.extend({
                 label: 'dropdown choice'
             }),
-            label: { accessor: EAT.WidgetDefinition.Attr("label"), type: "String" },
+            label: { accessor: WidgetDefinition.Attr("label"), type: "String" },
         }),
         category: "Custom Dropdowns"
     };
 }
 
-EAT.Widget.register('multiple-choice-table', {
+Widget.register('multiple-choice-table', {
     RowView: RowView,
     prettyName: "Multiple Choice Table",
     value: null,
@@ -92,16 +95,16 @@ EAT.Widget.register('multiple-choice-table', {
         type: 'radio'
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             label: "Select your choices for these questions"
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         choices: {
             type: "HasMany",
             prettyName: 'Choice',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('choice', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('choice', {
+                model: WidgetDefinition.extend({
                     label: "One Choice",
                     htmlID: function () {
                         return this.get('dataKey');
@@ -135,11 +138,11 @@ EAT.Widget.register('multiple-choice-table', {
                     ),
                     choiceType: "radio"
                 }),
-                label: { accessor: EAT.WidgetDefinition.ChildNode('label') },
+                label: { accessor: WidgetDefinition.ChildNode('label') },
                 checkBox: {
                     prettyName: 'Check Box',
                     type: "Boolean",
-                    accessor: EAT.WidgetDefinition.Attr('check-box'),
+                    accessor: WidgetDefinition.Attr('check-box'),
                     visible: false,
                     dontSerialize: true
                 },
@@ -155,7 +158,7 @@ EAT.Widget.register('multiple-choice-table', {
                         { value: "custom-dropdown-3", label: "Custom Dropdown #4" },
                         { value: "custom-dropdown-4", label: "Custom Dropdown #4" },
                     ],
-                    accessor: EAT.WidgetDefinition.Attr('choice-type')
+                    accessor: WidgetDefinition.Attr('choice-type')
                 }
             })
         },
@@ -163,17 +166,17 @@ EAT.Widget.register('multiple-choice-table', {
             type: "HasMany",
             prettyName: 'Row',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('row', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('row', {
+                model: WidgetDefinition.extend({
                     label: 'untitled row'
                 }),
-                label: { accessor: EAT.WidgetDefinition.ChildNode('label') }
+                label: { accessor: WidgetDefinition.ChildNode('label') }
             })
         },
         randomizeRowOrder: {
             type: "Boolean",
             prettyName: 'Randomize Row Order',
-            accessor: EAT.WidgetDefinition.Attr('randomize-row-order'),
+            accessor: WidgetDefinition.Attr('randomize-row-order'),
             helpText: 'Randomize the order of rows for each person viewing the elicitation'
         },
         customDropDownChoices1: makeCustomDropdownChoicesSchema('1'),
@@ -187,7 +190,7 @@ EAT.Widget.register('multiple-choice-table', {
     serializeData: function (data, errors) {
         data.set('rows', this.get('data.table.rows').map(function (row) {
             var radioChoice = row.get('radioChoice');
-            var rowData = EAT.WidgetData.create({
+            var rowData = WidgetData.create({
                 choice: radioChoice,
                 dataKeyText: row.get('label')
             });

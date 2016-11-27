@@ -1,6 +1,8 @@
 import Ember from 'ember'
 import EAT from './app'
-import { WidgetRegistry, WidgetResultViewRegistry } from './widget-registry'
+import { WidgetRegistry } from './widget-registry'
+import { WidgetResultsViewRegistry } from './widget-results'
+
 import definitionDOMElements from './definition-dom-elements'
 
 EAT.reopen({
@@ -27,7 +29,7 @@ EAT.reopen({
         }
     }.property(),
     definitionDOMElements: definitionDOMElements,
-    WidgetResultsViews: WidgetResultViewRegistry
+    WidgetResultsViews: WidgetResultsViewRegistry
 });
 
 // We need to know about any DOM elements for working around IE8 html parser issues
@@ -50,18 +52,6 @@ EAT.DataDidntValidate = Ember.Object.extend({
     },
     errors: null
 });
-
-EAT.WidgetResultsView = Ember.View.extend({
-    perExpertDataBinding: 'content.perExpertData',
-    layoutName: 'results-chart-layout'
-});
-
-EAT.WidgetResultsData = Ember.Object.extend({
-    json: undefined,
-    rawJSON: undefined,
-    questionTextBinding: 'json.questionText',
-    perExpertDataBinding: 'json.data'
-})
 
 /* Example of an EmberJS setter:
     id: function (key, val) {

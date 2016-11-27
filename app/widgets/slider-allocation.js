@@ -1,19 +1,21 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
-import ElicitationUtils from 'eat/elicitation-utils'
 
-EAT.Widget.register('slider-allocation', {
+import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+
+Widget.register('slider-allocation', {
     prettyName: "Slider Allocation",
     value: null, // FIXME: remove this? unused?
     templateName: 'slider-allocation',
     definitionSchema: {
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
-        totalAllocation: { accessor: EAT.WidgetDefinition.Attr("total-allocation"), prettyName: "Allocation", type: "String" },
-        leftLabel: { accessor: EAT.WidgetDefinition.ChildNode("left-label"), prettyName: "Left Item" },
-        rightLabel: { accessor: EAT.WidgetDefinition.ChildNode("right-label"), prettyName: "Right Item" },
-        unitSuffix: { accessor: EAT.WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the value being allocated, e.g. the 'kg' in 50kg" },
-        unitPrefix: { accessor: EAT.WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the value being allocated, e.g. the '$' in $50m" },
-        model: EAT.WidgetDefinition.extend({
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
+        totalAllocation: { accessor: WidgetDefinition.Attr("total-allocation"), prettyName: "Allocation", type: "String" },
+        leftLabel: { accessor: WidgetDefinition.ChildNode("left-label"), prettyName: "Left Item" },
+        rightLabel: { accessor: WidgetDefinition.ChildNode("right-label"), prettyName: "Right Item" },
+        unitSuffix: { accessor: WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the value being allocated, e.g. the 'kg' in 50kg" },
+        unitPrefix: { accessor: WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the value being allocated, e.g. the '$' in $50m" },
+        model: WidgetDefinition.extend({
             label: "How would you spend a special allocation of $100m?",
             totalAllocation: 100,
             unitPrefix: "$",

@@ -1,18 +1,20 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
 
-EAT.Widget.register('text-area', {
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+
+Widget.register('text-area', {
     prettyName: "Text Area",
     templateName: 'text-area',
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             numRows: 4,
             optional: true
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
-        numRows: { accessor: EAT.WidgetDefinition.Attr("num-rows"), type: "String", prettyName: "# of Lines of Text" },
-        placeholder: { accessor: EAT.WidgetDefinition.Attr("placeholder"), type: "String", prettyName: "Placeholder Text" },
-        optional: { accessor: EAT.WidgetDefinition.Attr("optional"), type: "Boolean", prettyName: "Response is optional" }
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
+        numRows: { accessor: WidgetDefinition.Attr("num-rows"), type: "String", prettyName: "# of Lines of Text" },
+        placeholder: { accessor: WidgetDefinition.Attr("placeholder"), type: "String", prettyName: "Placeholder Text" },
+        optional: { accessor: WidgetDefinition.Attr("optional"), type: "Boolean", prettyName: "Response is optional" }
     },
     serializeData: function (data, errors) {
         var response = this.get('data.text');

@@ -1,33 +1,37 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
+import Ember from 'ember';
+import EAT from 'eat/eat';
+import ElicitationUtils from 'eat/elicitation-utils';
+import { Widget } from 'eat/widget';
+import { WidgetDefinition } from 'eat/widget-definition';
+import { WidgetData } from 'eat/widget-data';
 
-EAT.Widget.register('dropdown', {
+Widget.register('dropdown', {
     prettyName: "Dropdown",
     value: null,
     templateName: 'dropdown',
-    dataModel: EAT.WidgetData.extend({
+    dataModel: WidgetData.extend({
         selection: null
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             writein: true,
             placeholder: "Select one...",
             populateWithDiscussionMembers: true
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
-        populateWithDiscussionMembers: { accessor: EAT.WidgetDefinition.Attr("populate-with-discussion-members"), type: "Boolean", prettyName: "Populate dropdown with participant names" },
-        writein: { accessor: EAT.WidgetDefinition.Attr("writein"), type: "Boolean", prettyName: "Allow write-in answers" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
+        populateWithDiscussionMembers: { accessor: WidgetDefinition.Attr("populate-with-discussion-members"), type: "Boolean", prettyName: "Populate dropdown with participant names" },
+        writein: { accessor: WidgetDefinition.Attr("writein"), type: "Boolean", prettyName: "Allow write-in answers" },
         selections: {
             type: "HasMany",
             prettyName: 'Selection',
-            accessor: EAT.WidgetDefinition.HasMany('selection', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('selection', {
+                model: WidgetDefinition.extend({
                     label: "an item in the list"
                 }),
-                label: { accessor: EAT.WidgetDefinition.Contents() }
+                label: { accessor: WidgetDefinition.Contents() }
             })
         },
-        placeholder: { accessor: EAT.WidgetDefinition.Attr("placeholder") }
+        placeholder: { accessor: WidgetDefinition.Attr("placeholder") }
     },
     setupDOM: function () {
         if (this.get('definition.writein')) {

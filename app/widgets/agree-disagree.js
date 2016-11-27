@@ -1,11 +1,12 @@
-import Ember from 'ember'
-import EAT from 'eat/eat'
+import Ember from 'ember';
+import Widget from 'eat/widget'
+import {WidgetDefinition} from 'eat/widget-definition';
 
 // FIXME: We use this global to create radio "groups"...
 // is there a better way?
 var globalAgreeDisagreeNum = 0;
 
-EAT.Widget.register('agree-disagree', {
+Widget.register('agree-disagree', {
     agreeDisagreeNum: null,
     prettyName: "Agree/Disagree",
     initWidget: function () {
@@ -13,7 +14,7 @@ EAT.Widget.register('agree-disagree', {
     },
     templateName: 'agree-disagree',
     definitionSchema: {
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" }
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" }
     },
     serializeData: function (data, errors) {
         var agreement = this.$().find("input[type='radio']:checked").val();

@@ -1,10 +1,12 @@
 import Ember from 'ember'
-import EAT from 'eat/eat'
+
 import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
+import { WidgetResultsViewRegistry, WidgetResultsView, WidgetResultsData } from 'eat/widget-results';
 
-import { WidgetResultViewRegistry } from 'eat/widget-registry'
-
-WidgetResultViewRegistry.AllocationTable = EAT.WidgetResultsView.extend({
+WidgetResultsViewRegistry.AllocationTable = WidgetResultsView.extend({
     templateName: "allocation-table-results",
     classNames: ["widget-results", "allocation-table"],
     content: undefined, // An EAT.WidgetResultsData
@@ -402,14 +404,14 @@ var TableModel = Ember.Object.extend(SumChildAllocated, {
     }.property('cells.@each.allocated')
 });
 
-var AllocationTableDataModel = EAT.WidgetData.extend(AllocatedStringMixin, {
+var AllocationTableDataModel = WidgetData.extend(AllocatedStringMixin, {
     allocatedStringPrecision: 2,
     table: null,
     graphicalInput: false,
     init: function () {
         this._super();
 
-        this.set('table', EAT.WidgetData.CreateTable({
+        this.set('table', WidgetData.CreateTable({
             dataModel: this,
             rowDefinitionsBinding: 'dataModel.definition.rows',
             colDefinitionsBinding: 'dataModel.definition.cols',
@@ -430,43 +432,43 @@ var AllocationTableDataModel = EAT.WidgetData.extend(AllocatedStringMixin, {
     }.property('allocated', 'totalAllocation')
 });
 
-EAT.Widget.register('allocation-table', {
+Widget.register('allocation-table', {
     prettyName: "Allocation Table",
     templateName: 'allocation-table',
-    widgetResults: EAT.WidgetResultsViews.AllocationTable,        
+    widgetResults: WidgetResultsViews.AllocationTable,        
     dataModel: AllocationTableDataModel,
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             totalAllocation: 100
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode('label'), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode('label'), type: "Text" },
         totalAllocation: {
-            accessor: EAT.WidgetDefinition.Attr('total-allocation'),
+            accessor: WidgetDefinition.Attr('total-allocation'),
             prettyName: "Allocation",
             type: "String"
         },
-        unitSuffix: { accessor: EAT.WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the value being allocated, e.g. the 'kg' in 50kg" },
-        unitPrefix: { accessor: EAT.WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the value being allocated, e.g. the '$' in $50m" },
+        unitSuffix: { accessor: WidgetDefinition.Attr("unit-suffix"), prettyName: "Units", helpText: "Units for the value being allocated, e.g. the 'kg' in 50kg" },
+        unitPrefix: { accessor: WidgetDefinition.Attr("unit-prefix"), prettyName: "Prefix for Units", helpText: "Prefix to the value being allocated, e.g. the '$' in $50m" },
         cols: {
             type: "HasMany",
             prettyName: 'Col',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('column', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('column', {
+                model: WidgetDefinition.extend({
                     label: 'untitled col'
                 }),
-                label: { accessor: EAT.WidgetDefinition.ChildNode('label') }
+                label: { accessor: WidgetDefinition.ChildNode('label') }
             })
         },
         rows: {
             type: "HasMany",
             prettyName: 'Row',
             emphasizeWhenEmpty: true,
-            accessor: EAT.WidgetDefinition.HasMany('row', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('row', {
+                model: WidgetDefinition.extend({
                     label: 'untitled row'
                 }),
-                label: { accessor: EAT.WidgetDefinition.ChildNode('label') }
+                label: { accessor: WidgetDefinition.ChildNode('label') }
             })
         }
     },

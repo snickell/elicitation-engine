@@ -1,8 +1,11 @@
 import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
+import { Widget } from 'eat/widget'
+import { WidgetDefinition } from 'eat/widget-definition'
+import { WidgetData } from 'eat/widget-data'
 
-console.warn("WEBPACKCONVERT: setting EAT.TabularInputTextField from within widget");
+
 EAT.TabularInputTextField = Ember.TextField.extend({
     widget: undefined,
     row: undefined,
@@ -16,10 +19,10 @@ EAT.TabularInputTextField = Ember.TextField.extend({
     }
 });
 
-EAT.Widget.register('tabular-input', {
+Widget.register('tabular-input', {
     prettyName: "Tabular Input",
     templateName: 'tabular-input',
-    dataModel: EAT.WidgetData.extend({
+    dataModel: WidgetData.extend({
         rows: undefined,
         init: function () {
             this._super();
@@ -39,19 +42,19 @@ EAT.Widget.register('tabular-input', {
         }
     }),
     definitionSchema: {
-        model: EAT.WidgetDefinition.extend({
+        model: WidgetDefinition.extend({
             label: "Who else should complete this elicitation?"
         }),
-        label: { accessor: EAT.WidgetDefinition.ChildNode("label"), type: "Text" },
+        label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },
         columns: {
             type: "HasMany",
             emphasizeWhenEmpty: true,
             prettyName: 'Column',
-            accessor: EAT.WidgetDefinition.HasMany('column', {
-                model: EAT.WidgetDefinition.extend({
+            accessor: WidgetDefinition.HasMany('column', {
+                model: WidgetDefinition.extend({
                     label: "untitled column"
                 }),
-                label: { accessor: EAT.WidgetDefinition.Contents() }
+                label: { accessor: WidgetDefinition.Contents() }
             })
         }
     },

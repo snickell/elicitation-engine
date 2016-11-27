@@ -7,7 +7,7 @@ import { Schema, SchemaProperty } from './schema'
 import { SerializedData } from './serialized-data'
 import { qualifications } from './widget-qualification'
 import StoreDataResult from './store-data-result'
-import { WidgetRegistry } from './widget-registry'
+import WidgetRegistry from './widget-registry'
 import definitionDOMElements from './definition-dom-elements'
 
 var Widget = Ember.View.extend({
