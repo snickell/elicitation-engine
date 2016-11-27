@@ -1,6 +1,6 @@
 import "./elicitation-utils"
 import "./app"
-import './eat-import-export'
+import './eat-import-submodules'
 
 import "./widgets"
 import "./register-elicitation-widgets"
