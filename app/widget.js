@@ -1,7 +1,7 @@
 import Ember from 'ember'
 
 import ElicitationUtils from './elicitation-utils'
-import { WidgetDefinition } from './widget-definition'
+import { WidgetDefinition, WidgetDefinitionEditorView } from './widget-definition'
 import { WidgetData } from './widget-data'
 import { Schema, SchemaProperty } from './schema'
 import { SerializedData } from './serialized-data'
