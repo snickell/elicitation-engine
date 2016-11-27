@@ -1,6 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var path = require('path');
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   debug: true,
@@ -49,7 +49,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
-    new ExtractTextPlugin("app.css")
+    new ExtractTextPlugin("app.css"),
     // new webpack.optimize.UglifyJsPlugin()
   ],
   devServer: {
