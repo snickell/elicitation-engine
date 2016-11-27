@@ -1,3 +1,5 @@
+console.error("WEBPACKCONVERT: editing a card-rank to add cards doesn't seem to be working");
+
 import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
