@@ -180,3 +180,4 @@ function CreateVanillaMarkdownConverter() {
 }
 
 export { MarkdownLabel, CreateMarkdownConverter, VanillaMarkdownLabel };
+export default MarkdownLabel;

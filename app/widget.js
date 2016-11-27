@@ -1,13 +1,13 @@
 import Ember from 'ember'
 
 import ElicitationUtils from './elicitation-utils'
-import WidgetDefinition from './widget-definition'
-import WidgetData from './widget-data'
+import { WidgetDefinition } from './widget-definition'
+import { WidgetData } from './widget-data'
 import { Schema, SchemaProperty } from './schema'
-import SerializedData from './serialized-data'
-import qualifications from './widget-qualification'
+import { SerializedData } from './serialized-data'
+import { qualifications } from './widget-qualification'
 import StoreDataResult from './store-data-result'
-import WidgetRegistry from './widget-registry'
+import { WidgetRegistry } from './widget-registry'
 import definitionDOMElements from './definition-dom-elements'
 
 var Widget = Ember.View.extend({

@@ -1,7 +1,7 @@
 import Ember from 'ember'
 import ElicitationUtils from './elicitation-utils'
 
-import WidgetRegistry from './widget-registry'
+import { WidgetRegistry } from './widget-registry'
 
 var WidgetGalleryView = Ember.View.extend({
     addToPage: undefined, // page that will be added to!

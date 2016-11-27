@@ -2,7 +2,7 @@ import Ember from 'ember'
 import ElicitationUtils from './elicitation-utils'
 
 import definitionDOMElements from './definition-dom-elements'
-import Schema from './schema'
+import {Schema} from './schema'
 
 var WidgetDefinition = Ember.Object.extend({
     schema: null,

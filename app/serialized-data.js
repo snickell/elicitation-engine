@@ -19,4 +19,5 @@ var RootSerializedData = SerializedData.extend({
     }
 });
 
-export { SerializedData, RootSerializedData }
+export { SerializedData, RootSerializedData };
+export default SerializedData;

@@ -1,6 +1,6 @@
 import Ember from 'ember'
 import EAT from './app'
-import WidgetRegistry from './widget-registry'
+import { WidgetRegistry, WidgetResultViewRegistry } from './widget-registry'
 import definitionDOMElements from './definition-dom-elements'
 
 EAT.reopen({
@@ -27,7 +27,7 @@ EAT.reopen({
         }
     }.property(),
     definitionDOMElements: definitionDOMElements,
-    WidgetResultsViews: Ember.Object.create()
+    WidgetResultsViews: WidgetResultViewRegistry
 });
 
 // We need to know about any DOM elements for working around IE8 html parser issues

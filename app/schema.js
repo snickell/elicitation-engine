@@ -1,7 +1,7 @@
 import Ember from 'ember'
 import ElicitationUtils from './elicitation-utils'
-import WidgetDefinition from './widget-definition'
-import PropertyEditors from './property-editor'
+import {WidgetDefinition} from './widget-definition'
+import {PropertyEditors} from './property-editor'
 
 var Schema = Ember.ArrayController.extend({
     init: function () {
@@ -101,4 +101,5 @@ var SchemaProperty = Ember.Object.extend({
     visible: true
 });
 
-export { Schema, SchemaProperty }
+export { Schema, SchemaProperty };
+export default Schema;

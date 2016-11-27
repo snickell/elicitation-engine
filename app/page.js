@@ -2,7 +2,7 @@ import Ember from 'ember'
 import ElicitationUtils from './elicitation-utils'
 
 import StoreDataResult from './store-data-result'
-import WidgetRegistry from './widget-registry'
+import {WidgetRegistry} from './widget-registry'
 import SerialiazedData from './serialized-data'
 
 var Page = Ember.Object.extend({
@@ -323,3 +323,4 @@ var PageView = Ember.View.extend({
 });
 
 export { Page, PageView };
+export default Page;

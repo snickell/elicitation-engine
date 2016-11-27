@@ -1,10 +1,9 @@
 import Ember from 'ember'
 import EAT from 'eat/eat'
+import { WidgetResultViewRegistry } from 'eat/widget-registry'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-
-console.warn("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
-EAT.WidgetResultsViews.AllocationTable = EAT.WidgetResultsView.extend({
+WidgetResultViewRegistry.AllocationTable = EAT.WidgetResultsView.extend({
     templateName: "allocation-table-results",
     classNames: ["widget-results", "allocation-table"],
     content: undefined, // An EAT.WidgetResultsData

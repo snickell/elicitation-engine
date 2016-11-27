@@ -88,4 +88,5 @@ var PhraseDefinitionsController = Ember.ArrayController.extend({
 });
 
 export { PhraseDefinition, PhraseDefinitionView, PhraseDefinitionsView, PhraseDefinitionsController };
+export default PhraseDefinition;
 
