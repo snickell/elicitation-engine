@@ -114,33 +114,17 @@ if (app.get('env') === 'development') {
 
 }
 
+http.createServer(app).listen(app.get('port'), function () {
+  console.log("node process.version=", process.version);
+  console.log("Express server listening on port " + app.get('port'));
 
-console.log("Building EAT webpack");
-var webpack = require("webpack");
-var webpackConfig = null;
-if (app.get('env') === 'production') {
-  webpackConfig = require("./webpack.config.prod");  
-} else {
-  webpackConfig = require("./webpack.config");
-}
-
-var compiler = webpack(webpackConfig);
-compiler.run(function(err, stats) {
-  if (err) throw err;
-  console.log("Success: EAT webpack built\n");
-
-  http.createServer(app).listen(app.get('port'), function () {
-    console.log("node process.version=", process.version);
-    console.log("Express server listening on port " + app.get('port'));
-  
-    if (getConfig("STANDALONE") || app.get('env') === 'development') {
-      console.log();    
-      console.log(colors.rainbow("Try accessing the elicitation server at:"));
-      console.log(colors.green("http://localhost:" + app.get('port') + baseURL + "/admin"));
-      console.log();
-    }
-  });
-
+  if (getConfig("STANDALONE") || app.get('env') === 'development') {
+    console.log();    
+    console.log(colors.rainbow("Try accessing the elicitation server at:"));
+    console.log(colors.green("http://localhost:" + app.get('port') + baseURL + "/admin"));
+    console.log();
+  }
 });
+
 
 

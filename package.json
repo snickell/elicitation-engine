@@ -7,29 +7,19 @@
   "main": "./server.js",
   "keywords": [],
   "dependencies": {
-    "babel-core": "^6.4.0",
-    "babel-loader": "^6.2.1",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-es2015-without-strict": "0.0.4",
     "bluebird": "^2.9.34",
     "body-parser": "~1.13.2",
     "colors": "^1.1.2",
-    "components-ember": "https://github.com/components/ember/archive/1.2.0.tar.gz",
     "connect-assets": "^5.0.1",
     "connect-busboy": "0.0.2",
     "cookie-parser": "^1.3.5",
-    "css-loader": "^0.23.1",
-    "ember-webpack-loaders": "https://github.com/snickell/ember-webpack-loaders.git",
     "errorhandler": "^1.4.2",
     "express": "~4.13.1",
     "express-handlebars": "^2.0.1",
     "extend": "^3.0.0",
-    "extract-text-webpack-plugin": "^1.0.1",
     "fast-csv": "^2.0.0",
     "glob": "^5.0.14",
     "handlebars": "2.0.0",
-    "jquery": "2.1.0",
-    "moment": "^2.17.0",
     "morgan": "^1.6.1",
     "node-connection-string-builder": "0.0.1",
     "node-uuid": "^1.4.7",
@@ -37,9 +27,9 @@
     "pg-hstore": "^2.3.2",
     "request-promise": "^0.4.3",
     "sequelize": "^3.18.0",
-    "style-loader": "^0.13.0",
     "tedious": "^1.13.2",
-    "webpack": "^1.12.11"
+    "components-ember": "https://github.com/components/ember/archive/1.2.0.tar.gz",
+    "jquery": "2.1.0"
   },
   "noAnalyze": true,
   "license": "GPL-3.0",
@@ -48,14 +38,24 @@
   },
   "devDependencies": {
     "assert": "^1.3.0",
+    "babel-core": "^6.4.0",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2015-without-strict": "0.0.4",
+    "css-loader": "^0.23.1",
+    "ember-webpack-loaders": "https://github.com/snickell/ember-webpack-loaders.git",
+    "extract-text-webpack-plugin": "^1.0.1",
     "nodeunit": "^0.9.1",
     "q": "^1.4.1",
     "selenium-standalone": "^4.8.0",
-    "wd": "^0.4.0"
+    "style-loader": "^0.13.0",
+    "wd": "^0.4.0",
+    "webpack": "^1.12.11"
   },
   "scripts": {
     "test": "./run-tests.sh",
     "log": "azure site log tail elicitation-gorilla",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "build:prod": "webpack --config webpack.config.prod.js"
   }
 }
