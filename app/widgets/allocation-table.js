@@ -1,7 +1,8 @@
 import Ember from 'ember'
 import EAT from 'eat/eat'
-import { WidgetResultViewRegistry } from 'eat/widget-registry'
 import ElicitationUtils from 'eat/elicitation-utils'
+
+import { WidgetResultViewRegistry } from 'eat/widget-registry'
 
 WidgetResultViewRegistry.AllocationTable = EAT.WidgetResultsView.extend({
     templateName: "allocation-table-results",

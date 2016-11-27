@@ -2,8 +2,7 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-// WEBPACKCONVERT: how to import G_vmlCanvasManager ?
-console.warn("WEBPACKCONVERT: not importing G_vmlCanvasManager");
+import { WidgetResultViewRegistry } from 'eat/widget-registry'
 
 var DEBUG_TIME_TREND = false;
 var TIME_TREND_UNDEFINED_POINT_OFFSET = -15;
@@ -20,8 +19,7 @@ perExpertData[].data.Expected[].y
 
 */
 
-console.warn("WEBPACKCONVERT: directly setting child on EAT.WidgetResultsViews");
-EAT.WidgetResultsViews.TimeTrend = EAT.WidgetResultsView.extend({
+WidgetResultViewRegistry.TimeTrend = EAT.WidgetResultsView.extend({
     templateName: "time-trend-results",
     classNames: ["widget-results", "time-trend"],
     content: undefined, // An EAT.WidgetResultsData

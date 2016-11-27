@@ -2,9 +2,6 @@ import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'
 
-// WEBPACKCONVERT: how to import G_vmlCanvasManager ?
-console.warn("WEBPACKCONVERT: not importing G_vmlCanvasManager");
-
 var DEBUG_BOX_AND_WHISKERS = false;
 var LINE_WIDTH = 7;
 var PERCENTILES = ['_0th', '_25th', '_50th', '_75th', '_100th'];

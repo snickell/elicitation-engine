@@ -118,7 +118,6 @@ function storeDataForMultipleChoiceWidget(widget, data) {
 
 
 // THIS WAS RETRIEVED FROM JQUERY-UI.COM AND CUSTOMIZED, LOOK FOR NZ_CUSTOM BELOW
-console.warn("WEBPACKCONVERT: extending global $. object (i.e. jQuery) from within widget");
 (function ($) {
   $.widget("ui.combobox", {
       _create: function () {
