@@ -14,5 +14,5 @@ The NearZero elicitation engine is a **web app for creating and hosting scientif
 ##Builtin Widgets
 ![Available Widgets](https://nearzero.github.io/elicitation-engine/images/widgets.png)
 
-##Try it out in 5 minutes or less:
+##(Not working ATM) Try it out in 5 minutes or less:
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
