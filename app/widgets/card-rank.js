@@ -7,7 +7,7 @@ import { WidgetDefinition } from 'eat/widget-definition'
 import { WidgetData } from 'eat/widget-data'
 import { WidgetResultsViewRegistry, WidgetResultsView, WidgetResultsData } from 'eat/widget-results';
 
-WidgetResultViewRegistry.CardRank = WidgetResultsView.extend({
+WidgetResultsViewRegistry.CardRank = WidgetResultsView.extend({
     templateName: "card-rank-results",
     classNames: ["widget-results", "card-rank"],
     content: undefined, // An WidgetResultsData
