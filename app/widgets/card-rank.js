@@ -271,7 +271,7 @@ var CardRankModel = WidgetDefinition.extend({
 Widget.register('card-rank', {
     prettyName: "Card Rank",
     templateName: 'card-rank',
-    widgetResults: WidgetResultsViews.CardRank,
+    widgetResults: WidgetResultsViewRegistry.CardRank,
     definitionSchema: {
         model: CardRankModel,
         label: { accessor: WidgetDefinition.ChildNode("label"), type: "Text" },

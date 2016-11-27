@@ -408,4 +408,5 @@ var WidgetVariable = WidgetDefinition.extend({
     }.observes('value')
 });
 
+export { Widget };
 export default Widget;

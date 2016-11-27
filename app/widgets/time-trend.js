@@ -808,7 +808,7 @@ var pointsDef = {
 Widget.register('time-trend', {
     prettyName: "Time Trend",
     templateName: 'time-trend',
-    widgetResults: WidgetResultsViews.TimeTrend,
+    widgetResults: WidgetResultsViewRegistry.TimeTrend,
     dataModel: WidgetData.extend({
     }),
     definitionSchema: {

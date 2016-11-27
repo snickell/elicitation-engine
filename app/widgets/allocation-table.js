@@ -435,7 +435,7 @@ var AllocationTableDataModel = WidgetData.extend(AllocatedStringMixin, {
 Widget.register('allocation-table', {
     prettyName: "Allocation Table",
     templateName: 'allocation-table',
-    widgetResults: WidgetResultsViews.AllocationTable,        
+    widgetResults: WidgetResultsViewRegistry.AllocationTable,        
     dataModel: AllocationTableDataModel,
     definitionSchema: {
         model: WidgetDefinition.extend({
