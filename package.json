@@ -29,7 +29,18 @@
     "sequelize": "^3.18.0",
     "tedious": "^1.13.2",
     "components-ember": "https://github.com/components/ember/archive/1.2.0.tar.gz",
-    "jquery": "2.1.0"
+    "jquery": "2.1.0",
+
+    "babel-core": "^6.4.0",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2015-without-strict": "0.0.4",
+    "css-loader": "^0.23.1",
+    "ember-webpack-loaders": "https://github.com/snickell/ember-webpack-loaders.git",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "style-loader": "^0.13.0",    
+    "webpack": "^1.12.11"    
+
   },
   "noAnalyze": true,
   "license": "GPL-3.0",
@@ -38,19 +49,10 @@
   },
   "devDependencies": {
     "assert": "^1.3.0",
-    "babel-core": "^6.4.0",
-    "babel-loader": "^6.2.1",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-es2015-without-strict": "0.0.4",
-    "css-loader": "^0.23.1",
-    "ember-webpack-loaders": "https://github.com/snickell/ember-webpack-loaders.git",
-    "extract-text-webpack-plugin": "^1.0.1",
     "nodeunit": "^0.9.1",
     "q": "^1.4.1",
     "selenium-standalone": "^4.8.0",
-    "style-loader": "^0.13.0",
-    "wd": "^0.4.0",
-    "webpack": "^1.12.11"
+    "wd": "^0.4.0"
   },
   "scripts": {
     "test": "./run-tests.sh",
