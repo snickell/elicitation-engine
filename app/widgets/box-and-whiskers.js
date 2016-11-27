@@ -447,10 +447,10 @@ Widget.register('box-and-whiskers', {
         var boxPlot = this.get('boxPlot');
 
         // Need to initialze exCanvas, c.f. "IE Sux"
-        if (G_vmlCanvasManager != undefined) {
+        if (window.G_vmlCanvasManager != undefined) {
             var canvasElement = this.$().find("canvas")[0];
             canvasElement = ElicitationUtils.recreateCanvasElement(canvasElement);
-            G_vmlCanvasManager.initElement(canvasElement);
+            window.G_vmlCanvasManager.initElement(canvasElement);
         }
 
         this.set('haveSetupDOM', true);

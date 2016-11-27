@@ -959,7 +959,7 @@ Widget.register('time-trend', {
         this.set('haveSetupDOM', true);
 
         // Need to initialze exCanvas, c.f. "IE Sux"
-        if (G_vmlCanvasManager != undefined) {
+        if (window.G_vmlCanvasManager != undefined) {
             var frame = this.get('frame');
 
             var axisCanvas = frame.get("axisCanvas");
@@ -968,8 +968,8 @@ Widget.register('time-trend', {
             axisCanvas = ElicitationUtils.recreateCanvasElement(axisCanvas);
             linesCanvas = ElicitationUtils.recreateCanvasElement(linesCanvas);
 
-            G_vmlCanvasManager.initElement(axisCanvas);
-            G_vmlCanvasManager.initElement(linesCanvas);
+            window.G_vmlCanvasManager.initElement(axisCanvas);
+            window.G_vmlCanvasManager.initElement(linesCanvas);
             frame.set('renderingUsingExCanvas', true);
         }
 
