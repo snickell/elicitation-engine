@@ -45,11 +45,13 @@
       ENV.FORCE_JQUERY = true;
   </script>
 
-	{{js "assets/site.js"}}
-	{{js "assets/elicitation.js"}}
-	{{js "assets/elicitation-widgets.js"}}
-    <script src='{{assetPath "assets/vendor.js"}}'></script>
-    <script src='{{assetPath "assets/app.js"}}'></script>
+	<!--
+        js "assets/site.js"-
+	    js "assets/elicitation.js"
+	    js "assets/elicitation-widgets.js"
+    -->
+    <script src='{{publicPath "assets/vendor.js"}}'></script>
+    <script src='{{publicPath "assets/app.js"}}'></script>
         
 	{{includeStatic "eat.hbs"}}
 	{{includeStatic "widgets.hbs"}}
