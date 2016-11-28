@@ -126,6 +126,8 @@ if [ -e "$DEPLOYMENT_TARGET/webpack.config.prod.json" ]; then
   exitWithMessageOnError "npm run build:prod failed"
   cd - > /dev/null
   echo ok think webpackin worked?
+  echo $NPM_CMD
+  echo $DEPLOYMENT_TARGET
 fi
 echo finished webpackin
 
