@@ -112,10 +112,19 @@ selectNodeVersion
 # 3. Install npm packages
 if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
-  eval $NPM_CMD install --production
+  eval $NPM_CMD install
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
 fi
+
+# 4. Run webpack
+if [ -e "$DEPLOYMENT_TARGET/webpack.config.prod.json" ]; then
+  cd "$DEPLOYMENT_TARGET"
+  eval $NPM_CMD run build:prod
+  exitWithMessageOnError "npm run build:prod failed"
+  cd - > /dev/null
+fi
+
 
 ##################################################################################################################################
 echo "Finished successfully."
