@@ -118,12 +118,16 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
 fi
 
 # 4. Run webpack
+echo Webpacking!
+echo Yup, doing the webpack
 if [ -e "$DEPLOYMENT_TARGET/webpack.config.prod.json" ]; then
   cd "$DEPLOYMENT_TARGET"
   eval $NPM_CMD run build:prod
   exitWithMessageOnError "npm run build:prod failed"
   cd - > /dev/null
+  echo ok think webpackin worked?
 fi
+echo finished webpackin
 
 
 ##################################################################################################################################
