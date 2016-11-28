@@ -25,10 +25,10 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, path.join(__dirname, './public/libs')],
         loader: 'babel-loader',
         query: {
-          presets: ['es2015-without-strict']
+          presets: ['es2015']
         }
       },
       /*
