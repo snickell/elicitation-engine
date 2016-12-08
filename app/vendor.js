@@ -1,8 +1,12 @@
+// This module handles the fancy imports required for our legacy "global namespace polluting" legacy libs
+
 window.jQuery = window.$ = require("./../public/libs/jquery-1.11.3");
 require("./../public/libs/jquery.textarea_auto_expand");
 require("./../public/libs/browser-detection-from-old-jquery");
 require("./../public/libs/jquery.scrollTo");
+
 require("imports?define=>false!./../public/libs/jquery-ui-1.11.4");
+
 require("./../public/libs/jquery.ui.touch-punch");
 require("./../public/libs/jquery.color");
 require("./../public/libs/jquery.placeholder");
