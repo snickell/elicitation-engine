@@ -3,7 +3,7 @@ import ElicitationUtils from './elicitation-utils'
 
 import StoreDataResult from './store-data-result'
 import {WidgetRegistry} from './widget-registry'
-import SerialiazedData from './serialized-data'
+import SerializedData from './serialized-data'
 
 var Page = Ember.Object.extend({
     pagesController: undefined, // define this in when creating
