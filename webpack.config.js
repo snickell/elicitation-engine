@@ -31,6 +31,9 @@ module.exports = {
           presets: ['es2015']
         }
       },
+			{ test: /\.png$/,    loader: "url-loader?prefix=img/&limit=5000" },
+			{ test: /\.jpg$/,    loader: "url-loader?prefix=img/&limit=5000" },
+			{ test: /\.gif$/,    loader: "url-loader?prefix=img/&limit=5000" },      
       /*
       {
         test: /\.hbs$/,

@@ -46,18 +46,20 @@
     "ember-webpack-loaders": "https://github.com/snickell/ember-webpack-loaders.git",
     "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
     "imports-loader": "^0.6.5",
     "nodeunit": "^0.9.1",
     "q": "^1.4.1",
     "selenium-standalone": "^4.8.0",
     "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
     "wd": "^0.4.0",
     "webpack": "^1.12.11"
   },
   "scripts": {
     "test": "./run-tests.sh",
     "log": "azure site log tail elicitation-gorilla",
-    "build": "webpack --watch",
+    "build": "webpack --progress --colors --watch",
     "build:prod": "webpack --config webpack.config.prod.js"
   }
 }

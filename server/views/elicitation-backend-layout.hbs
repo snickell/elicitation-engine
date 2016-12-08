@@ -19,14 +19,8 @@
         window.IsMobileDevice = true;
     </script>
 {{else}}
-	{{css "assets/site.css"}}
-	{{css "assets/elicitation.css"}}
-	{{css "assets/elicitation-categories.css"}}	
-	{{css "assets/elicitation-widgets.css"}}
+    <link rel="stylesheet" href="{{publicPath "dist/app.css"}}" />
 {{/if}}
-
-	<!-- Include directly because it relies on relative image references -->
-	<link rel="stylesheet" href="{{publicPath "themes/base/theme.css"}}" />
     
     <script>
         ENV = {
