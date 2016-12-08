@@ -67,7 +67,14 @@ app.use(connectAssets({
 }));
 connectAssetsHelpers.baseURL = baseURL;
 
+
+if (app.get('env') === 'development') {
+  console.log("DEV: aliasing /public/dist/dev over /public/dist (be sure to use webpack dev build)");
+  router.use('/public/dist', express.static('public/dist/dev'));
+}
 router.use('/public', express.static('public'));
+
+
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
 router.get('/', function (req, res) {  
@@ -108,11 +115,6 @@ app.use(baseURL, router);
 
 // FIXME: maybe should only do this in dev? think its ok for now...
 app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-
-if (app.get('env') === 'development') {
-  
-
-}
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log("node process.version=", process.version);

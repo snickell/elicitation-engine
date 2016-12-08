@@ -57,7 +57,7 @@
   "scripts": {
     "test": "./run-tests.sh",
     "log": "azure site log tail elicitation-gorilla",
-    "watch": "webpack --watch",
+    "build": "webpack --watch",
     "build:prod": "webpack --config webpack.config.prod.js"
   }
 }

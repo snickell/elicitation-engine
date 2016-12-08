@@ -10,7 +10,7 @@ module.exports = {
     vendor: './app/vendor.js'
   },
   output: {
-    path: './public/assets',
+    path: './public/dist/dev',
     filename: '[name].js'
   },
   resolve: {
