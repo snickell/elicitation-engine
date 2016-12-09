@@ -16,7 +16,6 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 
 var exphbs  = require('express-handlebars');
-var connectAssets = require('connect-assets');
 
 var colors = require('colors');
 
@@ -30,8 +29,6 @@ var expressHandlebars = exphbs.create({
   layoutsDir: viewsDir + "/layouts",
   partialsDir: viewsDir + "/partials"
 });
-
-var connectAssetsHelpers = {};
 
 console.log("env is: ", app.get('env'));
 
@@ -57,16 +54,9 @@ var db = new NZDB();
 // Setup basic app routes
 var router = express.Router();
 
-app.use(connectAssets({
-  paths: [
-    'app',
-    'public'
-  ],
-  servePath: baseURL + "/assets",
-  helperContext: connectAssetsHelpers
-}));
-connectAssetsHelpers.baseURL = baseURL;
-
+var assetHelpers = {
+  baseURL: baseURL
+};
 
 if (app.get('env') === 'development') {
   console.log("DEV: aliasing /public/dist/dev over /public/dist (be sure to use webpack dev build)");
@@ -96,7 +86,7 @@ if (getConfig("STANDALONE") || app.get('env') === 'development') {
     console.error("\nWARNING WARNING WARNING: using default admin password, please set ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n");
   }
   
-  var adminRoutes = require('./server/routes/admin')(db, connectAssetsHelpers);
+  var adminRoutes = require('./server/routes/admin')(db, assetHelpers);
   router.use('/admin', adminRoutes);
   
   // Convenience authenticator for dev mode
@@ -108,7 +98,7 @@ if (getConfig("STANDALONE") || app.get('env') === 'development') {
   });
 }
 
-var elicitationRoutes = require('./server/routes/elicitation')(db, connectAssetsHelpers);
+var elicitationRoutes = require('./server/routes/elicitation')(db, assetHelpers);
 router.use('/', elicitationRoutes);
 
 app.use(baseURL, router);
