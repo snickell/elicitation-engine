@@ -26,6 +26,8 @@
         ENV = {
             CP_DEFAULT_CACHEABLE: true,
             VIEW_PRESERVES_CONTEXT: true
+            FORCE_JQUERY: true // using jQuery 1.11, but Ember.js asserts 1.10
+
         };
     </script>
 
@@ -33,17 +35,6 @@
         <script src="{{publicPath "libs/excanvas.js"}}"
     <![endif]-->
 
-  <script>
-      // using jQuery 1.11, but Ember.js asserts 1.10
-      ENV = ENV || {};
-      ENV.FORCE_JQUERY = true;
-  </script>
-
-	<!--
-        js "assets/site.js"-
-	    js "assets/elicitation.js"
-	    js "assets/elicitation-widgets.js"
-    -->
     <script src='{{publicPath "js/eval-in-scope.js"}}'></script>
     <script src='{{publicPath "js/nearzero-confidentiality-indicator.js"}}'></script>
     <script src='{{publicPath "dist/vendor.js"}}'></script>
