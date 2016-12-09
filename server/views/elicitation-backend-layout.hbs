@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 {{/if}}
 
-    <link rel="SHORTCUT ICON" href="{{assetPath "favicon.ico"}}" />
+    <link rel="SHORTCUT ICON" href="{{publicPath "favicon.ico"}}" />
 
     <title>{{elicitationName}} - Expert Elicitation</title>
     
@@ -80,14 +80,14 @@
         <div id="vertical-spacer">
         </div>
         <div id="logo">
-            <img src="{{assetPath "images/nz-logo.png"}}" />
+            <img src="{{publicPath "images/nz-logo.png"}}" />
         </div>
 	{{/if}}
 
 
     <div id="page-load-throbber">
         Loading elicitation...<br />
-        <img src="{{assetPath "images/page-load-throbber.gif"}}" width="220" height="19" />
+        <img src="{{publicPath "images/page-load-throbber.gif"}}" width="220" height="19" />
     </div>
 
     <div id="confidentiality-indicator-box"></div>
@@ -124,8 +124,9 @@
 		{{/if}}    
     
     {{#if settings.allowEditing}}
-      {{css "assets/elicitation-editing.css"}}
-      {{js "assets/elicitation-editing.js"}}
+        <link rel="stylesheet" href="{{publicPath "libs/codemirror/codemirror.css"}}" />
+        <script src="{{publicPath "libs/codemirror/codemirror.js"}}"></script>
+        <script src="{{publicPath "libs/codemirror/javascript.js"}}"></script>
     {{/if}}
     
 </body>
