@@ -60,5 +60,8 @@ module.exports = {
   },
   node: {
     fs: 'empty'
-  }
+  },
+  stats: {
+    children: false //surpress extract-text-plugin console spew
+  }  
 }
