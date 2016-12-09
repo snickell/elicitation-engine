@@ -162,18 +162,6 @@ var Elicitation = Ember.Object.extend({
         });
 
         var self = this;
-
-        // FIXME: bad hack, mysterious "inBuffer" problem if editMode defaults to 'true'
-        if (this.get('switchToEditModeAfterLoading')) {
-            window.setTimeout(function () {
-                self.set('editMode', true);
-            }, 500);
-        } else if (this.get('switchToReviewModeAfterLoading')) {
-            window.setTimeout(function () {
-                self.set('reviewMode', true);
-            }, 500);
-        }
-
         // FIXME: this should probably be unbound to clean up the resources
         // see: https://github.com/emberjs/ember.js/issues/1603
         $(window).bind('beforeunload', function () {
