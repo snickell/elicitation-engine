@@ -1,3 +1,5 @@
+import './custom-scripting.css';
+
 import Ember from 'ember'
 import { Widget } from 'eat/widget'
 import { WidgetDefinition } from 'eat/widget-definition'

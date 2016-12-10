@@ -21,22 +21,3 @@ import './../public/categories/solar/elicitation.css';
 import './../public/categories/storage-and-transmission/elicitation.css';
 import './../public/categories/transportation/elicitation.css';
 import './../public/categories/wind/elicitation.css';
-
-// assets/elicitation-widgets.css
-import './widgets/agree-disagree.css';
-import './widgets/allocation-table.css';
-import './widgets/area-allocation.css';
-import './widgets/box-and-whiskers.css';
-import './widgets/card-rank.css';
-import './widgets/dropdown.css';
-import './widgets/image.css';
-import './widgets/likert.css';
-import './widgets/multiple-choice.css';
-import './widgets/multiple-choice-table.css';
-import './widgets/paragraph.css';
-import './widgets/custom-scripting.css';
-import './widgets/slider-allocation.css';
-import './widgets/tabular-input.css';
-import './widgets/text-area.css';        
-import './widgets/text-box.css';
-import './widgets/time-trend.css';

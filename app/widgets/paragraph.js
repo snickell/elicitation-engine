@@ -1,3 +1,5 @@
+import './paragraph.css';
+
 import Ember from 'ember'
 
 import { Widget } from 'eat/widget'

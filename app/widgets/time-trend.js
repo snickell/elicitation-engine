@@ -1,3 +1,5 @@
+import './time-trend.css';
+
 import Ember from 'ember'
 import EAT from 'eat/eat'
 

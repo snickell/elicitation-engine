@@ -1,3 +1,5 @@
+import './slider-allocation.css';
+
 import Ember from 'ember'
 
 import ElicitationUtils from 'eat/elicitation-utils'

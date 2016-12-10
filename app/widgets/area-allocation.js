@@ -3,6 +3,9 @@
 
 // DEPRECATED
 /*
+
+import './area-allocation.css';
+
 var RowModel = EAT.WidgetDefinition.extend({
     color: '#ffaaaa',
     label: 'untitled',

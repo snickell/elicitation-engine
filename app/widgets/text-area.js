@@ -1,3 +1,5 @@
+import './text-area.css';
+
 import Ember from 'ember'
 
 import { Widget } from 'eat/widget'
