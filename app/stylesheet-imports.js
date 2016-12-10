@@ -1,10 +1,3 @@
-/*
-{{css "assets/site.css"}}
-{{css "assets/elicitation.css"}}
-{{css "assets/elicitation-categories.css"}}	
-{{css "assets/elicitation-widgets.css"}}
-*/
-
 // assets/site.css
 import './../public/chosen/chosen.css';
 import './../public/themes/base/all.css';
