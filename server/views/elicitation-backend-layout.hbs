@@ -14,13 +14,16 @@
 {{includeStatic "google-analytics.html"}}
 
 {{#if isMobileDevice}}
-	{{css "elicitationCSS-mobile"}}
+    <!-- 
+        fixme, need to replace this after connect-assetsification:
+        {{css "elicitationCSS-mobile"}}        
+    -->
     <script>
         window.IsMobileDevice = true;
     </script>
-{{else}}
-    <link rel="stylesheet" href="{{publicPath "dist/app.css"}}" />
 {{/if}}
+
+    <link rel="stylesheet" href="{{publicPath "dist/app.css"}}" />
     
     <script>
         ENV = {
@@ -34,8 +37,6 @@
         <script src="{{publicPath "libs/excanvas.js"}}"
     <![endif]-->
 
-    <script src='{{publicPath "js/eval-in-scope.js"}}'></script>
-    <script src='{{publicPath "js/nearzero-confidentiality-indicator.js"}}'></script>
     <script src='{{publicPath "dist/vendor.js"}}'></script>
     <script src='{{publicPath "dist/app.js"}}'></script>
         

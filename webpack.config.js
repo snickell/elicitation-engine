@@ -26,12 +26,16 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        exclude: [/node_modules/, path.join(__dirname, './public/libs')],
+        exclude: [ 
+          /node_modules/, 
+          path.join(__dirname, './public/libs'), 
+          path.join(__dirname, './app/eval-in-scope.es3.js') // not compat with strict mode
+        ],
         loader: 'babel-loader',
         query: {
           presets: ['es2015']
         }
-      },
+      },   
 			{ test: /\.png$/,    loader: "url-loader?prefix=img/&limit=5000" },
 			{ test: /\.jpg$/,    loader: "url-loader?prefix=img/&limit=5000" },
 			{ test: /\.gif$/,    loader: "url-loader?prefix=img/&limit=5000" },      
