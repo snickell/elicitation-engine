@@ -1,10 +1,11 @@
-import Ember from 'ember'
-import ElicitationUtils from './elicitation-utils'
+import Ember from 'ember';
+import ElicitationUtils from './elicitation-utils';
+import confidentialityIndicator from './nearzero-confidentiality-indicator';
 
-import {RootSerializedData} from './serialized-data'
-import {CreateMarkdownConverter} from './markdown-label'
-import {PhraseDefinitionsController} from './phrase-definition'
-import {PagesController} from './pages'
+import {RootSerializedData} from './serialized-data';
+import {CreateMarkdownConverter} from './markdown-label';
+import {PhraseDefinitionsController} from './phrase-definition';
+import {PagesController} from './pages';
 
 var PageFooterController = Ember.Object.extend({
     label: "",

@@ -1,13 +1,11 @@
 // assets/site.css
-import './../public/chosen/chosen.css';
 import './../public/themes/base/all.css';
-import './../public/css/nearzero-confidentiality-indicator.css';
 
 // assets/elicitation.css
 import './styles/elicitation.css';
 
 /* elicitation editing */
-import './../public/css/jquery.miniColors.css';
+import './../public/libs/jquery.miniColors.css';
 import './styles/elicitation-editor.css';
 import './styles/elicitation-print.css';
 
