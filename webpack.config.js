@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     app: './app/index.js',
     vendor: './app/vendor.js',
-    vendorElicitationEditor: './app/vendor-elicitation-editor.js'
+    elicitationEditor: './app/elicitation-editor.js'
   },
   output: {
     path: './public/dist/dev',
@@ -57,7 +57,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
-    new webpack.optimize.CommonsChunkPlugin({name: "vendorElicitationEditor", chunks: ['vendorElicitationEditor']}),
+    new webpack.optimize.CommonsChunkPlugin({name: "elicitationEditor", chunks: ['elicitationEditor']}),
     new ExtractTextPlugin("[name].css"),
     // new webpack.optimize.UglifyJsPlugin()
   ],

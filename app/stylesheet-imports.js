@@ -1,14 +1,10 @@
 // assets/site.css
-import './../public/themes/base/all.css';
+// this arguably should go in vendor.js, but there's no other vendor CSS currently, its tiny
+// and I figure we might as well avoid the round-trip
+import './../public/themes/base/all.css'; 
 
 // assets/elicitation.css
 import './styles/elicitation.css';
-
-/* elicitation editing */
-import './../public/libs/jquery.miniColors.css';
-import './styles/elicitation-editor.css';
-import './styles/elicitation-print.css';
-
 
 // assets/elicitation-categories.css
 import './../public/categories/other/elicitation.css';
