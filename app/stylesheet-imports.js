@@ -1,7 +1,7 @@
 // assets/site.css
 // this arguably should go in vendor.js, but there's no other vendor CSS currently, its tiny
 // and I figure we might as well avoid the round-trip
-import './../public/themes/base/all.css'; 
+import './../public/libs/jquery-ui/themes/base/all.css'; 
 
 // assets/elicitation.css
 import './styles/elicitation.css';
