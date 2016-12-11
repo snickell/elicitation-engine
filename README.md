@@ -14,11 +14,17 @@ The NearZero elicitation engine is a **web app for creating and hosting scientif
 ##Builtin Widgets
 ![Available Widgets](https://nearzero.github.io/elicitation-engine/images/widgets.png)
 
-## Try it out in (takes about 5 minutes):
+## Try it out in about 5 minutes:
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
 
-### You can also deploy it through the azure portal:
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnearzero%2Felicitation-engine%2Fmaster%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
+1. Create a Microsoft account if you don't already have one: https://account.microsoft.com/
+2. Sign up for Windows Azure if you haven't already - usually a free trial: https://azure.microsoft.com
+3. Deploy an Elicitation Engine by clicking: [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+   * Specify a real username (i.e *not* 'admin') for the new server and a **strong password or the deploy will fail**.
+   * The deploy will take a couple minutes to create the new web server and sql database.
+5. Now find the URL of your new Elicitation Engine web server:
+   * After the deploy completes, click "Manage your resources" to open the Windows Azure Portal.
+   * Find the ElicitationEngine-######### App Service in the right hand list and click it to open
+   * On the right hand side near the top, find the "URL" and open it to access your elicitation-engine. URL should be something like http://elicitationengine-#########.azurewebsites.net
+6. Login with your elicitation admin password, and starting creating elicitations!
+   * See http://wiki.nearzero.org/elicitation-authoring for some docs and advice on elicitation authoring
