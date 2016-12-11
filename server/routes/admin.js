@@ -51,6 +51,7 @@ module.exports = function (db, assetHelpers) {
     var now = Date.now();
     
     var reviewToken=uuid.v4();
+    var openAccessToken=uuid.v4();
     
     return db.ready // fixme, next thing requires "m", need to authAndLoad
     .then((m) =>
@@ -69,7 +70,9 @@ module.exports = function (db, assetHelpers) {
             CompletePageIncludeLinkToDiscussion: false,
             CompleteTaskBeforeDiscussion: false,
             CompleteTaskInline: false,
-            LastCompleted: now
+            LastCompleted: now,
+            EnableOpenAccess: true,
+            OpenAccessToken: openAccessToken
           }, {transaction: t}
         )
         .then( elicitation => {

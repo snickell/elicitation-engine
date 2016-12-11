@@ -40,7 +40,7 @@
 		$(document).ready(function () {
 			console.log("Ready");
 			$("button#create").click(function () {
-				$.post("admin/create", {
+				$.post("create", {
 					ElicitationName: prompt("Name of new elicitation:")
 				});
 			});
