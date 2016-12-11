@@ -109,7 +109,11 @@
               {
                 "name": "ELICITATION_STANDALONE",
                 "value": "true"
-              }              
+              },
+              {
+                "name": "ELICITATION_BASE_URL",
+                "value": "/"
+              }                        
             ]
         }        
       },
