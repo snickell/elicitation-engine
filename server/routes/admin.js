@@ -23,6 +23,8 @@ module.exports = function (db, assetHelpers) {
       if (standaloneMode) {
         console.log("Standalone mode: syncing DB tables");
         return db.syncDBTables();
+      } else {
+        return Promise.resolve();
       }
     })
     .then(() => db.models.Task.findAll({
