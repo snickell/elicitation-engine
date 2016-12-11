@@ -11,7 +11,7 @@ var Promise = require('bluebird');
 // FIXME: should only use in dev, not prod
 Promise.longStackTraces();
 
-var getConfig = require('./server/config').get;
+var getConfig = require('../config').get;
 
 module.exports = function (db, assetHelpers) {
 
