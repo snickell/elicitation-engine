@@ -13,6 +13,8 @@ Promise.longStackTraces();
 
 var getConfig = require('../config').get;
 
+var ADMIN_PERSON_ID = 2;
+
 module.exports = function (db, assetHelpers) {
 
   router.get('/', function (req, res, next) {
@@ -22,7 +24,20 @@ module.exports = function (db, assetHelpers) {
     .then(function () {
       if (standaloneMode) {
         console.log("Standalone mode: syncing DB tables");
-        return db.syncDBTables();
+
+        return db.syncDBTables().
+        then(() => db.models.Person.findById(ADMIN_PERSON_ID))
+        .then(function (person) {
+          if (person === null) {
+            console.log("No admin in DB, creating...");
+            return db.models.Person.create({ ID: 2, affiliation: "", email: "admin@elicitation.com",
+              FirstName: "Elicitation", LastName: "Admin", Title: "Dr", 
+              DoNotEmail: false, DoNotEmailActiveOptOut: false 
+            });            
+          } else {
+            return Promise.resolve();
+          }
+        });
       } else {
         return Promise.resolve();
       }
@@ -43,7 +58,7 @@ module.exports = function (db, assetHelpers) {
   
   router.post('/create', function (req, res, next) {
     console.error("\n\nFIXME: need to load auth and get person.ID, HARDCODING m.person.ID=2 ****\n\n");
-    var m_person_ID = 2;
+    var m_person_ID = ADMIN_PERSON_ID;
         
     var definitionText = "<elicitation><page title='Page Title Goes Here'></page></elicitation>";
     var changeSummary = "create new elicitation";
