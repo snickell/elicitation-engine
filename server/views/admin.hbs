@@ -24,15 +24,15 @@
 		<div class="error-header">WARNING: you're using the default admin password, please configure ELICITATION_STANDALONE_ADMIN_PASSWORD</div>
 	{{/if}}
 	
-	<h1>Welcome Admin to the Elicitation Gorilla</h1>
+	<h1>Hi Admin! Welcome to your Elicitation Engine</h1>
 	
-	<button id="create">Create Elicitation</button>
+	<button id="create">Create an Elicitation</button>
 	
 	<ul>
 		{{#each elicitations}}
 			<li><a href="../edit/{{ID}}/{{ElicitationName}}">{{ElicitationName}}</a></li>
 		{{else}}
-			<li><p>No elicitations found, sorry!</p></li>
+			<li><p>No elicitations found, sorry! Try reloading a couple times if you just created a new one.</p></li>
 		{{/each}}
 	</ul>
 	
@@ -41,7 +41,10 @@
 			console.log("Ready");
 			$("button#create").click(function () {
 				$.post("create", {
-					ElicitationName: prompt("Name of new elicitation:")
+					ElicitationName: prompt("Name of new elicitation, no spaces please:")
+				}, function () {
+				    alert("Elicitation created!");
+                    location.reload(true);                    
 				});
 			});
 		});
