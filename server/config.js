@@ -36,8 +36,6 @@ function haventSetAdminPassword() {
   return isDefault("STANDALONE_ADMIN_PASSWORD");
 }
 
-console.log("process.env is ", process.env);
-
 module.exports.get = getConfig;
 module.exports.isDefault = isDefault;
 module.exports.haventSetAdminPassword = haventSetAdminPassword;
