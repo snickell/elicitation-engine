@@ -93,6 +93,7 @@ module.exports = function (db, assetHelpers) {
           })
         });
       }).then( function () {
+        res.redirect('..');
         // FIXME: now redirect to editing the elicitation!
         console.error("FIXME: now redirect to the elicitation, this will time out forever!");
       })

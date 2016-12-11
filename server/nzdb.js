@@ -58,7 +58,7 @@ var NZDB = function (sequelizeConfig) {
 NZDB.prototype.syncDBTables = function () {
   return this.ready
   .bind(this)
-  .then( () => this.sql.sync({ force: true }) );
+  .then( () => this.sql.sync({ force: false }) );
 }
 
 NZDB.prototype.seedDevServer = function () {  
