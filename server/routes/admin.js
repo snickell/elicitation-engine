@@ -44,7 +44,7 @@ module.exports = function (db, assetHelpers) {
           console.log("There are currently ", numRoles, " rolse in webpages_Roles");
           if (numRoles == 0) {
             console.log("Creating admin roles");
-            return db.models.webpages_Roles.create({ RoleId: ADMIN_ROLE_ID, RoleName: 'Administrator'}))
+            return db.models.webpages_Roles.create({ RoleId: ADMIN_ROLE_ID, RoleName: 'Administrator'})
             .then(() => db.models.webpages_UsersInRoles.create({ UserId: ADMIN_PERSON_ID, RoleId: ADMIN_ROLE_ID}));            
           } else {
             return Promise.resolve();
