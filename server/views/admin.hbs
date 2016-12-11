@@ -78,7 +78,7 @@
 		$(document).ready(function () {
 			console.log("Ready");
 			$("button#create").click(function () {
-				$.post("./create", {
+				$.post("admin/create", {
 					ElicitationName: prompt("Name of new elicitation?\n\nNo spaces please, e.g. try cost-of-living or my-elicitation.")
 				}, function () {
 				    alert("Elicitation created!");
