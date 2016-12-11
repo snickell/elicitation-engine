@@ -99,7 +99,19 @@
       },
       "properties": {
         "name": "[variables('webSiteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+        "siteConfig": {
+            "appSettings": [
+              {
+                "name": "ELICITATION_STANDALONE_ADMIN_PASSWORD",
+                "value": "[parameters('elicitationAdminPassword')]"
+              },
+              {
+                "name": "ELICITATION_STANDALONE",
+                "value": "true"
+              }              
+            ]
+        }        
       },
       "resources": [
         {
@@ -115,35 +127,14 @@
               "type": "SQLAzure"
             }
           }
-        },
-        {
-          "apiVersion": "2016-03-01",
-          "type": "config",
-          "name": "web",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-            "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/config/connectionstrings')]"            
-          ],
-          "properties": {
-            "appSettings": [
-              {
-                "name": "elicitationAdminUsername",
-                "value": "[parameters('elicitationAdminUsername')]"
-              },
-              {
-                "name": "elicitationAdminPassword",
-                "value": "[parameters('elicitationAdminPassword')]"
-              }
-            ]
-          }
-        },        
+        },   
         {
           "apiVersion": "2016-03-01",
           "name": "web",
           "type": "sourcecontrols",
           "dependsOn": [
             "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-            "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/config/web')]"
+            "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/config/connectionstrings')]"
           ],
           "properties": {
             "RepoUrl": "https://github.com/nearzero/elicitation-engine.git",

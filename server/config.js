@@ -25,7 +25,7 @@ function getConfig (key) {
         value = value || mssqlConstringToSequelizeConfig(process.env['SQLAZURECONNSTR_DefaultConnection']);
     }
     
-    return value
+    return value;
 }
 
 function isDefault(key) {
@@ -35,6 +35,8 @@ function isDefault(key) {
 function haventSetAdminPassword() {
   return isDefault("STANDALONE_ADMIN_PASSWORD");
 }
+
+console.log("process.env is ", process.env);
 
 module.exports.get = getConfig;
 module.exports.isDefault = isDefault;
