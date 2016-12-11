@@ -16,7 +16,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
   var notTheLatestRevision =  false;
   var reviewMode = false;
   
-  var NZCategory = discussion ? discussion.category : 'solar';
+  var NZCategory = discussion ? discussion.category : 'wind';
   var discussionName = discussion ? discussion.name : 'nameless';
   
   var personID = person != null ? person.ID : 0;
