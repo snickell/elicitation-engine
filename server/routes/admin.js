@@ -39,13 +39,13 @@ module.exports = function (db, assetHelpers) {
             return Promise.resolve();
           }
         })
-        .then(() => db.models.webpages_Roles.count())
+        .then(() => db.models.webpages_Role.count())
         .then(function (numRoles) {
           console.log("There are currently ", numRoles, " rolse in webpages_Roles");
           if (numRoles == 0) {
             console.log("Creating admin roles");
-            return db.models.webpages_Roles.create({ RoleId: ADMIN_ROLE_ID, RoleName: 'Administrator'})
-            .then(() => db.models.webpages_UsersInRoles.create({ UserId: ADMIN_PERSON_ID, RoleId: ADMIN_ROLE_ID}));            
+            return db.models.webpages_Role.create({ RoleId: ADMIN_ROLE_ID, RoleName: 'Administrator'})
+            .then(() => db.models.webpages_UsersInRole.create({ UserId: ADMIN_PERSON_ID, RoleId: ADMIN_ROLE_ID}));            
           } else {
             return Promise.resolve();
           }
