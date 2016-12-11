@@ -67,16 +67,8 @@ router.use('/public', express.static('public'));
 
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
-router.get('/', function (req, res) {  
-  res.render('index', {
-    title: req.originalUrl
-  });
-});
-
-router.get(baseURL, function (req, res) {  
-  res.render('index', {
-    title: "Gorilla"
-  });
+router.get('/', function (req, res) {
+  res.redirect('./admin/');
 });
 
 if (getConfig("STANDALONE") || app.get('env') === 'development') {

@@ -11,16 +11,26 @@ var Promise = require('bluebird');
 // FIXME: should only use in dev, not prod
 Promise.longStackTraces();
 
+var getConfig = require('./server/config').get;
+
 module.exports = function (db, assetHelpers) {
 
   router.get('/', function (req, res, next) {
-
-    return db.models.Task.findAll({
+    var standaloneMode = getConfig("STANDALONE");
+    
+    return db.ready
+    .then(function () {
+      if (standaloneMode) {
+        console.log("Standalone mode: syncing DB tables");
+        return db.syncDBTables();
+      }
+    })
+    .then(() => db.models.Task.findAll({
       where: {
         Discriminator: 'Elicitation' 
       },
       order: [['Modified', 'DESC']]
-    }).then((elicitations) =>
+    })).then((elicitations) =>
       res.render('admin', {
         elicitations: elicitations,
         usingDefaultAdminPassword: config.haventSetAdminPassword(),
