@@ -14,7 +14,35 @@
 	body {
 		padding: 0;
 		margin: 0;
+        background-color: #3e4959;
+        color: white;
+        font-size: 120%;
 	}
+    a {
+        color: #19b5eb;
+        font-weight: bold;
+    }
+    #logo {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+    #container {
+        max-width: 40em;
+        margin: 0 auto;
+    }
+    .action-button {
+        padding: 7px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        border: 1px solid #444;
+        background-color: #19b4eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        font-size: 18px;
+    }
 	</style>
 	
     <script src='{{publicPath "dist/vendor.js"}}'></script>
@@ -23,25 +51,35 @@
 	{{#if usingDefaultAdminPassword}}
 		<div class="error-header">WARNING: you're using the default admin password, please configure ELICITATION_STANDALONE_ADMIN_PASSWORD</div>
 	{{/if}}
+    
+    <div id="container">
+        <div id="logo">
+            <img src="{{publicPath "/images/nz-logo.png"}}" />
+        </div>    
+    
+    	<h1>Well hello, Doctor!</h1>
 	
-	<h1>Hi Admin! Welcome to your Elicitation Engine</h1>
+    	<button id="create" class="action-button">Create an Elicitation</button>
 	
-	<button id="create">Create an Elicitation</button>
-	
-	<ul>
-		{{#each elicitations}}
-			<li><a href="../edit/{{ID}}/{{ElicitationName}}">{{ElicitationName}}</a></li>
-		{{else}}
-			<li><p>No elicitations found, sorry! Try reloading a couple times if you just created a new one.</p></li>
-		{{/each}}
-	</ul>
-	
+    	<ul>
+    		{{#each elicitations}}
+    			<li><a href="edit/{{ID}}/{{ElicitationName}}">{{ElicitationName}}</a></li>
+    		{{else}}
+    			<li><p>No elicitations found, sorry! Try reloading a couple times if you just created a new one.</p></li>
+    		{{/each}}
+    	</ul>
+    
+        <p>
+            Check out <a href="http://wiki.nearzero.org/elicitation-authoring">the NearZero wiki</a> for advice and documentation on elicitation authoring.
+    	</p>
+    </div>
+    
 	<script>
 		$(document).ready(function () {
 			console.log("Ready");
 			$("button#create").click(function () {
-				$.post("create", {
-					ElicitationName: prompt("Name of new elicitation, no spaces please:")
+				$.post("./create", {
+					ElicitationName: prompt("Name of new elicitation?\n\nNo spaces please, e.g. try cost-of-living or my-elicitation.")
 				}, function () {
 				    alert("Elicitation created!");
                     location.reload(true);                    

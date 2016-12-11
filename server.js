@@ -68,7 +68,7 @@ router.use('/public', express.static('public'));
 router.use('/app/widgets/thumbnails', express.static('app/widgets/thumbnails'));
 
 router.get('/', function (req, res) {
-  res.redirect('./admin/');
+  res.redirect('./admin');
 });
 
 if (getConfig("STANDALONE") || app.get('env') === 'development') {
