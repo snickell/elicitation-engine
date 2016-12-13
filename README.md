@@ -29,3 +29,25 @@ The NearZero elicitation engine is a **web app for creating and hosting scientif
 6. Login with your elicitation admin password, and starting creating elicitations!
    * See http://wiki.nearzero.org/elicitation-authoring for some docs and advice on elicitation authoring
    * The default configuration should cost about $20/mo and uses small servers. This should be OK for many elicitations, but you might want to "Scale Up" both the "App Service Plan" and "SQL Database" to the next Azure hostingplan level before you run the elicitation, esp. if consulting more than a hundred experts.
+   
+##Development
+
+### Getting started
+
+1. Install Node and NPM if necessary
+2. Install NPM dependencies by running "npm install" in elicitation-engine/
+3. (Optional) By default the elicitation-engine will attempt to connect to PostgreSQL running on localhost with no username or password. If this suits your dev needs, you'll need to install PostgreSQL locally and get it running. If you already have a DB you'd like to use, you can configure the environment variable ELICITATION\_SEQUELIZE\_CONFIG to point to your DB.
+3. We use webpack to transpile our javascript, in a separate terminal run "npm run-script build" in elicitation-engine/ to compile the javascript. By default this will watch for changes and recompile.
+4. Run "npm start" to start the elicitation engine
+5. Open http://localhost:3000/admin
+
+### Source code organization
+
+- **/app** : this contains the bulk of the elicitation-engine source code, and runs in-browser as a "Single Page App". Its built with the EmberJS framework, though development started with a /very/ early version of EmberJS, so its not a conventional modern EmberJS app in a lot of varieties (doesn't use routing, etc)
+- **/app/widgets** : all of the elicitation 'question types' (time-trend, box-and-whiskers, etc) are defined here
+- **/public** : static web server assets
+- **/server and server.js** : a basic NodeJS/express based web-server backend for hosting the /app frontend, authentication, storing results to the DB, etc. Relatively little code lives here, most elicitation logic is in the front-end.
+
+### Supported DBs
+
+The elicitation-engine backend uses the NodeJS Sequelize library (http://sequelizejs.com) for database access. Any database well-supported by Sequelize should work, including Postgres, MS SQL Server, MySQL, MariaDB, etc.
