@@ -1,8 +1,8 @@
 var colors = require('colors');
 
 var CONFIG_KEYS = {
-    BASE_URL: { default: '/elicitation' },
-    STANDALONE: { default: false, json: true },
+    BASE_URL: { default: '/' },
+    STANDALONE: { default: true, json: true },
     STANDALONE_ADMIN_PASSWORD: { default: "may all your elicitations be true"},
     SEQUELIZE_CONFIG: { json: true, 
       default: function () {
