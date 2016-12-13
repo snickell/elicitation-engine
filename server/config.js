@@ -1,8 +1,17 @@
+var colors = require('colors');
+
 var CONFIG_KEYS = {
     BASE_URL: { default: '/elicitation' },
     STANDALONE: { default: false, json: true },
     STANDALONE_ADMIN_PASSWORD: { default: "may all your elicitations be true"},
-    SEQUELIZE_CONFIG: { json: true },
+    SEQUELIZE_CONFIG: { json: true, 
+      default: function () {
+        console.warn(colors.red("Using default DB config: 'postgres://localhost', override with ENV variable " + ENV_PREFIX + "SEQUELIZE_CONFIG."))
+        return {
+                options: { dialect: 'postgres' } 
+        };  
+      }
+     },
     AUTH_URL: { default: "/authenticate-access-to-elicitation/" }
 }
 
@@ -17,6 +26,8 @@ function getConfig (key) {
     if (keyProps) {
         var envVal = process.env[ENV_PREFIX + key];
         value = (keyProps.json && envVal ? JSON.parse(envVal) : envVal) || keyProps.default;
+        if (typeof value === "function")
+          value = value();
     } else {
         throw "config.get(): " + key + " is not a valid config key";
     }
