@@ -16,7 +16,9 @@ function FIXME_monkeyPatchSequelizeForMSSQL() {
 var NZDB = function (sequelizeConfig) {
   var config = sequelizeConfig || getConfig("SEQUELIZE_CONFIG");
   
-  console.log("ELICITATION_SEQUELIZE_CONFIG='" + JSON.stringify(config) + "'");
+  var dbConfigKey = "ELICITATION_SEQUELIZE_CONFIG";
+  
+  console.log(dbConfigKey + "='" + JSON.stringify(config) + "'");
   
   config.options = config.options || {};
   
@@ -39,17 +41,22 @@ var NZDB = function (sequelizeConfig) {
   }
   
   this.ready = auth()
+  .then(function () {
+    console.error("NZDB(): succesfully connected to DB");
+  })
   .catch(function (err) { 
     console.error("NZDB(): couldn't auth with db: ", err);
     console.warn("Trying to connect one more time....");
     return auth()
     .catch(function (err) {
       console.error("NZDB(): second try, couldn't auth with db: ", err);
-      console.error("NZDB(): allowing connection to continue, but could NOT AUTHENTICATE WITH DB");
+      console.error(colors.red("NZDB(): allowing connection to continue, but could NOT AUTHENTICATE WITH DB"));
+      console.error();
+      console.error(colors.red("Maybe you need to set the environment variable ELICITATION_SEQUELIZE_CONFIG correctly for your DB?"));
+      console.error(colors.red("It should be JSON, see default above for an example, and sequelize docs for formatting the options."));
     });
   })
   .then(function () {
-      console.error("NZDB(): succesfully connected to DB")
       self.models = nzdbModels(self.sql, Sequelize);
       return true;      
   });
