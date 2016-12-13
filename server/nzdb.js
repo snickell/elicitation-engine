@@ -16,7 +16,7 @@ function FIXME_monkeyPatchSequelizeForMSSQL() {
 var NZDB = function (sequelizeConfig) {
   var config = sequelizeConfig || getConfig("SEQUELIZE_CONFIG");
   
-  console.log("NZDB(): db is " + JSON.stringify(config, null, '\t'));  
+  console.log("ELICITATION_SEQUELIZE_CONFIG='" + JSON.stringify(config) + "'");
   
   config.options = config.options || {};
   
@@ -49,7 +49,7 @@ var NZDB = function (sequelizeConfig) {
     });
   })
   .then(function () {
-      console.error("NZDB(): done")
+      console.error("NZDB(): succesfully connected to DB")
       self.models = nzdbModels(self.sql, Sequelize);
       return true;      
   });

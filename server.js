@@ -75,7 +75,7 @@ if (getConfig("STANDALONE") || app.get('env') === 'development') {
   console.log("ELICITATION_STANDALONE || env=development: enabling standalone features");
   
   if (haventSetAdminPassword()) {
-    console.error("\nWARNING WARNING WARNING: using default admin password, please set ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n");
+    console.error("\nUsing default admin password, please set ENV variable ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n".red);
   }
   
   var adminRoutes = require('./server/routes/admin')(db, assetHelpers);
@@ -99,14 +99,14 @@ app.use(baseURL, router);
 app.use(errorHandler({ dumpExceptions: true, showStack: true }));
 
 http.createServer(app).listen(app.get('port'), function () {
-  console.log("node process.version=", process.version);
   console.log("Express server listening on port " + app.get('port'));
 
   if (getConfig("STANDALONE") || app.get('env') === 'development') {
-    console.log();    
-    console.log(colors.rainbow("Try accessing the elicitation server at:"));
-    console.log(colors.green("http://localhost:" + app.get('port') + baseURL + "/admin"));
-    console.log();
+    db.ready.then(function () {
+      console.log();    
+      console.log(colors.rainbow("Try accessing the elicitation server at:"));
+      console.log(colors.green("http://localhost:" + app.get('port') + path.join(baseURL + "/admin")));
+    });
   }
 });
 

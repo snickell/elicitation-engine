@@ -6,10 +6,8 @@ var CONFIG_KEYS = {
     STANDALONE_ADMIN_PASSWORD: { default: "may all your elicitations be true"},
     SEQUELIZE_CONFIG: { json: true, 
       default: function () {
-        console.warn(colors.red("Using default DB config: 'postgres://localhost', override with ENV variable " + ENV_PREFIX + "SEQUELIZE_CONFIG."))
-        return {
-                options: { dialect: 'postgres' } 
-        };  
+        console.warn(colors.red("Using default DB config: override with ENV variable " + ENV_PREFIX + "SEQUELIZE_CONFIG."))
+        return { userName: null, password: null, database: null, options: { dialect: 'postgres' } };  
       }
      },
     AUTH_URL: { default: "/authenticate-access-to-elicitation/" }
