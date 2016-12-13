@@ -24,8 +24,6 @@ function getConfig (key) {
     if (keyProps) {
         var envVal = process.env[ENV_PREFIX + key];
         value = (keyProps.json && envVal ? JSON.parse(envVal) : envVal) || keyProps.default;
-        if (typeof value === "function")
-          value = value();
     } else {
         throw "config.get(): " + key + " is not a valid config key";
     }
@@ -33,6 +31,9 @@ function getConfig (key) {
     if (key === "SEQUELIZE_CONFIG" && process.env['SQLAZURECONNSTR_DefaultConnection']) {
         value = value || mssqlConstringToSequelizeConfig(process.env['SQLAZURECONNSTR_DefaultConnection']);
     }
+    
+    if (typeof value === "function")
+      value = value();    
     
     return value;
 }
