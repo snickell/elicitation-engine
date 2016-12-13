@@ -50,6 +50,8 @@ module.exports = function (db, assetHelpers) {
     var elicitationName = req.body.ElicitationName;
     var now = Date.now();
     
+    if (elicitationName == "") throw "Must specify ElicitationName";
+    
     var reviewToken=uuid.v4();
     var openAccessToken=uuid.v4();
     
