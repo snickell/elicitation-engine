@@ -74,12 +74,12 @@ if (getConfig("STANDALONE") || app.get('env') === 'development') {
   console.log("ELICITATION_STANDALONE || env=development: enabling standalone features");
   
   if (haventSetAdminPassword()) {
-    console.error("\nUsing default admin password, please set ENV variable ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n".red);
+    console.error("\nYou haven't set the admin password, please set ENV variable ELICITATION_STANDALONE_ADMIN_PASSWORD for security\n\n".red);
   }
   
   var adminRoutes = require('./server/routes/admin')(db, assetHelpers);
-  router.use('/admin', adminRoutes);
-  
+  router.use('/admin', adminRoutes);  
+    
   // Convenience authenticator for dev mode
   app.get('/authenticate-access-to-elicitation/:id', function (req, res) {
     res.setHeader('Content-Type', 'application/json');

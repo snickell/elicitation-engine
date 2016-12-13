@@ -7,6 +7,7 @@
   "main": "./server.js",
   "keywords": [],
   "dependencies": {
+    "basic-auth-connect": "^1.0.0",
     "bluebird": "^2.9.34",
     "body-parser": "~1.13.2",
     "colors": "^1.1.2",

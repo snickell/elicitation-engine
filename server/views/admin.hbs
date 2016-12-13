@@ -6,10 +6,14 @@
 	<style>
 	.error-header {
 		background-color: red;
-		font-size: 150%;
 		font-weight: bold;
 		color: white;
 		padding: 10px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        z-index: -1;
 	}
 	body {
 		padding: 0;
@@ -49,7 +53,7 @@
 </head>
 <body>
 	{{#if usingDefaultAdminPassword}}
-		<div class="error-header">WARNING: you're using the default admin password, please configure ELICITATION_STANDALONE_ADMIN_PASSWORD</div>
+		<div class="error-header">WARNING: you haven't set an admin password using environment variable ELICITATION_STANDALONE_ADMIN_PASSWORD</div>
 	{{/if}}
     
     <div id="container">

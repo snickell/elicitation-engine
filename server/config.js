@@ -3,7 +3,7 @@ var colors = require('colors');
 var CONFIG_KEYS = {
     BASE_URL: { default: '/' },
     STANDALONE: { default: true, json: true },
-    STANDALONE_ADMIN_PASSWORD: { default: "may all your elicitations be true"},
+    STANDALONE_ADMIN_PASSWORD: { default: ""},
     SEQUELIZE_CONFIG: { json: true, 
       default: function () {
         console.warn(colors.red("Using SQLite in the local directory (./elicitation.db.sqlite) by default.\nSetup your database with ENV variable " + ENV_PREFIX + "SEQUELIZE_CONFIG."))

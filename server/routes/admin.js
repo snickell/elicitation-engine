@@ -13,8 +13,15 @@ Promise.longStackTraces();
 
 var getConfig = require('../config').get;
 
+var basicAuth = require('basic-auth-connect');
 
 module.exports = function (db, assetHelpers) {
+
+  var adminPassword = getConfig("STANDALONE_ADMIN_PASSWORD");
+  if (adminPassword) {
+    var adminAuth = basicAuth('admin', adminPassword);
+    router.use(adminAuth);    
+  }
 
   router.get('/', function (req, res, next) {
     var standaloneMode = getConfig("STANDALONE");
