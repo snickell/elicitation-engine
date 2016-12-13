@@ -29,7 +29,7 @@ function getConfig (key) {
     }
         
     if (key === "SEQUELIZE_CONFIG" && process.env['SQLAZURECONNSTR_DefaultConnection']) {
-        value = value || mssqlConstringToSequelizeConfig(process.env['SQLAZURECONNSTR_DefaultConnection']);
+        value = mssqlConstringToSequelizeConfig(process.env['SQLAZURECONNSTR_DefaultConnection']);
     }
     
     if (typeof value === "function")
