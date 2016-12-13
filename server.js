@@ -59,7 +59,6 @@ var assetHelpers = {
 };
 
 if (app.get('env') === 'development') {
-  console.log("DEV: aliasing /public/dist/dev over /public/dist (be sure to use webpack dev build)");
   router.use('/public/dist', express.static('public/dist/dev'));
 }
 router.use('/public', express.static('public'));
