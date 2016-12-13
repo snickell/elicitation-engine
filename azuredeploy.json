@@ -107,6 +107,10 @@
                 "value": "[parameters('elicitationAdminPassword')]"
               },
               {
+                "name": "ELICITATION_STANDALONE_ADMIN_USERNAME",
+                "value": "[parameters('elicitationAdminUsername')]"
+              },              
+              {
                 "name": "ELICITATION_STANDALONE",
                 "value": "true"
               },

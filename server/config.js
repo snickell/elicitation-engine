@@ -4,6 +4,7 @@ var CONFIG_KEYS = {
     BASE_URL: { default: '/' },
     STANDALONE: { default: true, json: true },
     STANDALONE_ADMIN_PASSWORD: { default: ""},
+    STANDALONE_ADMIN_USERNAME: { default: "admin"},
     SEQUELIZE_CONFIG: { json: true, 
       default: function () {
         console.warn(colors.red("Using SQLite in the local directory (./elicitation.db.sqlite) by default.\nSetup your database with ENV variable " + ENV_PREFIX + "SEQUELIZE_CONFIG."))

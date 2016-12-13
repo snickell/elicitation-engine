@@ -19,7 +19,8 @@ module.exports = function (db, assetHelpers) {
 
   var adminPassword = getConfig("STANDALONE_ADMIN_PASSWORD");
   if (adminPassword) {
-    var adminAuth = basicAuth('admin', adminPassword);
+    var adminUsername = getConfig("STANDALONE_ADMIN_USERNAME");
+    var adminAuth = basicAuth(adminUsername, adminPassword);
     router.use(adminAuth);    
   }
 
