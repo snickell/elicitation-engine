@@ -85,8 +85,8 @@ NZDB.prototype.createStandaloneDBTablesIfNeeded = function () {
   .then(function (numRoles) {
     if (numRoles == 0) {
       console.log("\tCreating admin roles");
-      return this.models.webpages_Role.create({ RoleId: STANDALONE_ADMIN_ROLE_ID, RoleName: 'Administrator'})
-      .then(() => this.models.webpages_UsersInRole.create({ UserId: STANDALONE_ADMIN_PERSON_ID, RoleId: STANDALONE_ADMIN_ROLE_ID}));            
+      return this.models.webpages_Role.create({ RoleId: this.STANDALONE_ADMIN_ROLE_ID, RoleName: 'Administrator'})
+      .then(() => this.models.webpages_UsersInRole.create({ UserId: this.STANDALONE_ADMIN_PERSON_ID, RoleId: this.STANDALONE_ADMIN_ROLE_ID}));            
     }
   });
 }
