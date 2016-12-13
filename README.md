@@ -26,7 +26,7 @@ The NearZero elicitation engine is a **web app for creating and hosting scientif
    * After the deploy completes, click "Manage your resources" to open the Windows Azure Portal.
    * Find the ElicitationEngine-######### App Service in the right hand list and click it to open
    * On the right hand side near the top, find the "URL" and open it to access your elicitation-engine. URL should be something like http://elicitationengine-#########.azurewebsites.net
-6. Login with your elicitation admin password, and starting creating elicitations!
+6. Login with your elicitation admin username and password, and starting creating elicitations!
    * See http://wiki.nearzero.org/elicitation-authoring for some docs and advice on elicitation authoring
    * The default configuration should cost about $20/mo and uses small servers. This should be OK for many elicitations, but you might want to "Scale Up" both the "App Service Plan" and "SQL Database" to the next Azure hostingplan level before you run the elicitation, esp. if consulting more than a hundred experts.
 
