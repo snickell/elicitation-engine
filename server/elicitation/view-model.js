@@ -62,8 +62,8 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
 
           allowEditing: allowEditing,
           editorWithoutAssignment: editorWithoutAssignment,
-          editMode: startEditing,
-          reviewMode: reviewMode,
+          switchToEditModeAfterLoading: startEditing,
+          switchToReviewModeAfterLoading: reviewMode,
 
           notTheLatestRevision: notTheLatestRevision,
 
