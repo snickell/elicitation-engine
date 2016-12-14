@@ -5,6 +5,8 @@ module.exports = {
       if (controller === "Elicitation") {
         if (method === "review") {
           return baseURL + "/review/" + params.ReviewToken.toLowerCase();
+        } else if (method === "openaccess") {
+            return baseURL + "/access/" + params.OpenAccessToken.toLowerCase();
         } else {
           return baseURL + "/" + method + "/" + params.id; 
         }

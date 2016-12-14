@@ -82,6 +82,7 @@ module.exports = function elicitationViewModel(baseURL, db, m, logName, startEdi
           /* elicitation.adminURLs */
           /* elicitation.allowEditing */
           reviewAdminURL: allowEditing ? Url.Action(baseURL, "Review", "Elicitation", { ReviewToken: elicitation.ReviewToken }) : null,
+          openAccessAdminURL: allowEditing && elicitation.EnableOpenAccess ? Url.Action(baseURL, "OpenAccess", "Elicitation", { OpenAccessToken: elicitation.OpenAccessToken }) : null,
           assignedToAdminURL: allowEditing ? Url.Action(baseURL, "AssignedTo", "Task", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           dataAdminURL: allowEditing ? Url.Action(baseURL, "Data", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
           changeHistoryAdminURL: allowEditing ? Url.Action(baseURL, "ChangeHistory", "ElicitationAdmin", { id: elicitation.ID, DiscussionName: discussionName }) : null,
