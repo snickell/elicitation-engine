@@ -112,16 +112,7 @@ var Elicitation = Ember.Object.extend({
     /* END: initialization properties */
 
     init: function () {
-        var startedInEditMode = this.editMode;
-        editMode = false;
-        
         this._super();
-        
-        if (startedInEditMode) {
-            window.setTimeout(function () {
-                this.set('editMode', true);
-            }.bind(this), 800);
-        }
 
         window.debug.elicitation = this;
 
