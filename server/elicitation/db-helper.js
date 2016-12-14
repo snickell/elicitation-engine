@@ -41,13 +41,13 @@ module.exports = function (db) {
         elicitation: db.getElicitationForReview(reviewToken)
       })
     )
-    .then(loadElicitationDefinition)
-    .then(loadDiscussion);
+    .then(loadElicitationDefinition)    
+    .then( m => m.elicitation.Discussion_ID ? loadDiscussion : m);
   }
 
   function loadElicitationDefinition(m) {
     return db.models.ElicitationDefinition.findById(m.elicitation.ElicitationDefinition_ID)
-    .then(throwIfNull)    
+    .then(throwIfNull)
     .then( definition => extend(m, {
       elicitationDefinition: definition
     }));
@@ -124,7 +124,7 @@ module.exports = function (db) {
       } else {
         throw "This elicitation has not been assigned to you";
       }
-    })    
+    })
     .then((m) =>
       options.includeElicitationDefinition
       ? loadElicitationDefinition(m)
