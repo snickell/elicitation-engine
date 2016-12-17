@@ -42,7 +42,7 @@ module.exports = function (db) {
       })
     )
     .then(loadElicitationDefinition)    
-    .then( m => m.elicitation.Discussion_ID ? loadDiscussion : m);
+    .then( m => m.elicitation.Discussion_ID ? loadDiscussion(m) : m);
   }
 
   function loadElicitationDefinition(m) {
