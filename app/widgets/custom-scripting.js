@@ -211,7 +211,7 @@ Widget.register('custom-scripting', {
             Ember.run.later(this, function () {
                 this.editors.beforeEnteringPage = createEditor("beforeEnteringPage");
                 this.editors.beforeExitingPage = createEditor("beforeExitingPage");                
-            }, 750);                
+            }, 750);
         }
     },        
     runEventHandler: function (eventName, page) {
@@ -233,7 +233,7 @@ Widget.register('custom-scripting', {
             api: api,
             unsupported: unsupported,
             exception: null
-        }
+        };
 
         try {
             var handler = new Function("api", "unsupported", handlerBody);
