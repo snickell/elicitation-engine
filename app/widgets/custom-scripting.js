@@ -114,7 +114,7 @@ function bindCustomScriptingAPI(elicitation) {
             console.log(result + "\n\n(PS: WidgetIDs are the long numbers)");
             return widgetIDs;
         }
-    }
+    };
 
     /*
     Supported APIs:
