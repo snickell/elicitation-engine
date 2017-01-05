@@ -244,6 +244,17 @@ Widget.register('box-and-whiskers', {
             max = definition.get('max');
             if (DEBUG_BOX_AND_WHISKERS) console.log("Using min and max", min, max);
         }
+        
+        var hardMax = parseFloat(definition.get("hardMax"));
+        if (!isNaN(hardMax)) {
+          max = Math.min(hardMax, max);      
+        }
+        var hardMin = parseFloat(definition.get("hardMin"));
+        if (!isNaN(hardMin)) {
+          min = Math.max(hardMin, min);
+        }
+
+
 
         var modelRange = max - min;
         function pixelToModelCoords(pixelX) {
