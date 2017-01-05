@@ -94,7 +94,17 @@ Widget.register('box-and-whiskers', {
             accessor: WidgetDefinition.Attr("label-100th"),
             prettyName: "100th Percentile",
             category: "Percentile Labels"              
-        }            
+        },
+        hardMin: {
+            accessor: WidgetDefinition.Attr("hard-min"),
+            prettyName: "Min value allowed",
+            helpText: "Don't allow users to input numbers less than this value"
+        },        
+        hardMax: {
+            accessor: WidgetDefinition.Attr("hard-max"),
+            prettyName: "Max value allowed",
+            helpText: "Don't allow users to input numbers greater than this value"
+        }
     },
     initWidget: function () {
         this._super();            
@@ -365,6 +375,18 @@ Widget.register('box-and-whiskers', {
             if (positions[lesser] > positions[greater]) {
                 setPosition(recipient, donor);
             }
+        }
+        
+        // Enforce hardMin and hardMax constraints
+        var hardMin = this.get("definition.hardMin");
+        if (hardMin != null && positions['_0th'] < hardMin) {
+          data.set("_0th", hardMin);
+          positions['_0th'] = hardMin;
+        }
+        var hardMax = this.get("definition.hardMax");        
+        if (hardMax != null && positions['_100th'] > hardMax) {
+          data.set("_100th", hardMax);
+          positions["_100th"] = hardMax;
         }
 
         enforceLessThan('_0th', '_25th', '_25th', '_0th');
