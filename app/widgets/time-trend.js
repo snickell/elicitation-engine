@@ -460,7 +460,6 @@ function setupSeries(seriesModel, definitionPoints, requestRange, labelPrefix, a
   
   seriesModel.set('points', points);
   
-  
   allSeries.push(seriesModel);
   
   if (requestRange) {
@@ -883,7 +882,12 @@ Widget.register('time-trend', {
                     type: "Boolean"
                 }
             })
-        }
+        },
+        fillBetweenMinAndMaxYValues: {
+            accessor: WidgetDefinition.Attr("fill-between-min-and-max-y-values"),
+            prettyName: "Draw a fill between min and max y values, across all series",
+            type: "Boolean"
+        },        
     },
     initWidget: function () {
         this._super();
@@ -983,6 +987,8 @@ Widget.register('time-trend', {
         var ctx = canvas.getContext("2d");
 
         var series = this.get('frame.series');
+        
+        var fillBetweenMinAndMaxPoints = this.get('definition.fillBetweenMinAndMaxYValues');
 
         var minPixelX = frame.toPixelX(frame.minModelX);
         var minPixelY = frame.toPixelY(frame.minModelY);
@@ -1017,6 +1023,58 @@ Widget.register('time-trend', {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.translate(0, CONNECTING_LINE_CANVAS_OFFSET);
+            
+            if (fillBetweenMinAndMaxPoints) {
+                var maxY = {};
+                var minY = {};
+                                
+                // Find extreme Y values (across all series)
+                series.forEach(function (series) {
+                    series.get('points').forEach(function (point) {
+                        var x = parseFloat(point.get('x'));
+                        var y = parseFloat(point.get('y'));
+                        
+                        if (!isNaN(y) && !isNaN(x)) {
+                            if (maxY[x] === undefined || y > maxY[x]) {
+                                maxY[x] = y;
+                            }
+                            if (minY[x] === undefined || y < minY[x]) {
+                                minY[x] = y;
+                            }
+                        }
+                        
+                    });
+                });
+                
+                // Now order the x values
+                var pointsMax = Object.keys(maxY)
+                    .map(function (xVal) { return { 
+                        x: frame.toPixelX(xVal), 
+                        y: frame.toPixelY(maxY[xVal])
+                    }})
+                    .sort(function (a, b) { return a.x - b.x; });
+                var pointsMin = Object.keys(minY)
+                    .map(function (xVal) { return { 
+                        x: frame.toPixelX(xVal), 
+                        y: frame.toPixelY(minY[xVal])
+                    }})                    
+                    .sort(function (a, b) { return b.x - a.x; });
+                var points = pointsMax.concat(pointsMin);
+                
+                
+                if (points.length > 0) {
+                    var startingPoint = points[0];
+                    
+                    ctx.moveTo(startingPoint.x, startingPoint.y);
+                    points.forEach(function (point) {
+                        ctx.lineTo(point.x,point.y);
+                    });                    
+                    ctx.lineTo(startingPoint.x, startingPoint.y);
+
+                    ctx.fillStyle = "rgba(255,255,0,0.2)";
+                    ctx.fill();                    
+                }
+            }
 
             series.forEach(function (series) {
 
