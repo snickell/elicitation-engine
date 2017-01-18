@@ -453,6 +453,24 @@ var RelativePointModel = PointModel.extend({
     }.property('relativeValue', 'relativeTo', 'relativeTo.value')
 });
 
+function setupSeries(seriesModel, definitionPoints, requestRange, labelPrefix, allSeries) {
+  var points = definitionPoints.map(function (existingPoint) {
+      return Ember.copy(existingPoint).set('series', seriesModel);
+  });
+  
+  seriesModel.set('points', points);
+  
+  
+  allSeries.push(seriesModel);
+  
+  if (requestRange) {
+      var frame = seriesModel.get('frame');
+      var minMaxSeries = createMinAndMaxSeries(points, frame, labelPrefix);
+      allSeries.push(minMaxSeries.max);
+      allSeries.push(minMaxSeries.min);
+  }
+}
+
 function createMinAndMaxSeries(points, frame, labelPrefix) {
     var adjustablePoints = points.filter(function (point) { return !point.fixedValue });
 
@@ -532,24 +550,13 @@ var TimeTrendFrameModel = Ember.Object.extend({
         var frame = this;
 
 
-        var expectedSeries = SeriesModel.create({
+        var model = SeriesModel.create({
             name: this.get('definition.seriesLabel'),
             title: "The value you expect",
             frame: frame
         });
-
-        var points = this.get('definition.points').map(function (existingPoint) {
-            return Ember.copy(existingPoint).set('series', expectedSeries);
-        });
-
-        expectedSeries.set('points', points);
-        allSeries.push(expectedSeries);
-
-        if (this.get('definition.requestRange')) {
-            var minMaxSeries = createMinAndMaxSeries(points, frame, "");
-            allSeries.push(minMaxSeries.max);
-            allSeries.push(minMaxSeries.min);
-        }
+        
+        setupSeries(model, this.get('definition.points'), this.get('definition.requestRange'), "", allSeries);
 
         // Add in the extra series
         var colors = ['#ebb419', '#98ef05', '#f00098', '#2349F0', '#39F034'];
@@ -562,19 +569,8 @@ var TimeTrendFrameModel = Ember.Object.extend({
                 frame: frame,
                 color: colors.pop()
             });
-
-            var points = series.get('points').map(function (existingPoint) {
-                return Ember.copy(existingPoint).set('series', model);
-            });
-
-            model.set('points', points);
-            allSeries.push(model);
-
-            if (series.get('requestRange')) {
-                var minMaxSeries = createMinAndMaxSeries(points, frame, label + " ");
-                allSeries.push(minMaxSeries.max);
-                allSeries.push(minMaxSeries.min);
-            }
+            
+            setupSeries(model, series.get('points'), series.get('requestRange'), label + "", allSeries);
         });
 
         return allSeries;
