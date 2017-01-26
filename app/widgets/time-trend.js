@@ -524,6 +524,10 @@ function createMinAndMaxSeries(points, frame, labelPrefix) {
     }
 }
 
+function isInteger(num) {
+    return num == Math.round(num);
+}
+
 var TimeTrendFrameModel = Ember.Object.extend({
     renderingUsingExCanvas: false,
     widget: undefined,
@@ -543,6 +547,13 @@ var TimeTrendFrameModel = Ember.Object.extend({
 
         return parseFloat(y).toFixed(2);
     }.property('modelRangeY', 'pointBeingDragged.point.y'),
+    allX: function () {
+        return new Ember.Set(this.get('allPoints').mapProperty('x'));
+    }.property('allPoints'),    
+    everyXIsInteger: function () {
+        var xValues = this.get('allX');
+        return xValues.every(isInteger);  
+    }.property('allX'),
     theFrameIsBeingScaled: false,
     series: function () {
         var allSeries = Ember.A([]);
@@ -1149,7 +1160,7 @@ Widget.register('time-trend', {
 
         } ctx.restore();
     }.observes('frame.coordsChanged', 'frame.pointsChanged'),
-    drawGrid: function (ctx, min, max, minPixelY, maxPixelY, modelToPixelXFunc, textTransform) {
+    drawGrid: function (ctx, min, max, minPixelY, maxPixelY, modelToPixelXFunc, textTransform, integerXAxis) {
         var GRID_COLOR = "rgb(200,200,200)";
 
         ctx.save(); {
@@ -1163,7 +1174,7 @@ Widget.register('time-trend', {
             var range = max - min;
             var scale = Math.round(log10(range));
             var tickSize = Math.pow(10, scale);
-
+            
             var majorTickEvery = 1;
 
             var minNumTicks = 9;
@@ -1177,10 +1188,19 @@ Widget.register('time-trend', {
                 tickSize /= 2;
                 scale--;
             }
+            
+            if (integerXAxis && !isInteger(tickSize)) {
+                tickSize = Math.ceil(tickSize);
+                scale = 0;
+            }
+
 
             if (range / tickSize > maxNumMajorTicks) {
                 majorTickEvery *= 2;
             }
+            
+            
+            
 
             var majorTickSize = tickSize * majorTickEvery;
             var start = Math.round(min / majorTickSize) * majorTickSize;
@@ -1216,6 +1236,7 @@ Widget.register('time-trend', {
                             } else {
                                 tickLabel = modelX.toFixed();
                             }
+                            
                             ctx.fillText(tickLabel, 0, 5);
                         } ctx.restore();
                     } else {
@@ -1261,8 +1282,10 @@ Widget.register('time-trend', {
             ctx.translate(pixelX, pixelY);
         }
 
+        var everyXIsInteger = frame.get('everyXIsInteger');
+
         // Draw the x grid and labels
-        this.drawGrid(ctx, frame.minModelX, frame.maxModelX, minPixelY, maxPixelY, b(frame, frame.toPixelX), textTransform);
+        this.drawGrid(ctx, frame.minModelX, frame.maxModelX, minPixelY, maxPixelY, b(frame, frame.toPixelX), textTransform, everyXIsInteger);
 
         // Draw the y grid and labels by rotating 90 degrees
         ctx.save(); {
@@ -1273,7 +1296,7 @@ Widget.register('time-trend', {
                 ctx.rotate(-Math.PI / 2.0);
                 ctx.translate(20, -15);
             }
-            this.drawGrid(ctx, frame.minModelY, frame.maxModelY, 0, maxPixelX - minPixelX, b(frame, frame.toPixelY), textTransform);
+            this.drawGrid(ctx, frame.minModelY, frame.maxModelY, 0, maxPixelX - minPixelX, b(frame, frame.toPixelY), textTransform, false);
 
             // Draw a darker line at zero
             ctx.beginPath();
