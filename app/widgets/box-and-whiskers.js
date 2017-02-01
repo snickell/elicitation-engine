@@ -174,8 +174,16 @@ Widget.register('box-and-whiskers', {
     BoxPlotSubView: Ember.View.extend({
         boxAndWhiskers: undefined, // bound in the template
         classNames: ["box-plot"],
+        lastClickTime: null,
         click: function (evt) {
-            this.get('boxAndWhiskers').boxPlotClicked(evt);
+            var DEBOUNCE_INTERVAL_MS = 500;
+            var now = Date.now();
+            var lastClickTime = this.get('lastClickTime');
+            
+            // Run boxPlotClicked, but debounce to avoid user errors
+            if (lastClickTime === null || now - lastClickTime > DEBOUNCE_INTERVAL_MS) {
+                this.get('boxAndWhiskers').boxPlotClicked(evt);
+            }
         }
     }),
     updateCurrentQuestionText: function () {
