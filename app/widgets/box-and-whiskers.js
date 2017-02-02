@@ -206,7 +206,9 @@ Widget.register('box-and-whiskers', {
         } else {
             currentQuestion.addClass("current");
             this.updateCurrentQuestionText();
+            this.setCurrentQuestionToMouseX(evt);
         }
+        
         this.redraw();
     },
     hideMouseCursorWhenDoneClicking: function () {
