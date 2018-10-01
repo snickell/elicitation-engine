@@ -1,3 +1,5 @@
+import './multiple-choice.css';
+
 import Ember from 'ember'
 
 import { Widget } from 'eat/widget'

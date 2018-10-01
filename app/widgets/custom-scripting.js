@@ -1,3 +1,5 @@
+import './custom-scripting.css';
+
 import Ember from 'ember'
 import { Widget } from 'eat/widget'
 import { WidgetDefinition } from 'eat/widget-definition'
@@ -112,7 +114,7 @@ function bindCustomScriptingAPI(elicitation) {
             console.log(result + "\n\n(PS: WidgetIDs are the long numbers)");
             return widgetIDs;
         }
-    }
+    };
 
     /*
     Supported APIs:
@@ -128,14 +130,17 @@ function bindCustomScriptingAPI(elicitation) {
     return api;
 }
 
+const DEFAULT_BEFORE_ENTERING_PAGE_SCRIPT = "// see http://wiki.nearzero.org/elicitation-authoring/for-developers\n// for examples and (some) documentation\n\nalert('hello world!');\n";
+const DEFAULT_BEFORE_EXITING_PAGE_SCRIPT = "";
+
 Widget.register('custom-scripting', {
     prettyName: "Custom Scripting",
     templateName: 'custom-scripting',
     definitionSchema: {
         model: WidgetDefinition.extend({
             label: "explain what the script does here",
-            beforeEnteringPage: "// see http://wiki.nearzero.org/elicitation-authoring/for-developers\n// for examples and (some) documentation\n\nalert('hello world!');\n",
-            beforeExitingPage: "",
+            beforeEnteringPage: DEFAULT_BEFORE_ENTERING_PAGE_SCRIPT,
+            beforeExitingPage: DEFAULT_BEFORE_EXITING_PAGE_SCRIPT,
             activeEventHandlers: function () {
                 return ['beforeEnteringPage', 'beforeExitingPage']
                     .map(function (eventName) {
@@ -164,52 +169,55 @@ Widget.register('custom-scripting', {
         debug.customScriptingWidget = this;
         window.customScripting = {
             api: bindCustomScriptingAPI(this.get('elicitation')),
-        }
+        };
+        this.set('editors', {
+            beforeEnteringPage: null,
+            beforeExitingPage: null
+        });
     },
-    editors: {
-        beforeEnteringPage: null,
-        beforeExtingPage: null
-    },
+    editors: null,
     beforeEnteringPageChanged: function () {
         if (this.editors.beforeEnteringPage) {
-            var value = this.get("definition.beforeEnteringPage");                
+            var value = this.get("definition.beforeEnteringPage");
+                          
             if (value != this.editors.beforeEnteringPage.getValue()) {
-                console.log("Updating editor from property");
                 this.editors.beforeEnteringPage.setValue(value);
             }
         }
     }.observes("definition.beforeEnteringPage"),
     beforeExitingPageChanged: function () {
         if (this.editors.beforeExitingPage) {
-            var value = this.get("definition.beforeExitingPage");                
+            var value = this.get("definition.beforeExitingPage");       
+                           
             if (value != this.editors.beforeExitingPage.getValue()) {
                 this.editors.beforeExitingPage.setValue(value);
             }
         }
     }.observes("definition.beforeExitingPage"),
     setupDOM: function () {
-        if (this.get('elicitation.allowEditing')) {
-            var widget = this;
-        
-            function createEditor(eventName) {
+        if (this.get('elicitation.allowEditing')) {  
+            function createEditor(widget, eventName) {
                 var div = widget.$().find(".script-editor#" + eventName)[0];
                 var editor = CodeMirror(div, {
                     lineNumbers: true,
                     viewportMargin: Infinity,
                     value: widget.get("definition").get(eventName)
                 });
+                function updateEmberPropertyFromCodeMirror() {
+                    widget.get("definition").set(eventName, editor.getValue());                    
+                }
                 editor.on("change", function () {
-                    widget.get("definition").set(eventName, editor.getValue());
+                    Ember.run.throttle(this, updateEmberPropertyFromCodeMirror, 500);
                 });
                 return editor;
             }
         
             debug.widgie = this;
         
-            Ember.run.later(this, function () {
-                this.editors.beforeEnteringPage = createEditor("beforeEnteringPage");
-                this.editors.beforeExitingPage = createEditor("beforeExitingPage");                
-            }, 750);                
+            //Ember.run.later(this, function () {
+                this.editors.beforeEnteringPage = createEditor(this, "beforeEnteringPage");
+                this.editors.beforeExitingPage = createEditor(this, "beforeExitingPage");                
+                //}, 750);
         }
     },        
     runEventHandler: function (eventName, page) {
@@ -231,7 +239,7 @@ Widget.register('custom-scripting', {
             api: api,
             unsupported: unsupported,
             exception: null
-        }
+        };
 
         try {
             var handler = new Function("api", "unsupported", handlerBody);

@@ -97,6 +97,14 @@
                                 Reviewer Link (shareable url)
                             </a>
                         </li>
+                        {{#if elicitation.openAccessAdminURL}}
+                        <li>
+                            <a {{bindAttr href="elicitation.openAccessAdminURL"}} target="blank">
+                                <span class="ui-icon ui-icon-circle-arrow-e"></span>
+                                Open Access Link (shareable url)
+                            </a>
+                        </li>
+                        {{/if}}
                         <li>
                             <a {{bindAttr href="elicitation.assignedToAdminURL"}} target="_blank">
                                 <span class="ui-icon ui-icon-circle-arrow-e"></span>

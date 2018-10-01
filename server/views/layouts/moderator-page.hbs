@@ -5,8 +5,9 @@
     <meta charset="utf-8" />
     <link href='http://fonts.googleapis.com/css?family=Rokkitt:400,700' rel='stylesheet' type='text/css' />
     <link rel="SHORTCUT ICON" href="/Content/favicon.ico" /> <!-- FIXME: point at elicitation-engine specific favico -->
-    {{css "assets/moderator-page.css"}}
-    {{js "assets/site.js"}}  
+
+    <link rel="stylesheet" href="{{publicPath "css/moderator-page.css"}}" />
+    <script src='{{publicPath "dist/vendor.js"}}'></script>  
 	</head>
   
   
@@ -18,8 +19,8 @@
   	    <tr valign="top">
   		    <td>
   			    <a href="/">
-              
-              <img id="logo" width=183 height=65 src="{{assetPath "images/nz-logo.png"}}"/></a>
+                    <img id="logo" width=183 height=65 src="{{publicPath "images/nz-logo.png"}}" />              
+                </a>
 
   		    </td><td class="sidebar">
             {{> logged-in-person}}

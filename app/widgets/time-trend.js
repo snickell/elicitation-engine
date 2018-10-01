@@ -1,3 +1,5 @@
+import './time-trend.css';
+
 import Ember from 'ember'
 import EAT from 'eat/eat'
 
@@ -451,6 +453,23 @@ var RelativePointModel = PointModel.extend({
     }.property('relativeValue', 'relativeTo', 'relativeTo.value')
 });
 
+function setupSeries(seriesModel, definitionPoints, requestRange, labelPrefix, allSeries) {
+  var points = definitionPoints.map(function (existingPoint) {
+      return Ember.copy(existingPoint).set('series', seriesModel);
+  });
+  
+  seriesModel.set('points', points);
+  
+  allSeries.push(seriesModel);
+  
+  if (requestRange) {
+      var frame = seriesModel.get('frame');
+      var minMaxSeries = createMinAndMaxSeries(points, frame, labelPrefix);
+      allSeries.push(minMaxSeries.max);
+      allSeries.push(minMaxSeries.min);
+  }
+}
+
 function createMinAndMaxSeries(points, frame, labelPrefix) {
     var adjustablePoints = points.filter(function (point) { return !point.fixedValue });
 
@@ -505,6 +524,10 @@ function createMinAndMaxSeries(points, frame, labelPrefix) {
     }
 }
 
+function isInteger(num) {
+    return num == Math.round(num);
+}
+
 var TimeTrendFrameModel = Ember.Object.extend({
     renderingUsingExCanvas: false,
     widget: undefined,
@@ -524,30 +547,26 @@ var TimeTrendFrameModel = Ember.Object.extend({
 
         return parseFloat(y).toFixed(2);
     }.property('modelRangeY', 'pointBeingDragged.point.y'),
+    allX: function () {
+        return new Ember.Set(this.get('allPoints').mapProperty('x'));
+    }.property('allPoints'),    
+    everyXIsInteger: function () {
+        var xValues = this.get('allX');
+        return xValues.every(isInteger);  
+    }.property('allX'),
     theFrameIsBeingScaled: false,
     series: function () {
         var allSeries = Ember.A([]);
         var frame = this;
 
 
-        var expectedSeries = SeriesModel.create({
+        var model = SeriesModel.create({
             name: this.get('definition.seriesLabel'),
             title: "The value you expect",
             frame: frame
         });
-
-        var points = this.get('definition.points').map(function (existingPoint) {
-            return Ember.copy(existingPoint).set('series', expectedSeries);
-        });
-
-        expectedSeries.set('points', points);
-        allSeries.push(expectedSeries);
-
-        if (this.get('definition.requestRange')) {
-            var minMaxSeries = createMinAndMaxSeries(points, frame, "");
-            allSeries.push(minMaxSeries.max);
-            allSeries.push(minMaxSeries.min);
-        }
+        
+        setupSeries(model, this.get('definition.points'), this.get('definition.requestRange'), "", allSeries);
 
         // Add in the extra series
         var colors = ['#ebb419', '#98ef05', '#f00098', '#2349F0', '#39F034'];
@@ -560,19 +579,8 @@ var TimeTrendFrameModel = Ember.Object.extend({
                 frame: frame,
                 color: colors.pop()
             });
-
-            var points = series.get('points').map(function (existingPoint) {
-                return Ember.copy(existingPoint).set('series', model);
-            });
-
-            model.set('points', points);
-            allSeries.push(model);
-
-            if (series.get('requestRange')) {
-                var minMaxSeries = createMinAndMaxSeries(points, frame, label + " ");
-                allSeries.push(minMaxSeries.max);
-                allSeries.push(minMaxSeries.min);
-            }
+            
+            setupSeries(model, series.get('points'), series.get('requestRange'), label + "", allSeries);
         });
 
         return allSeries;
@@ -885,7 +893,12 @@ Widget.register('time-trend', {
                     type: "Boolean"
                 }
             })
-        }
+        },
+        fillBetweenMinAndMaxYValues: {
+            accessor: WidgetDefinition.Attr("fill-between-min-and-max-y-values"),
+            prettyName: "Draw a fill between min and max y values, across all series",
+            type: "Boolean"
+        },        
     },
     initWidget: function () {
         this._super();
@@ -985,6 +998,8 @@ Widget.register('time-trend', {
         var ctx = canvas.getContext("2d");
 
         var series = this.get('frame.series');
+        
+        var fillBetweenMinAndMaxPoints = this.get('definition.fillBetweenMinAndMaxYValues');
 
         var minPixelX = frame.toPixelX(frame.minModelX);
         var minPixelY = frame.toPixelY(frame.minModelY);
@@ -1019,6 +1034,58 @@ Widget.register('time-trend', {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.translate(0, CONNECTING_LINE_CANVAS_OFFSET);
+            
+            if (fillBetweenMinAndMaxPoints) {
+                var maxY = {};
+                var minY = {};
+                                
+                // Find extreme Y values (across all series)
+                series.forEach(function (series) {
+                    series.get('points').forEach(function (point) {
+                        var x = parseFloat(point.get('x'));
+                        var y = parseFloat(point.get('y'));
+                        
+                        if (!isNaN(y) && !isNaN(x)) {
+                            if (maxY[x] === undefined || y > maxY[x]) {
+                                maxY[x] = y;
+                            }
+                            if (minY[x] === undefined || y < minY[x]) {
+                                minY[x] = y;
+                            }
+                        }
+                        
+                    });
+                });
+                
+                // Now order the x values
+                var pointsMax = Object.keys(maxY)
+                    .map(function (xVal) { return { 
+                        x: frame.toPixelX(xVal), 
+                        y: frame.toPixelY(maxY[xVal])
+                    }})
+                    .sort(function (a, b) { return a.x - b.x; });
+                var pointsMin = Object.keys(minY)
+                    .map(function (xVal) { return { 
+                        x: frame.toPixelX(xVal), 
+                        y: frame.toPixelY(minY[xVal])
+                    }})                    
+                    .sort(function (a, b) { return b.x - a.x; });
+                var points = pointsMax.concat(pointsMin);
+                
+                
+                if (points.length > 0) {
+                    var startingPoint = points[0];
+                    
+                    ctx.moveTo(startingPoint.x, startingPoint.y);
+                    points.forEach(function (point) {
+                        ctx.lineTo(point.x,point.y);
+                    });                    
+                    ctx.lineTo(startingPoint.x, startingPoint.y);
+
+                    ctx.fillStyle = "rgba(255,255,0,0.2)";
+                    ctx.fill();                    
+                }
+            }
 
             series.forEach(function (series) {
 
@@ -1093,7 +1160,7 @@ Widget.register('time-trend', {
 
         } ctx.restore();
     }.observes('frame.coordsChanged', 'frame.pointsChanged'),
-    drawGrid: function (ctx, min, max, minPixelY, maxPixelY, modelToPixelXFunc, textTransform) {
+    drawGrid: function (ctx, min, max, minPixelY, maxPixelY, modelToPixelXFunc, textTransform, integerXAxis) {
         var GRID_COLOR = "rgb(200,200,200)";
 
         ctx.save(); {
@@ -1107,7 +1174,7 @@ Widget.register('time-trend', {
             var range = max - min;
             var scale = Math.round(log10(range));
             var tickSize = Math.pow(10, scale);
-
+            
             var majorTickEvery = 1;
 
             var minNumTicks = 9;
@@ -1121,10 +1188,19 @@ Widget.register('time-trend', {
                 tickSize /= 2;
                 scale--;
             }
+            
+            if (integerXAxis && !isInteger(tickSize)) {
+                tickSize = Math.ceil(tickSize);
+                scale = 0;
+            }
+
 
             if (range / tickSize > maxNumMajorTicks) {
                 majorTickEvery *= 2;
             }
+            
+            
+            
 
             var majorTickSize = tickSize * majorTickEvery;
             var start = Math.round(min / majorTickSize) * majorTickSize;
@@ -1160,6 +1236,7 @@ Widget.register('time-trend', {
                             } else {
                                 tickLabel = modelX.toFixed();
                             }
+                            
                             ctx.fillText(tickLabel, 0, 5);
                         } ctx.restore();
                     } else {
@@ -1205,8 +1282,10 @@ Widget.register('time-trend', {
             ctx.translate(pixelX, pixelY);
         }
 
+        var everyXIsInteger = frame.get('everyXIsInteger');
+
         // Draw the x grid and labels
-        this.drawGrid(ctx, frame.minModelX, frame.maxModelX, minPixelY, maxPixelY, b(frame, frame.toPixelX), textTransform);
+        this.drawGrid(ctx, frame.minModelX, frame.maxModelX, minPixelY, maxPixelY, b(frame, frame.toPixelX), textTransform, everyXIsInteger);
 
         // Draw the y grid and labels by rotating 90 degrees
         ctx.save(); {
@@ -1217,7 +1296,7 @@ Widget.register('time-trend', {
                 ctx.rotate(-Math.PI / 2.0);
                 ctx.translate(20, -15);
             }
-            this.drawGrid(ctx, frame.minModelY, frame.maxModelY, 0, maxPixelX - minPixelX, b(frame, frame.toPixelY), textTransform);
+            this.drawGrid(ctx, frame.minModelY, frame.maxModelY, 0, maxPixelX - minPixelX, b(frame, frame.toPixelY), textTransform, false);
 
             // Draw a darker line at zero
             ctx.beginPath();

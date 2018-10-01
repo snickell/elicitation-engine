@@ -1,5 +1,8 @@
 import Ember from 'ember'
 
+// This is in a separate module because it cannot work with strict mode (including babel)
+import './eval-in-scope.es3';
+
 var allPeriods = new RegExp('[.]', 'g');
 function escapeForEmberProperty(prop) {
     return prop.replace(allPeriods, '');

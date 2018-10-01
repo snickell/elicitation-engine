@@ -41,13 +41,13 @@ module.exports = function (db) {
         elicitation: db.getElicitationForReview(reviewToken)
       })
     )
-    .then(loadElicitationDefinition)
-    .then(loadDiscussion);
+    .then(loadElicitationDefinition)    
+    .then( m => m.elicitation.Discussion_ID ? loadDiscussion(m) : m);
   }
 
   function loadElicitationDefinition(m) {
     return db.models.ElicitationDefinition.findById(m.elicitation.ElicitationDefinition_ID)
-    .then(throwIfNull)    
+    .then(throwIfNull)
     .then( definition => extend(m, {
       elicitationDefinition: definition
     }));
@@ -87,25 +87,29 @@ module.exports = function (db) {
       ? addLogEntry(req, logEventName, "ElicitationID: " + elicitationID, m.person.ID, m.elicitation.Discussion_ID)
         .then( () => db.getDiscussionMembership(m.elicitation.Discussion_ID, m.person.ID) )
         .then(function (membership) {
-          if (m.isAdmin) {
-            if (membership != null) {
-              // admins are always moderators
-              membership.Moderator = true;
-            } else {
-              // Creating a virtual db.models.DiscussionMembership for admins, who should
-              // be given access to any elicitation
-              membership = {
-                Virtual: true,
-                Moderator: true,
-                ReadOnly: true
-              };              
-            }
-          }
-          
           return extend(m, { membership: membership });
         })
       : m
     )
+    .then(function (m) {
+      var membership = m.membership;
+      
+      if (m.isAdmin) {
+        if (membership != null) {
+          // admins are always moderators
+          membership.Moderator = true;
+        } else {
+          // Creating a virtual db.models.DiscussionMembership for admins, who should
+          // be given access to any elicitation
+          membership = {
+            Virtual: true,
+            Moderator: true,
+            ReadOnly: true
+          };              
+        }
+      }
+      return extend(m, { membership: membership });
+    })
     .then(function (m) {
       var isModOrAdmin = m.isAdmin || (m.membership && m.membership.Moderator);
       if (options.requireModOrAdmin && !isModOrAdmin) {
@@ -120,7 +124,7 @@ module.exports = function (db) {
       } else {
         throw "This elicitation has not been assigned to you";
       }
-    })    
+    })
     .then((m) =>
       options.includeElicitationDefinition
       ? loadElicitationDefinition(m)

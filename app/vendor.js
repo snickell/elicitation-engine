@@ -10,7 +10,6 @@ require("imports?define=>false!./../public/libs/jquery-ui-1.11.4");
 require("./../public/libs/jquery.ui.touch-punch");
 require("./../public/libs/jquery.color");
 require("./../public/libs/jquery.placeholder");
-require("./../public/libs/jquery.miniColors");
 
 window.Handlebars = require("exports?Handlebars!./../public/libs/handlebars");
 window.Ember = window.Em = require("exports?Ember!./../public/libs/ember");

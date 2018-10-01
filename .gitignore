@@ -3,3 +3,4 @@ node_modules/*
 builtAssets
 npm-debug.log
 public/dist/dev/*
+elicitation.db.sqlite

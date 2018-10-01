@@ -1,3 +1,5 @@
+import './box-and-whiskers.css';
+
 import Ember from 'ember'
 
 import ElicitationUtils from 'eat/elicitation-utils'
@@ -92,7 +94,17 @@ Widget.register('box-and-whiskers', {
             accessor: WidgetDefinition.Attr("label-100th"),
             prettyName: "100th Percentile",
             category: "Percentile Labels"              
-        }            
+        },
+        hardMin: {
+            accessor: WidgetDefinition.Attr("hard-min"),
+            prettyName: "Min value allowed",
+            helpText: "Don't allow users to input numbers less than this value"
+        },        
+        hardMax: {
+            accessor: WidgetDefinition.Attr("hard-max"),
+            prettyName: "Max value allowed",
+            helpText: "Don't allow users to input numbers greater than this value"
+        }
     },
     initWidget: function () {
         this._super();            
@@ -162,8 +174,16 @@ Widget.register('box-and-whiskers', {
     BoxPlotSubView: Ember.View.extend({
         boxAndWhiskers: undefined, // bound in the template
         classNames: ["box-plot"],
+        lastClickTime: null,
         click: function (evt) {
-            this.get('boxAndWhiskers').boxPlotClicked(evt);
+            var DEBOUNCE_INTERVAL_MS = 500;
+            var now = Date.now();
+            var lastClickTime = this.get('lastClickTime');
+            
+            // Run boxPlotClicked, but debounce to avoid user errors
+            if (lastClickTime === null || now - lastClickTime > DEBOUNCE_INTERVAL_MS) {
+                this.get('boxAndWhiskers').boxPlotClicked(evt);
+            }
         }
     }),
     updateCurrentQuestionText: function () {
@@ -186,7 +206,9 @@ Widget.register('box-and-whiskers', {
         } else {
             currentQuestion.addClass("current");
             this.updateCurrentQuestionText();
+            this.setCurrentQuestionToMouseX(evt);
         }
+        
         this.redraw();
     },
     hideMouseCursorWhenDoneClicking: function () {
@@ -232,6 +254,17 @@ Widget.register('box-and-whiskers', {
             max = definition.get('max');
             if (DEBUG_BOX_AND_WHISKERS) console.log("Using min and max", min, max);
         }
+        
+        var hardMax = parseFloat(definition.get("hardMax"));
+        if (!isNaN(hardMax)) {
+          max = Math.min(hardMax, max);      
+        }
+        var hardMin = parseFloat(definition.get("hardMin"));
+        if (!isNaN(hardMin)) {
+          min = Math.max(hardMin, min);
+        }
+
+
 
         var modelRange = max - min;
         function pixelToModelCoords(pixelX) {
@@ -363,6 +396,18 @@ Widget.register('box-and-whiskers', {
             if (positions[lesser] > positions[greater]) {
                 setPosition(recipient, donor);
             }
+        }
+        
+        // Enforce hardMin and hardMax constraints
+        var hardMin = this.get("definition.hardMin");
+        if (hardMin != null && positions['_0th'] < hardMin) {
+          data.set("_0th", hardMin);
+          positions['_0th'] = hardMin;
+        }
+        var hardMax = this.get("definition.hardMax");        
+        if (hardMax != null && positions['_100th'] > hardMax) {
+          data.set("_100th", hardMax);
+          positions["_100th"] = hardMax;
         }
 
         enforceLessThan('_0th', '_25th', '_25th', '_0th');

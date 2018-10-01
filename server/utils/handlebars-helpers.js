@@ -6,12 +6,11 @@ var exphbs = require('express-handlebars');
 var Handlebars = exphbs.create().handlebars;
 
 module.exports = function (assetHelpers) {
+  var baseURLNoSlash = assetHelpers.baseURL.endsWith('/') ? assetHelpers.baseURL.slice(0,-1) : assetHelpers.baseURL;
+  
   return {
-        includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
-        css: function(filename) { return new Handlebars.SafeString(assetHelpers.css(filename)); },
-        js: function(filename) { return new Handlebars.SafeString(assetHelpers.js(filename)); },
-        assetPath: function(filename) { return new Handlebars.SafeString(assetHelpers.assetPath(filename)); },
-        jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); },
-        publicPath: function(filename) { return new Handlebars.SafeString(assetHelpers.baseURL + "/public/" + filename)}
+    includeStatic: function(filename) { return new Handlebars.SafeString(includeStatic(filename)); },
+    jsonStringify: function(obj) { return new Handlebars.SafeString(JSON.stringify(obj)); },
+    publicPath: function(filename) { return new Handlebars.SafeString(baseURLNoSlash + "/public/" + filename); }
   };
 }

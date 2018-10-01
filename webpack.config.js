@@ -7,7 +7,8 @@ module.exports = {
   devtool: 'eval-source-map',
   entry: {
     app: './app/index.js',
-    vendor: './app/vendor.js'
+    vendor: './app/vendor.js',
+    elicitationEditor: './app/elicitation-editor.js'
   },
   output: {
     path: './public/dist/dev',
@@ -25,12 +26,16 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        exclude: [/node_modules/, path.join(__dirname, './public/libs')],
+        exclude: [ 
+          /node_modules/, 
+          path.join(__dirname, './public/libs'), 
+          path.join(__dirname, './app/eval-in-scope.es3.js') // not compat with strict mode
+        ],
         loader: 'babel-loader',
         query: {
           presets: ['es2015']
         }
-      },
+      },   
 			{ test: /\.png$/,    loader: "url-loader?prefix=img/&limit=5000" },
 			{ test: /\.jpg$/,    loader: "url-loader?prefix=img/&limit=5000" },
 			{ test: /\.gif$/,    loader: "url-loader?prefix=img/&limit=5000" },      
@@ -52,7 +57,8 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({name: "vendor"}),
-    new ExtractTextPlugin("app.css"),
+    new webpack.optimize.CommonsChunkPlugin({name: "elicitationEditor", chunks: ['elicitationEditor']}),
+    new ExtractTextPlugin("[name].css"),
     // new webpack.optimize.UglifyJsPlugin()
   ],
   devServer: {
@@ -60,5 +66,8 @@ module.exports = {
   },
   node: {
     fs: 'empty'
-  }
+  },
+  stats: {
+    children: false //surpress extract-text-plugin console spew
+  }  
 }

@@ -1,3 +1,5 @@
+import './tabular-input.css';
+
 import Ember from 'ember'
 import EAT from 'eat/eat'
 import ElicitationUtils from 'eat/elicitation-utils'

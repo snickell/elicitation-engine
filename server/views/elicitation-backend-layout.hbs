@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,45 +7,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 {{/if}}
 
-    <link rel="SHORTCUT ICON" href="{{assetPath "favicon.ico"}}" />
+    <link rel="SHORTCUT ICON" href="{{publicPath "favicon.ico"}}" />
 
     <title>{{elicitationName}} - Expert Elicitation</title>
     
 {{includeStatic "google-analytics.html"}}
 
 {{#if isMobileDevice}}
-	{{css "elicitationCSS-mobile"}}
+    <!-- 
+        fixme, need to replace this after connect-assetsification:
+        {{css "elicitationCSS-mobile"}}        
+    -->
     <script>
         window.IsMobileDevice = true;
     </script>
-{{else}}
-    <link rel="stylesheet" href="{{publicPath "dist/app.css"}}" />
 {{/if}}
+
+    <link rel="stylesheet" href="{{publicPath "dist/app.css"}}" />
     
     <script>
         ENV = {
             CP_DEFAULT_CACHEABLE: true,
-            VIEW_PRESERVES_CONTEXT: true
+            VIEW_PRESERVES_CONTEXT: true,
+            FORCE_JQUERY: true // using jQuery 1.11, but Ember.js asserts 1.10
         };
     </script>
 
     <!--[if IE 8]>
-		{{js "assets/shims-for-ie8.js"}}
+        <script src="{{publicPath "libs/excanvas.js"}}"
     <![endif]-->
 
-  <script>
-      // using jQuery 1.11, but Ember.js asserts 1.10
-      ENV = ENV || {};
-      ENV.FORCE_JQUERY = true;
-  </script>
-
-	<!--
-        js "assets/site.js"-
-	    js "assets/elicitation.js"
-	    js "assets/elicitation-widgets.js"
-    -->
-    <script src='{{publicPath "js/eval-in-scope.js"}}'></script>
-    <script src='{{publicPath "js/nearzero-confidentiality-indicator.js"}}'></script>
     <script src='{{publicPath "dist/vendor.js"}}'></script>
     <script src='{{publicPath "dist/app.js"}}'></script>
         
@@ -64,15 +55,13 @@
 						$.extend(ELICITATION_SETTINGS, {
 							elicitationDefinition: $("script[type='text/x-elicitation-definition']").html(),
 							priorSessionData: $("script[type='text/x-elicitation-prior-session-data']").html(),
-							priorDataRaw: $("script[type='text/x-elicitation-prior-data']").html(),              
-							switchToEditModeAfterLoading: window.ELICITATION_SETTINGS.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),
+							priorDataRaw: $("script[type='text/x-elicitation-prior-data']").html(),
+							switchToEditModeAfterLoading: window.ELICITATION_SETTINGS.switchToEditModeAfterLoading && !EAT.get('unsupportedBrowserForEditing'),                            
 						})
 					);
 	        ElicitationApp.advanceReadiness();					
 				});
     </script>
-				
-		<link href='http://fonts.googleapis.com/css?family=Rokkitt:400' rel='stylesheet' type='text/css' />
 </head>
 <body class="{{nzCategory}} {{#if settings.embedded}}embedded{{else}}not-embedded{{/if}}">
 
@@ -80,14 +69,14 @@
         <div id="vertical-spacer">
         </div>
         <div id="logo">
-            <img src="{{assetPath "images/nz-logo.png"}}" />
+            <img src="{{publicPath "images/nz-logo.png"}}" />
         </div>
 	{{/if}}
 
 
     <div id="page-load-throbber">
         Loading elicitation...<br />
-        <img src="{{assetPath "images/page-load-throbber.gif"}}" width="220" height="19" />
+        <img src="{{publicPath "images/page-load-throbber.gif"}}" width="220" height="19" />
     </div>
 
     <div id="confidentiality-indicator-box"></div>
@@ -124,8 +113,9 @@
 		{{/if}}    
     
     {{#if settings.allowEditing}}
-      {{css "assets/elicitation-editing.css"}}
-      {{js "assets/elicitation-editing.js"}}
+        <link rel="stylesheet" href="{{publicPath "dist/elicitationEditor.css"}}" />        
+        <script src="{{publicPath "dist/elicitationEditor.js"}}"></script>
+		<link href='http://fonts.googleapis.com/css?family=Rokkitt:400' rel='stylesheet' type='text/css' />        
     {{/if}}
     
 </body>
